@@ -1452,9 +1452,49 @@ function requestNotificationPermission() {
   }
 }
 
+// ===== ROSH CHODESH NOTIFICATION =====
+function checkRoshChodesh() {
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+
+  try {
+    const now = new Date();
+    const hour = now.getHours();
+
+    // Only notify in the evening (18:00 - 22:00)
+    if (hour < 18 || hour > 22) return;
+
+    // Get tomorrow's Hebrew date
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const tomorrowHebrewDay = parseInt(
+      new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(tomorrow)
+    );
+
+    // If tomorrow is the 1st of Hebrew month = tonight is Rosh Chodesh eve
+    if (tomorrowHebrewDay === 1) {
+      const tomorrowMonth = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(tomorrow);
+
+      // Avoid duplicate notifications - check if already notified today
+      const lastNotified = localStorage.getItem('roshChodeshNotified');
+      const today = now.toDateString();
+      if (lastNotified === today) return;
+
+      localStorage.setItem('roshChodeshNotified', today);
+
+      new Notification('🌙 ראש חודש הלילה!', {
+        body: `הלילה מתחיל ראש חודש ${tomorrowMonth}\nזכור להדליק נר! 🕯️`,
+        icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+      });
+    }
+  } catch(e) { console.log('Rosh Chodesh check error:', e); }
+}
+
 // Request permission on load and check daily
 requestNotificationPermission();
-setInterval(checkHilula, 3600000); // check every hour
+setInterval(checkHilula, 3600000);
+setInterval(checkRoshChodesh, 3600000);
+checkRoshChodesh();
 
 updateDateDisplay();
 setInterval(updateDateDisplay, 60000);
