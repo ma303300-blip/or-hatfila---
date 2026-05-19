@@ -111,6 +111,19 @@
     text-align: center;
   }
 
+  .date-display {
+    position: fixed;
+    top: 36px;
+    right: 18px;
+    z-index: 50;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Heebo', sans-serif;
+    font-size: 11px;
+    text-align: right;
+    line-height: 1.6;
+    text-shadow: 0 0 8px rgba(0,0,0,0.5);
+  }
+
   .bsd {
     position: fixed;
     top: 14px;
@@ -140,6 +153,68 @@
       0 2px 4px rgba(0,0,0,0.8);
     letter-spacing: 2px;
     margin-bottom: 6px;
+    animation: titleHeartbeat 2.5s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  .title-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .sun-rays {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .ray {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 3px;
+    transform-origin: 0 50%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(212,175,55,0.6), transparent);
+    animation: rayPulse 2.5s ease-in-out infinite;
+  }
+
+  .ray:nth-child(1)  { transform: rotate(0deg);    animation-delay: 0s; }
+  .ray:nth-child(2)  { transform: rotate(30deg);   animation-delay: 0.1s; }
+  .ray:nth-child(3)  { transform: rotate(60deg);   animation-delay: 0.2s; }
+  .ray:nth-child(4)  { transform: rotate(90deg);   animation-delay: 0.3s; }
+  .ray:nth-child(5)  { transform: rotate(120deg);  animation-delay: 0.4s; }
+  .ray:nth-child(6)  { transform: rotate(150deg);  animation-delay: 0.5s; }
+  .ray:nth-child(7)  { transform: rotate(180deg);  animation-delay: 0.6s; }
+  .ray:nth-child(8)  { transform: rotate(210deg);  animation-delay: 0.7s; }
+  .ray:nth-child(9)  { transform: rotate(240deg);  animation-delay: 0.8s; }
+  .ray:nth-child(10) { transform: rotate(270deg);  animation-delay: 0.9s; }
+  .ray:nth-child(11) { transform: rotate(300deg);  animation-delay: 1.0s; }
+  .ray:nth-child(12) { transform: rotate(330deg);  animation-delay: 1.1s; }
+
+  @keyframes rayPulse {
+    0%   { opacity: 0.2; width: 80px; }
+    14%  { opacity: 0.9; width: 130px; }
+    28%  { opacity: 0.2; width: 80px; }
+    42%  { opacity: 0.6; width: 110px; }
+    70%  { opacity: 0.2; width: 80px; }
+    100% { opacity: 0.2; width: 80px; }
+  }
+
+  @keyframes titleHeartbeat {
+    0%   { transform: scale(1);    text-shadow: 0 0 20px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.8); }
+    14%  { transform: scale(1.04); text-shadow: 0 0 30px rgba(212,175,55,1),   0 0 60px rgba(212,175,55,0.6), 0 2px 4px rgba(0,0,0,0.8); }
+    28%  { transform: scale(1);    text-shadow: 0 0 20px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.8); }
+    42%  { transform: scale(1.02); text-shadow: 0 0 25px rgba(212,175,55,0.9), 0 0 50px rgba(212,175,55,0.5), 0 2px 4px rgba(0,0,0,0.8); }
+    70%  { transform: scale(1);    text-shadow: 0 0 20px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.8); }
+    100% { transform: scale(1);    text-shadow: 0 0 20px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.8); }
   }
 
   .header p {
@@ -430,7 +505,7 @@
   .tzaddik-date {
     display: block;
     font-size: 13px;
-    color: rgba(212,175,55,0.5);
+    color: rgba(255, 255, 255, 0.7);
     margin-top: 3px;
     font-family: 'Heebo', sans-serif;
     font-weight: 300;
@@ -453,8 +528,17 @@
   .month-btn.selected {
     background: rgba(212,175,55,0.28);
     border-color: var(--gold);
-    transform: scale(1.05);
     box-shadow: 0 0 12px rgba(212,175,55,0.3);
+    animation: heartbeat 1.2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%   { transform: scale(1); box-shadow: 0 0 12px rgba(212,175,55,0.3); }
+    14%  { transform: scale(1.1); box-shadow: 0 0 20px rgba(212,175,55,0.6); }
+    28%  { transform: scale(1); box-shadow: 0 0 12px rgba(212,175,55,0.3); }
+    42%  { transform: scale(1.07); box-shadow: 0 0 18px rgba(212,175,55,0.5); }
+    70%  { transform: scale(1); box-shadow: 0 0 12px rgba(212,175,55,0.3); }
+    100% { transform: scale(1); box-shadow: 0 0 12px rgba(212,175,55,0.3); }
   }
 
   .scroll-controls {
@@ -548,6 +632,7 @@
 <body>
 
 <div class="bsd">בס"ד</div>
+<div class="date-display" id="dateDisplay"></div>
 
 <div class="font-size-control">
   <button class="font-btn" onclick="changeFontSize(10)">A+</button>
@@ -559,7 +644,15 @@
 <!-- Header -->
 <div class="header">
   <span class="header-star">✡</span>
-  <h1>אור התפילה</h1>
+  <div class="title-wrapper">
+    <div class="sun-rays">
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    </div>
+    <h1>אור התפילה</h1>
+  </div>
   <p>אוסף תפילות ובקשות</p>
   <div class="divider"></div>
 </div>
@@ -1268,6 +1361,162 @@ document.addEventListener('backbutton', function(e) {
   }
 }, false);
 
+function updateDateDisplay() {
+  const now = new Date();
+
+  const gregorian = now.toLocaleDateString('he-IL', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  const hebrewDay = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', {
+    day: 'numeric'
+  }).format(now);
+
+  const hebrewMonthYear = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', {
+    month: 'long', year: 'numeric'
+  }).format(now);
+
+  // Convert number to Hebrew letters
+  const dayNum = parseInt(hebrewDay);
+  const hebrewLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+    'י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ',
+    'כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  const dayLetter = hebrewLetters[dayNum - 1] || hebrewDay;
+
+  document.getElementById('dateDisplay').innerHTML =
+    gregorian + '<br>' + dayLetter + ' ' + hebrewMonthYear;
+}
+
+// ===== HILULA NOTIFICATIONS =====
+const hilulaCalendar = [
+  { name: 'התנא הקדוש רבי שמעון בר יוחאי', month: 'אייר', day: 18 },
+  { name: 'התנא הקדוש רבי מאיר בעל הנס', month: 'אייר', day: 14 },
+  { name: 'האור החיים הקדוש', month: 'תמוז', day: 15 },
+  { name: 'רבי ישעיה מקרסטיר', month: 'אייר', day: 3 },
+  { name: 'הבבא סאלי', month: 'שבט', day: 4 },
+  { name: 'האביר יעקב אבוחצירא', month: 'טבת', day: 27 },
+  { name: 'רבי נחמן מברסלב', month: 'תשרי', day: 18 },
+  { name: 'רבי אלימלך מליז\'נסק', month: 'אדר', day: 21 },
+  { name: 'רחל אמנו', month: 'מרחשוון', day: 11 }
+];
+
+function getHebrewDayMonth() {
+  try {
+    const now = new Date();
+    const day = parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(now));
+    const month = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(now);
+    return { day, month };
+  } catch(e) { return null; }
+}
+
+function checkHilula() {
+  const hDate = getHebrewDayMonth();
+  if (!hDate) return;
+
+  const monthMap = {
+    'תשרי': 'תשרי', 'חשון': 'מרחשוון', 'כסלו': 'כסלו',
+    'טבת': 'טבת', 'שבט': 'שבט', 'אדר': 'אדר',
+    'ניסן': 'ניסן', 'אייר': 'אייר', 'סיון': 'סיון',
+    'תמוז': 'תמוז', 'אב': 'אב', 'אלול': 'אלול'
+  };
+
+  let currentMonth = '';
+  for (const [key, val] of Object.entries(monthMap)) {
+    if (hDate.month.includes(key)) { currentMonth = val; break; }
+  }
+
+  const todayHilulot = hilulaCalendar.filter(h =>
+    h.month === currentMonth && h.day === hDate.day
+  );
+
+  if (todayHilulot.length > 0) {
+    todayHilulot.forEach(h => {
+      if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        new Notification('🕯️ הילולא היום!', {
+          body: `היום הילולת ${h.name}\nהדלק נר לעילוי נשמתו`,
+          icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+        });
+      }
+    });
+  }
+}
+
+function requestNotificationPermission() {
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') checkHilula();
+    });
+  } else if (Notification.permission === 'granted') {
+    checkHilula();
+  }
+}
+
+// Request permission on load and check daily
+requestNotificationPermission();
+setInterval(checkHilula, 3600000); // check every hour
+
+updateDateDisplay();
+setInterval(updateDateDisplay, 60000);
+
+function getHebrewMonth() {
+  try {
+    const now = new Date();
+    // Get full Hebrew date string
+    const fullDate = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    }).format(now);
+
+    console.log('Full Hebrew date:', fullDate);
+
+    const monthMap = [
+      { keys: ['תשרי','בתשרי'], name: 'תִּשְׁרֵי', label: 'תִּשְׁרֵי' },
+      { keys: ['חשון','מרחשון','חשוון','בחשון','במרחשון'], name: 'חֶשְׁוָן', label: 'חֶשְׁוָן' },
+      { keys: ['כסלו','בכסלו'], name: 'כִּסְלֵו', label: 'כִּסְלֵו' },
+      { keys: ['טבת','בטבת'], name: 'טֵבֵת', label: 'טֵבֵת' },
+      { keys: ['שבט','בשבט'], name: 'שְׁבָט', label: 'שְׁבָט' },
+      { keys: ['אדר ב','אדר2','אדר II','באדר ב'], name: 'אֲדָר ב\'', label: 'אֲדָר ב\'' },
+      { keys: ['אדר א','אדר1','אדר I','באדר א','באדר','אדר'], name: 'אֲדָר', label: 'אֲדָר' },
+      { keys: ['ניסן','בניסן'], name: 'נִיסָן', label: 'נִיסָן' },
+      { keys: ['אייר','באייר'], name: 'אִיָּר', label: 'אִיָּר' },
+      { keys: ['סיון','בסיון','סיוון','בסיוון'], name: 'סִיוָן', label: 'סִיוָן' },
+      { keys: ['תמוז','בתמוז'], name: 'תַּמּוּז', label: 'תַּמּוּז' },
+      { keys: ['באב',' אב ','באב'], name: 'אָב', label: 'אָב' },
+      { keys: ['אלול','באלול'], name: 'אֱלוּל', label: 'אֱלוּל' }
+    ];
+
+    const clean = stripNikud(fullDate);
+    for (const m of monthMap) {
+      for (const key of m.keys) {
+        if (clean.includes(stripNikud(key))) return m;
+      }
+    }
+  } catch(e) { console.log('Hebrew month error:', e); }
+  return null;
+}
+
+function stripNikud(str) {
+  return str.replace(/[\u0591-\u05C7]/g, '').trim();
+}
+
+function autoSelectHebrewMonth() {
+  const month = getHebrewMonth();
+  if (!month) return;
+
+  document.querySelectorAll('.month-name-1, .month-name-2').forEach(el => {
+    el.textContent = month.name;
+  });
+
+  // Find button by matching label without nikud and without double letters
+  const normalize = s => stripNikud(s).replace(/וו/g,'ו').replace(/יי/g,'י').trim();
+  document.querySelectorAll('.month-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if (normalize(btn.textContent) === normalize(month.label)) {
+      btn.classList.add('selected');
+    }
+  });
+}
+
 function openPrayer(id) {
   history.pushState({ prayer: id }, '');
   const p = prayers[id];
@@ -1279,7 +1528,10 @@ function openPrayer(id) {
   document.body.style.overflow = 'hidden';
   setTimeout(applyFontSize, 10);
 
-  // Show scroll controls only for mazon
+  // Auto-select Hebrew month for Rosh Chodesh
+  if (id === 'roshchodesh') {
+    setTimeout(autoSelectHebrewMonth, 50);
+  }
   const controls = document.getElementById('scrollControls');
   if (id === 'mazon' || id === 'derech' || id === 'chayalim') {
     controls.classList.add('visible');
