@@ -145,7 +145,7 @@
   .header h1 {
     font-family: 'Frank Ruhl Libre', serif;
     font-weight: 900;
-    font-size: clamp(28px, 6vw, 48px);
+    font-size: clamp(34px, 7.2vw, 58px);
     color: var(--gold-light);
     text-shadow:
       0 0 20px rgba(212,175,55,0.8),
@@ -260,7 +260,20 @@
   .banner:nth-child(4) { animation-delay: 0.4s; }
   .banner:nth-child(5) { animation-delay: 0.5s; }
 
-  @keyframes fadeSlideIn {
+  @keyframes iconBurst {
+    0%   { transform: scale(1);    opacity: 1; }
+    40%  { transform: scale(3.5);  opacity: 0.7; }
+    100% { transform: scale(6);    opacity: 0; }
+  }
+
+  .icon-burst {
+    position: fixed;
+    z-index: 200;
+    font-size: 32px;
+    pointer-events: none;
+    animation: iconBurst 1s ease-out forwards;
+    transform-origin: center;
+  }
     from { opacity: 0; transform: perspective(1000px) translateY(30px) rotateX(-5deg); }
     to { opacity: 1; transform: perspective(1000px) translateY(0) rotateX(0deg); }
   }
@@ -329,6 +342,18 @@
   }
   .banner-5:hover { box-shadow: 0 20px 60px rgba(0,100,70,0.7); }
 
+  .banner-6 .banner-inner {
+    background: linear-gradient(135deg, #2A1A00 0%, #6B4400 40%, #1A0A00 100%);
+    box-shadow: 0 10px 40px rgba(150,90,0,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
+  }
+  .banner-6:hover { box-shadow: 0 20px 60px rgba(150,90,0,0.7); }
+
+  .banner-7 .banner-inner {
+    background: linear-gradient(135deg, #0A0020 0%, #1A0050 40%, #050015 100%);
+    box-shadow: 0 10px 40px rgba(60,0,150,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
+  }
+  .banner-7:hover { box-shadow: 0 20px 60px rgba(60,0,150,0.7); }
+
   /* Decorative gold corners */
   .banner-inner::after {
     content: '';
@@ -350,7 +375,7 @@
   .banner-title {
     font-family: 'Frank Ruhl Libre', serif;
     font-weight: 900;
-    font-size: clamp(20px, 5vw, 26px);
+    font-size: clamp(24px, 6vw, 31px);
     color: var(--gold-light);
     text-shadow: 0 0 15px rgba(212,175,55,0.5), 0 2px 4px rgba(0,0,0,0.8);
     line-height: 1.3;
@@ -467,7 +492,7 @@
 
   .prayer-text .section-title {
     color: var(--gold-light);
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: clamp(19px, 4.8vw, 24px);
     font-weight: 700;
     display: block;
     margin: 24px 0 12px;
@@ -598,6 +623,105 @@
     cursor: pointer;
   }
 
+  .search-icon-btn {
+    background: none;
+    border: none;
+    font-size: clamp(22px, 5vw, 36px);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+    padding: 0;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(212,175,55,0.5));
+  }
+  .search-icon-btn:hover { transform: scale(1.15); }
+
+  .search-bar {
+    display: none;
+    position: relative;
+    margin: 0 20px 10px;
+    z-index: 10;
+    animation: fadeSlideIn 0.3s ease;
+  }
+  .search-bar.visible { display: block; }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 44px 12px 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 24px;
+    color: #fff;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 17px;
+    direction: rtl;
+    outline: none;
+    box-shadow: 0 0 12px rgba(212,175,55,0.15);
+  }
+  .search-input::placeholder { color: rgba(255,255,255,0.4); }
+
+  .search-clear {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(212,175,55,0.6);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .search-results {
+    display: none;
+    margin: 0 20px;
+    z-index: 10;
+    position: relative;
+  }
+  .search-results.visible { display: block; }
+
+  .search-result-item {
+    background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    direction: rtl;
+    transition: background 0.2s;
+  }
+  .search-result-item:hover { background: rgba(212,175,55,0.18); }
+  .search-result-title {
+    color: var(--gold-light);
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .search-result-excerpt {
+    color: rgba(255,255,255,0.6);
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .search-result-excerpt mark {
+    background: rgba(212,175,55,0.4);
+    color: #fff;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+  .search-no-results {
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    padding: 20px;
+  }
+
   /* Candle flame animation */
   .candle-container {
     text-align: center;
@@ -651,16 +775,28 @@
       <div class="ray"></div><div class="ray"></div><div class="ray"></div>
       <div class="ray"></div><div class="ray"></div><div class="ray"></div>
     </div>
-    <h1>אור התפילה</h1>
+    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+      <h1>אור התפילה</h1>
+      <button class="search-icon-btn" onclick="toggleSearch()">🔍</button>
+    </div>
   </div>
-  <p>אוסף תפילות ובקשות</p>
+  <p id="headerSubtitle">אוסף תפילות ובקשות</p>
   <div class="divider"></div>
 </div>
+
+<!-- Search Bar -->
+<div class="search-bar" id="searchBar">
+  <input type="text" class="search-input" id="searchInput"
+    placeholder="חפש בתפילות..."
+    oninput="performSearch(this.value)" />
+  <button class="search-clear" onclick="closeSearch()">✕</button>
+</div>
+<div class="search-results" id="searchResults"></div>
 
 <!-- Banners -->
 <div class="banners">
 
-  <div class="banner banner-1" onclick="openPrayer('derech')">
+  <div class="banner banner-1" onclick="openPrayerWithBurst(event, 'derech', '🛤️')">
     <div class="banner-inner">
       <span class="banner-icon">🛤️</span>
       <div class="banner-title">תפילת הדרך</div>
@@ -669,16 +805,16 @@
     </div>
   </div>
 
-  <div class="banner banner-2" onclick="openPrayer('mazon')">
+  <div class="banner banner-2" onclick="openPrayerWithBurst(event, 'mazon', '🙌')">
     <div class="banner-inner">
-      <span class="banner-icon">🍞</span>
+      <span class="banner-icon">🙌</span>
       <div class="banner-title">ברכת המזון</div>
       <div class="banner-subtitle">נוסח ספרדי</div>
       <span class="banner-arrow">◀</span>
     </div>
   </div>
 
-  <div class="banner banner-3" onclick="openPrayer('chayalim')">
+  <div class="banner banner-3" onclick="openPrayerWithBurst(event, 'chayalim', '🛡️')">
     <div class="banner-inner">
       <span class="banner-icon">🛡️</span>
       <div class="banner-title">תפילה לחיילי צה"ל</div>
@@ -687,7 +823,7 @@
     </div>
   </div>
 
-  <div class="banner banner-4" onclick="openPrayer('hilula')">
+  <div class="banner banner-4" onclick="openPrayerWithBurst(event, 'hilula', '🕯️')">
     <div class="banner-inner">
       <span class="banner-icon">🕯️</span>
       <div class="banner-title">הדלקת נר בהילולה</div>
@@ -696,11 +832,29 @@
     </div>
   </div>
 
-  <div class="banner banner-5" onclick="openPrayer('roshchodesh')">
+  <div class="banner banner-5" onclick="openPrayerWithBurst(event, 'roshchodesh', '🌙')">
     <div class="banner-inner">
       <span class="banner-icon">🌙</span>
       <div class="banner-title">הדלקת נר ראש חודש</div>
       <div class="banner-subtitle">תפילה לחידוש הלבנה</div>
+      <span class="banner-arrow">◀</span>
+    </div>
+  </div>
+
+  <div class="banner banner-6" onclick="openPrayerWithBurst(event, 'challah', '🌾')">
+    <div class="banner-inner">
+      <span class="banner-icon">🌾</span>
+      <div class="banner-title">הפרשת חלה</div>
+      <div class="banner-subtitle">ברכה ותחינה</div>
+      <span class="banner-arrow">◀</span>
+    </div>
+  </div>
+
+  <div class="banner banner-7" onclick="openPrayerWithBurst(event, 'shema', '🌙')">
+    <div class="banner-inner">
+      <span class="banner-icon">🌙</span>
+      <div class="banner-title">קריאת שמע שעל המיטה</div>
+      <div class="banner-subtitle">נוסח ספרדי</div>
       <span class="banner-arrow">◀</span>
     </div>
   </div>
@@ -1178,6 +1332,236 @@ const prayers = {
 
       <span class="highlight">חֹדֶשׁ טוֹב וּמְבֹרָךְ!</span>
     `
+  },
+  shema: {
+    title: "קריאת שמע שעל המיטה",
+    body: `
+      <span class="section-title">✦ לשם יחוד ✦</span>
+      לְשֵׁם יִחוּד קֻדְשָׁא בְּרִיךְ הוּא וּשְׁכִינְתֵּיהּ,<br>
+      בִּדְחִילוּ וּרְחִימוּ, וּרְחִימוּ וּדְחִילוּ,<br>
+      לְיַחֲדָא שֵׁם אוֹת י' וְאוֹת ה' בְּשֵׁם אוֹת ו' וְאוֹת ה'<br>
+      בְּיִחוּדָא שְׁלִים בְּשֵׁם כָּל יִשְׂרָאֵל<br>
+      לַאֲקָמָא שְׁכִינְתָּא מֵעַפְרָא וּלְעִלּוּי שְׁכִינַת עֻזֵּנוּ.<br><br>
+      הֲרֵינִי מְקַבֵּל עָלַי אֱלָהוּתוֹ יִתְבָּרַךְ וְאַהֲבָתוֹ וְיִרְאָתוֹ,<br>
+      וַהֲרֵינִי יָרֵא מִמֶּנּוּ, בְּגִין דְּאִיהוּ רַב וְשַׁלִּיט עַל כֹּלָּא,<br>
+      וְכֹלָּא קָמֵיהּ כְּלָא.<br>
+      וַהֲרֵינִי מַמְלִיכוֹ עַל כָּל אֵבָר וְאֵבָר וְגִיד וְגִיד<br>
+      מֵרַמַ"ח אֵבָרִים וְשַׁסַ"ה גִּידִים שֶׁל גּוּפִי וְנַפְשִׁי,<br>
+      רוּחִי וְנִשְׁמָתִי, מַלְכוּת גְּמוּרָה וּשְׁלֵמָה.<br>
+      וַהֲרֵינִי עֶבֶד לַשֵּׁם יִתְבָּרַךְ,<br>
+      וְהוּא בְּרַחֲמָיו יְזַכֵּנִי לְעָבְדוֹ בְּלֵב שָׁלֵם וְנֶפֶשׁ חֲפֵצָה,<br>
+      אָמֵן כֵּן יְהִי רָצוֹן.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ מחילה ✦</span>
+      רִבּוֹנוֹ שֶׁל עוֹלָם, הֲרֵינִי מוֹחֵל וְסוֹלֵחַ<br>
+      לְכָל מִי שֶׁהִכְעִיס וְהִקְנִיט אוֹתִי אוֹ שֶׁחָטָא כְּנֶגְדִּי,<br>
+      בֵּין בְּגוּפִי, בֵּין בְּמָמוֹנִי, בֵּין בִּכְבוֹדִי, בֵּין בְּכָל אֲשֶׁר לִי.<br>
+      בֵּין בְּאֹנֶס, בֵּין בְּרָצוֹן, בֵּין בְּשׁוֹגֵג, בֵּין בְּמֵזִיד,<br>
+      בֵּין בְּדִבּוּר, בֵּין בְּמַעֲשֶׂה,<br>
+      בֵּין בְּגִלְגּוּל זֶה, בֵּין בְּגִלְגּוּל אַחֵר,<br>
+      לְכׇל בַּר יִשְׂרָאֵל,<br>
+      וְלֹא יֵעָנֵשׁ שׁוּם אָדָם בְּסִבָּתִי.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      יְהִי רָצוֹן מִלְּפָנֶיךָ, יְהֹוָה אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      שֶׁלֹּא אֶחֱטָא עוֹד,<br>
+      וּמַה שֶּׁחָטָאתִי לְפָנֶיךָ, מְחוֹק בְּרַחֲמֶיךָ הָרַבִּים,<br>
+      אֲבָל לֹא עַל יְדֵי יִסּוּרִין וְחוֹלָאִים רָעִים.<br><br>
+      יִהְיוּ לְרָצוֹן אִמְרֵי פִי וְהֶגְיוֹן לִבִּי לְפָנֶיךָ,<br>
+      יְהֹוָה צוּרִי וְגֹאֲלִי.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ ברכת המפיל ✦</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,<br>
+      הַמַּפִּיל חֶבְלֵי שֵׁנָה עַל עֵינַי וּתְנוּמָה עַל עַפְעַפַּי,<br>
+      וּמֵאִיר לְאִישׁוֹן בַּת עָיִן.<br><br>
+      יְהִי רָצוֹן מִלְּפָנֶיךָ יְהֹוָה אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      שֶׁתַּשְׁכִּיבֵנִי לְשָׁלוֹם וְתַעֲמִידֵנִי לְחַיִּים טוֹבִים וּלְשָׁלוֹם,<br>
+      וְתֵן חֶלְקִי בְּתוֹרָתֶךָ,<br>
+      וְתַרְגִּילֵנִי לִדְבַר מִצְוָה,<br>
+      וְאַל תַּרְגִּילֵנִי לִדְבַר עֲבֵרָה,<br>
+      וְאַל תְּבִיאֵנִי לִידֵי חֵטְא וְלֹא לִידֵי נִסָּיוֹן וְלֹא לִידֵי בִזָּיוֹן,<br>
+      וְיִשְׁלֹט בִּי יֵצֶר הַטּוֹב, וְאַל יִשְׁלֹט בִּי יֵצֶר הָרָע,<br>
+      וְתַצִּילֵנִי מִיֵּצֶר הָרָע וּמֵחֳלָאִים רָעִים,<br>
+      וְאַל יַבְהִילוּנִי חֲלוֹמוֹת רָעִים וְהִרְהוּרִים רָעִים,<br>
+      וּתְהֵא מִטָּתִי שְׁלֵמָה לְפָנֶיךָ,<br>
+      וְהָאֵר עֵינַי פֶּן אִישַׁן הַמָּוֶת.<br><br>
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה, הַמֵּאִיר לְעוֹלָם כֻּלּוֹ בִּכְבוֹדוֹ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ קריאת שמע ✦</span>
+      <span class="highlight">שְׁמַע יִשְׂרָאֵל יְהֹוָה אֱלֹהֵינוּ יְהֹוָה אֶחָד.</span><br>
+      בלחש: בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.<br><br>
+      וְאָהַבְתָּ אֵת יְהֹוָה אֱלֹהֶיךָ, בְּכׇל לְבָבְךָ וּבְכׇל נַפְשְׁךָ וּבְכׇל מְאֹדֶךָ.<br>
+      וְהָיוּ הַדְּבָרִים הָאֵלֶּה, אֲשֶׁר אָנֹכִי מְצַוְּךָ הַיּוֹם, עַל לְבָבֶךָ.<br>
+      וְשִׁנַּנְתָּם לְבָנֶיךָ וְדִבַּרְתָּ בָּם,<br>
+      בְּשִׁבְתְּךָ בְּבֵיתֶךָ, וּבְלֶכְתְּךָ בַדֶּרֶךְ, וּבְשׇׁכְבְּךָ וּבְקוּמֶךָ.<br>
+      וּקְשַׁרְתָּם לְאוֹת עַל יָדֶךָ, וְהָיוּ לְטֹטָפֹת בֵּין עֵינֶיךָ.<br>
+      וּכְתַבְתָּם עַל מְזוּזֹת בֵּיתֶךָ וּבִשְׁעָרֶיךָ.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וְהָיָה, אִם שָׁמֹעַ תִּשְׁמְעוּ אֶל מִצְו‍ֹתַי,<br>
+      אֲשֶׁר אָנֹכִי מְצַוֶּה אֶתְכֶם הַיּוֹם,<br>
+      לְאַהֲבָה אֶת יְהֹוָה אֱלֹהֵיכֶם וּלְעׇבְדוֹ, בְּכׇל לְבַבְכֶם וּבְכׇל נַפְשְׁכֶם.<br>
+      וְנָתַתִּי מְטַר אַרְצְכֶם בְּעִתּוֹ, יוֹרֶה וּמַלְקוֹשׁ,<br>
+      וְאָסַפְתָּ דְגָנֶךָ וְתִירֹשְׁךָ וְיִצְהָרֶךָ.<br>
+      וְנָתַתִּי עֵשֶׂב בְּשָׂדְךָ לִבְהֶמְתֶּךָ, וְאָכַלְתָּ וְשָׂבָעְתָּ.<br>
+      הִשָּׁמְרוּ לָכֶם פֶּן יִפְתֶּה לְבַבְכֶם,<br>
+      וְסַרְתֶּם וַעֲבַדְתֶּם אֱלֹהִים אֲחֵרִים וְהִשְׁתַּחֲוִיתֶם לָהֶם.<br>
+      וְחָרָה אַף יְהֹוָה בָּכֶם, וְעָצַר אֶת הַשָּׁמַיִם וְלֹא יִהְיֶה מָטָר,<br>
+      וְהָאֲדָמָה לֹא תִתֵּן אֶת יְבוּלָהּ,<br>
+      וַאֲבַדְתֶּם מְהֵרָה מֵעַל הָאָרֶץ הַטֹּבָה, אֲשֶׁר יְהֹוָה נֹתֵן לָכֶם.<br>
+      וְשַׂמְתֶּם אֶת דְּבָרַי אֵלֶּה עַל לְבַבְכֶם וְעַל נַפְשְׁכֶם,<br>
+      וּקְשַׁרְתֶּם אֹתָם לְאוֹת עַל יֶדְכֶם, וְהָיוּ לְטוֹטָפֹת בֵּין עֵינֵיכֶם.<br>
+      וְלִמַּדְתֶּם אֹתָם אֶת בְּנֵיכֶם לְדַבֵּר בָּם,<br>
+      בְּשִׁבְתְּךָ בְּבֵיתֶךָ וּבְלֶכְתְּךָ בַדֶּרֶךְ, וּבְשׇׁכְבְּךָ וּבְקוּמֶךָ.<br>
+      וּכְתַבְתָּם עַל מְזוּזוֹת בֵּיתֶךָ וּבִשְׁעָרֶיךָ.<br>
+      לְמַעַן יִרְבּוּ יְמֵיכֶם וִימֵי בְנֵיכֶם עַל הָאֲדָמָה<br>
+      אֲשֶׁר נִשְׁבַּע יְהֹוָה לַאֲבֹתֵיכֶם לָתֵת לָהֶם,<br>
+      כִּימֵי הַשָּׁמַיִם עַל הָאָרֶץ.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וַיֹּאמֶר יְהֹוָה אֶל מֹשֶׁה לֵּאמֹר.<br>
+      דַּבֵּר אֶל בְּנֵי יִשְׂרָאֵל וְאָמַרְתָּ אֲלֵהֶם,<br>
+      וְעָשׂוּ לָהֶם צִיצִת עַל כַּנְפֵי בִגְדֵיהֶם לְדֹרֹתָם,<br>
+      וְנָתְנוּ עַל צִיצִת הַכָּנָף פְּתִיל תְּכֵלֶת.<br>
+      וְהָיָה לָכֶם לְצִיצִת, וּרְאִיתֶם אֹתוֹ,<br>
+      וּזְכַרְתֶּם אֶת כָּל מִצְו‍ֹת יְהֹוָה וַעֲשִׂיתֶם אֹתָם,<br>
+      וְלֹא תָתֻרוּ אַחֲרֵי לְבַבְכֶם וְאַחֲרֵי עֵינֵיכֶם,<br>
+      אֲשֶׁר אַתֶּם זֹנִים אַחֲרֵיהֶם.<br>
+      לְמַעַן תִּזְכְּרוּ וַעֲשִׂיתֶם אֶת כׇּל מִצְו‍ֹתָי,<br>
+      וִהְיִיתֶם קְדֹשִׁים לֵאלֹהֵיכֶם.<br>
+      אֲנִי יְהֹוָה אֱלֹהֵיכֶם,<br>
+      אֲשֶׁר הוֹצֵאתִי אֶתְכֶם מֵאֶרֶץ מִצְרַיִם,<br>
+      לִהְיוֹת לָכֶם לֵאלֹהִים, אֲנִי יְהֹוָה אֱלֹהֵיכֶם.<br><br>
+      <span class="highlight">יְהֹוָה אֱלֹהֵיכֶם אֱמֶת.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ תוספות ✦</span>
+      יַעַלְזוּ חֲסִידִים בְּכָבוֹד, יְרַנְּנוּ עַל מִשְׁכְּבוֹתָם.<br>
+      רוֹמְמוֹת אֵל בִּגְרוֹנָם, וְחֶרֶב פִּיפִיּוֹת בְּיָדָם.<br><br>
+      (ג' פעמים):<br>
+      הִנֵּה מִטָּתוֹ שֶׁלִּשְׁלֹמֹה שִׁשִּׁים גִּבֹּרִים סָבִיב לָהּ,<br>
+      מִגִּבֹּרֵי יִשְׂרָאֵל. כֻּלָּם אֲחֻזֵי חֶרֶב מְלֻמְּדֵי מִלְחָמָה,<br>
+      אִישׁ חַרְבּוֹ עַל יְרֵכוֹ מִפַּחַד בַּלֵּילוֹת.<br><br>
+      יְבָרֶכְךָ יְהֹוָה וְיִשְׁמְרֶךָ.<br>
+      יָאֵר יְהֹוָה פָּנָיו אֵלֶיךָ וִיחֻנֶּךָּ.<br>
+      יִשָּׂא יְהֹוָה פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם.<br><br>
+      אִם תִּשְׁכַּב לֹא תִפְחָד וְשָׁכַבְתָּ וְעָרְבָה שְׁנָתֶךָ.<br>
+      שָׁמְרֵנִי כְּאִישׁוֹן בַּת עָיִן בְּצֵל כְּנָפֶיךָ תַּסְתִּירֵנִי.<br>
+      אֲנִי שָׁכַבְתִּי וָאִישָׁנָה הֱקִיצוֹתִי כִּי יְהֹוָה יִסְמְכֵנִי.<br><br>
+      בְּיָדְךָ אַפְקִיד רוּחִי פָּדִיתָה אוֹתִי יְהֹוָה אֵל אֱמֶת.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      יֹשֵׁב בְּסֵתֶר עֶלְיוֹן, בְּצֵל שַׁדַּי יִתְלוֹנָן.<br>
+      אֹמַר לַיְהֹוָה מַחְסִי וּמְצוּדָתִי, אֱלֹהַי אֶבְטַח בּוֹ.<br>
+      כִּי הוּא יַצִּילְךָ מִפַּח יָקוּשׁ מִדֶּבֶר הַוּוֹת.<br>
+      בְּאֶבְרָתוֹ יָסֶךְ לָךְ וְתַחַת כְּנָפָיו תֶּחְסֶה, צִנָּה וְסֹחֵרָה אֲמִתּוֹ.<br>
+      לֹא תִירָא מִפַּחַד לָיְלָה, מֵחֵץ יָעוּף יוֹמָם.<br>
+      מִדֶּבֶר בָּאֹפֶל יַהֲלֹךְ, מִקֶּטֶב יָשׁוּד צָהֳרָיִם.<br>
+      יִפֹּל מִצִּדְּךָ אֶלֶף וּרְבָבָה מִימִינֶךָ, אֵלֶיךָ לֹא יִגָּשׁ.<br>
+      רַק בְּעֵינֶיךָ תַבִּיט, וְשִׁלֻּמַת רְשָׁעִים תִּרְאֶה.<br>
+      <span class="highlight">כִּי אַתָּה יְהֹוָה מַחְסִי:</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ סדר תחנון ✦</span>
+      אָנָּא יְהֹוָה אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ,<br>
+      תָּבֹא לְפָנֶיךָ תְּפִלָּתֵנוּ,<br>
+      וְאַל תִּתְעַלַּם מַלְכֵּנוּ מִתְּחִנָּתֵנוּ,<br>
+      שֶׁאֵין אֲנַחְנוּ עַזֵּי פָנִים וּקְשֵׁי עֹרֶף,<br>
+      לוֹמַר לְפָנֶיךָ יְהֹוָה אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ<br>
+      צַדִּיקִים אֲנַחְנוּ וְלֹא חָטָאנוּ,<br>
+      אֲבָל חָטָאנוּ, עָוִינוּ, פָּשַׁעְנוּ,<br>
+      אֲנַחְנוּ וַאֲבוֹתֵינוּ וְאַנְשֵׁי בֵיתֵנוּ.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      אָשַׁמְנוּ, בָּגַדְנוּ, גָּזַלְנוּ, דִּבַּרְנוּ דוֹפִי וְלָשׁוֹן הָרָע,<br>
+      הֶעֱוִינוּ, וְהִרְשַׁעְנוּ, זַדְנוּ, חָמַסְנוּ, טָפַלְנוּ שֶׁקֶר וּמִרְמָה,<br>
+      יָעַצְנוּ עֵצוֹת רָעוֹת, כִּזַּבְנוּ, כָּעַסְנוּ, לַצְנוּ, מָרַדְנוּ,<br>
+      מָרִינוּ דְבָרֶיךָ, נִאַצְנוּ, נִאַפְנוּ, סָרַרְנוּ, עָוִינוּ, פָּשַׁעְנוּ,<br>
+      פָּגַמְנוּ, צָרַרְנוּ, צִעַרְנוּ אָב וָאֵם, קִשִּׁינוּ עֹרֶף,<br>
+      רָשַׁעְנוּ, שִׁחַתְנוּ, תִּעַבְנוּ, תָּעִינוּ וְתִעֲתַעְנוּ.<br><br>
+      וְסַרְנוּ מִמִּצְוֹתֶיךָ וּמִמִּשְׁפָּטֶיךָ הַטּוֹבִים וְלֹא שָׁוָה לָנוּ.<br>
+      וְאַתָּה צַדִּיק עַל כׇּל הַבָּא עָלֵינוּ,<br>
+      כִּי אֱמֶת עָשִׂיתָ, וַאֲנַחְנוּ הִרְשָׁעְנוּ.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ אנא בכח ✦</span>
+      אָנָּא בְּכֹחַ גְּדֻלַּת יְמִינְךָ תַּתִּיר צְרוּרָה.<br>
+      קַבֵּל רִנַּת עַמְּךָ שַׂגְּבֵנוּ טַהֲרֵנוּ נוֹרָא.<br>
+      נָא גִבּוֹר דּוֹרְשֵׁי יִחוּדְךָ כְּבָבַת שָׁמְרֵם.<br>
+      בָּרְכֵם טַהֲרֵם רַחֲמֵי צִדְקָתְךָ תָּמִיד גָּמְלֵם.<br>
+      חֲסִין קָדוֹשׁ בְּרוֹב טוּבְךָ נַהֵל עֲדָתֶךָ.<br>
+      יָחִיד גֵּאֶה לְעַמְּךָ פְּנֵה זוֹכְרֵי קְדֻשָּׁתֶךָ.<br>
+      שַׁוְעָתֵנוּ קַבֵּל וּשְׁמַע צַעֲקָתֵנוּ יוֹדֵעַ תַּעֲלוּמוֹת.<br>
+      בלחש: בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      אַתָּה תָקוּם תְּרַחֵם צִיּוֹן, כִּי עֵת לְחֶנְנָהּ כִּי בָא מוֹעֵד.<br>
+      בְּיָדְךָ אַפְקִיד רוּחִי, פָּדִיתָה אוֹתִי יְהֹוָה אֵל אֱמֶת.<br>
+      בְּטוֹב אָלִין וְאָקִיץ בְּרַחֲמִים.<br><br>
+      תּוֹרָה צִוָּה לָנוּ מֹשֶׁה מוֹרָשָׁה קְהִלַּת יַעֲקֹב.<br><br>
+      <span class="highlight">ויחזור על פסוק זה עד שישן, ושכב וערבה שנתו.</span>
+    `
+  },
+  challah: {
+    title: "הפרשת חלה",
+    body: `
+      <span class="section-title">✦ קודם ההפרשה מברך ✦</span>
+      בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      אֲשֶׁר קִדְּשָׁנוּ בְּמִצְווֹתָיו וְצִוָּנוּ לְהַפְרִישׁ חַלָּה תְרוּמָה.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ ואחר ההפרשה אומר ✦</span>
+      <span class="highlight">"הֲרֵי זוֹ חַלָּה"</span><br><br>
+      וְשׂוֹרֵף הַחַלָּה, וְאָסוּר לְיִשְׂרָאֵל לֵהָנוֹת מִמֶּנָּה.<br><br>
+      יְהִי רָצוֹן מִלְּפָנֶיךָ, ה' אֱלֹקֵינוּ וֵאלֹקֵי אֲבוֹתֵינוּ,<br>
+      שֶׁיִּבָּנֶה בֵּית הַמִּקְדָּשׁ בִּמְהֵרָה בְיָמֵינוּ,<br>
+      וְתֵן חֶלְקֵנוּ בְּתוֹרָתֶךָ,<br>
+      וְשָׁם נַעַבְדְךָ בְּיִרְאָה כִּימֵי עוֹלָם וּכְשָׁנִים קַדְמוֹנִיּוֹת.<br>
+      וְעָרְבָה לַה' מִנְחַת יְהוּדָה וִירוּשָׁלָיִם,<br>
+      כִּימֵי עוֹלָם וּכְשָׁנִים קַדְמוֹנִיּוֹת.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ תחינה אחר הפרשת חלה ✦</span>
+      יְהִי רָצוֹן מִלְּפָנֶיךָ, ה' אֱלֹקֵינוּ וֵאלֹקֵי אֲבוֹתֵינוּ,<br>
+      שֶׁהַמִּצְוָה שֶׁל הַפְרָשַׁת חַלָּה תֵּחָשֵׁב<br>
+      כְּאִלּוּ קִיַּמְתִּיהָ בְּכָל פְּרָטֶיהָ וְדִקְדּוּקֶיהָ,<br>
+      וְתֵחָשֵׁב הֲרָמַת הַחַלָּה שֶׁאֲנִי מְרִימָה,<br>
+      כְּמוֹ הַקָּרְבָּן שֶׁהוּקְרַב עַל הַמִּזְבֵּחַ שֶׁנִּתְקַבֵּל בְּרָצוֹן.<br><br>
+      וְכַאֲשֶׁר לְפָנִים הָיְתָה הַחַלָּה נְתוּנָה לַכֹּהֵן<br>
+      וְהָיְתָה זוֹ לְכַפָּרַת עֲוֹנוֹת,<br>
+      כָּךְ תְּהֵא לְכַפָּרָה לַעֲוֹנוֹתַי,<br>
+      וְאָז אֶהְיֶה כְּאִלּוּ נוֹלַדְתִּי מֵחָדָשׁ<br>
+      נְקִיָּה מֵחֵטְא וָעָוֹן,<br>
+      וְאוּכַל לְקַיֵּם מִצְוֹת שַׁבַּת קֹדֶשׁ וְהַיָּמִים הַטּוֹבִים<br>
+      עִם בַּעְלִי וִילָדֵינוּ,<br>
+      לִהְיוֹת נִיזוֹנִים מִקְּדֻשַּׁת הַיָּמִים הָאֵלֶּה,<br>
+      וּמֵהַשְׁפָּעָתָהּ שֶׁל מִצְוַת חַלָּה<br>
+      יִהְיוּ יְלָדֵינוּ נִיזוֹנִים תָּמִיד<br>
+      מִיָּדָיו שֶׁל הַקָּדוֹשׁ בָּרוּךְ הוּא<br>
+      בְּרֹב רַחֲמָיו וַחֲסָדָיו וּבְרֹב אַהֲבָה.<br>
+      וְשֶׁתִּתְקַבֵּל מִצְוַת חַלָּה כְּאִלּוּ נְתַתִּיהָ לַכֹּהֵן.<br><br>
+      וּכְשֵׁם שֶׁאֲנִי מְקַיֶּמֶת מִצְוַת חַלָּה בְּכָל לֵב,<br>
+      כָּךְ יִתְעוֹרְרוּ רַחֲמָיו שֶׁל הַקָּדוֹשׁ בָּרוּךְ הוּא<br>
+      לְשָׁמְרֵנִי מִצַּעַר וּמִמַּכְאוֹבִים כָּל הַיָּמִים.<br>
+      <span class="highlight">אָמֵן.</span>
+    `
   }
 };
 
@@ -1240,6 +1624,88 @@ function selectYaaleh(name, btn) {
   document.querySelectorAll('.yaaleh-name').forEach(el => el.textContent = name);
   btn.closest('div').querySelectorAll('.month-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
+}
+
+let searchOpen = false;
+
+function toggleSearch() {
+  if (searchOpen) {
+    closeSearch();
+  } else {
+    openSearch();
+  }
+}
+
+function openSearch() {
+  searchOpen = true;
+  document.getElementById('searchBar').classList.add('visible');
+  document.getElementById('headerSubtitle').style.opacity = '0.1';
+  document.querySelector('.title-wrapper').style.opacity = '0.1';
+  document.querySelector('.header-star').style.opacity = '0.1';
+  document.querySelector('.divider').style.opacity = '0.1';
+  setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+
+function closeSearch() {
+  searchOpen = false;
+  document.getElementById('searchBar').classList.remove('visible');
+  document.getElementById('searchResults').classList.remove('visible');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('headerSubtitle').style.opacity = '1';
+  document.querySelector('.title-wrapper').style.opacity = '1';
+  document.querySelector('.header-star').style.opacity = '1';
+  document.querySelector('.divider').style.opacity = '1';
+}
+
+function performSearch(query) {
+  const resultsEl = document.getElementById('searchResults');
+  if (!query.trim()) {
+    resultsEl.classList.remove('visible');
+    return;
+  }
+
+  resultsEl.classList.add('visible');
+  const results = [];
+
+  for (const [id, prayer] of Object.entries(prayers)) {
+    const plainText = prayer.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    const idx = plainText.indexOf(query);
+    if (idx !== -1) {
+      const start = Math.max(0, idx - 30);
+      const end = Math.min(plainText.length, idx + query.length + 30);
+      const excerpt = plainText.substring(start, end)
+        .replace(query, `<mark>${query}</mark>`);
+      results.push({ id, title: prayer.title, excerpt });
+    }
+  }
+
+  if (results.length === 0) {
+    resultsEl.innerHTML = `<div class="search-no-results">לא נמצאו תוצאות לחיפוש "${query}"</div>`;
+  } else {
+    resultsEl.innerHTML = results.map(r => `
+      <div class="search-result-item" onclick="openPrayer('${r.id}'); closeSearch();">
+        <div class="search-result-title">${r.title}</div>
+        <div class="search-result-excerpt">...${r.excerpt}...</div>
+      </div>
+    `).join('');
+  }
+}
+
+function openPrayerWithBurst(e, id, icon) {
+  // Create burst element at click position
+  const burst = document.createElement('div');
+  burst.className = 'icon-burst';
+  burst.textContent = icon;
+  const rect = e.currentTarget.getBoundingClientRect();
+  burst.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+  burst.style.top = (rect.top + rect.height / 2 - 20) + 'px';
+  document.body.appendChild(burst);
+
+  // Open prayer after short delay
+  setTimeout(() => {
+    openPrayer(id);
+    burst.remove();
+  }, 900);
 }
 
 function selectMonth(name, btn) {
@@ -1573,7 +2039,7 @@ function openPrayer(id) {
     setTimeout(autoSelectHebrewMonth, 50);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'derech' || id === 'chayalim') {
+  if (id === 'mazon' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
