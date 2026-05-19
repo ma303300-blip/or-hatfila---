@@ -466,6 +466,54 @@
 
   .close-btn:hover { background: rgba(212,175,55,0.3); transform: scale(1.1); }
 
+  /* ===== FLOATING FONT CONTROL INSIDE PRAYER ===== */
+  .prayer-font-ctrl {
+    position: fixed;
+    left: 12px;
+    bottom: 120px;
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.4s ease;
+    opacity: 0.35;
+  }
+  .prayer-font-ctrl.visible { display: flex; }
+  .prayer-font-ctrl.opaque  { opacity: 1 !important; }
+
+  .pfont-btn {
+    background: rgba(10, 14, 46, 0.82);
+    border: 1px solid rgba(212,175,55,0.35);
+    color: var(--gold-light);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .pfont-btn:hover  { background: rgba(212,175,55,0.25); transform: scale(1.12); }
+  .pfont-btn:active { transform: scale(0.93); }
+
+  .pfont-pct {
+    color: rgba(212,175,55,0.6);
+    font-family: 'Heebo', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1;
+  }
+
   .prayer-content {
     position: relative;
     z-index: 2;
@@ -722,6 +770,236 @@
     padding: 20px;
   }
 
+  /* ===== TODAY CARD ===== */
+  .today-card {
+    position: relative;
+    z-index: 10;
+    margin: 0 16px 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 14px;
+    overflow: hidden;
+    animation: fadeSlideIn 0.5s ease both;
+  }
+
+  .today-card-inner {
+    background: linear-gradient(135deg, #1A0A3E 0%, #0A2240 60%, #001A10 100%);
+    border: 1px solid rgba(212,175,55,0.45);
+    border-radius: 14px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 30px rgba(212,175,55,0.12), inset 0 1px 0 rgba(212,175,55,0.2);
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+  }
+  .today-card-inner:hover { box-shadow: 0 0 40px rgba(212,175,55,0.22); }
+
+  .today-icon {
+    font-size: 30px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(255,180,0,0.6));
+    animation: flicker 2s ease-in-out infinite alternate;
+  }
+
+  .today-text { flex: 1; direction: rtl; }
+  .today-label {
+    font-family: 'Heebo', sans-serif;
+    font-size: 11px;
+    color: rgba(212,175,55,0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .today-event {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 17px;
+    color: var(--gold-light);
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(212,175,55,0.4);
+  }
+  .today-action {
+    font-family: 'Heebo', sans-serif;
+    font-size: 12px;
+    color: rgba(212,175,55,0.5);
+    margin-top: 2px;
+  }
+  .today-arrow {
+    color: rgba(212,175,55,0.5);
+    font-size: 16px;
+  }
+
+  /* ===== FAVORITES ===== */
+  .fav-btn {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.25);
+    color: rgba(212,175,55,0.55);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 3;
+  }
+  .fav-btn:hover { background: rgba(212,175,55,0.25); }
+  .fav-btn.active {
+    color: #FFD700;
+    background: rgba(212,175,55,0.2);
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 6px rgba(255,215,0,0.6));
+  }
+
+  /* ===== SHARE BTN ===== */
+  .share-btn {
+    position: absolute;
+    left: 56px;
+    bottom: 16px;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.25);
+    color: rgba(212,175,55,0.55);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    z-index: 3;
+  }
+  .share-btn:hover { background: rgba(212,175,55,0.25); color: var(--gold-light); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(20, 10, 50, 0.95);
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 20px;
+    padding: 12px 24px;
+    color: var(--gold-light);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    z-index: 300;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ===== NEW BANNERS 8-10 ===== */
+  .banner-8 .banner-inner {
+    background: linear-gradient(135deg, #0A1A0A 0%, #1A4A1E 40%, #051010 100%);
+    box-shadow: 0 10px 40px rgba(20,100,40,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
+  }
+  .banner-8:hover { box-shadow: 0 20px 60px rgba(20,100,40,0.7); }
+
+  .banner-9 .banner-inner {
+    background: linear-gradient(135deg, #1A0A1A 0%, #4A1040 40%, #0A0520 100%);
+    box-shadow: 0 10px 40px rgba(120,20,100,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
+  }
+  .banner-9:hover { box-shadow: 0 20px 60px rgba(120,20,100,0.7); }
+
+  .banner-10 .banner-inner {
+    background: linear-gradient(135deg, #0A1A0A 0%, #1A4A1E 40%, #051010 100%);
+    box-shadow: 0 10px 40px rgba(20,100,40,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
+  }
+  .banner-10:hover { box-shadow: 0 20px 60px rgba(20,100,40,0.7); }
+
+
+  /* ===== REFUA INPUT ===== */
+  .refua-name-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(212,175,55,0.4);
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 18px;
+    text-align: center;
+    direction: rtl;
+    outline: none;
+    box-shadow: 0 0 12px rgba(212,175,55,0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin: 12px 0;
+  }
+  .refua-name-input:focus {
+    border-color: rgba(212,175,55,0.7);
+    box-shadow: 0 0 20px rgba(212,175,55,0.2);
+  }
+  .refua-name-input::placeholder { color: rgba(255,255,255,0.35); }
+
+  /* Prayer header share */
+  .prayer-header-btns {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .header-share-btn {
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.3);
+    color: rgba(212,175,55,0.7);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .header-share-btn:hover { background: rgba(212,175,55,0.25); color: var(--gold-light); }
+
+  /* Favorites section */
+  .favs-section {
+    position: relative;
+    z-index: 10;
+    padding: 0 16px 4px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .favs-title {
+    font-family: 'Heebo', sans-serif;
+    font-size: 11px;
+    color: rgba(212,175,55,0.45);
+    letter-spacing: 2px;
+    text-align: right;
+    margin-bottom: 8px;
+    direction: rtl;
+  }
+  .favs-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    direction: rtl;
+  }
+  .fav-chip {
+    background: rgba(212,175,55,0.1);
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: var(--gold-light);
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .fav-chip:hover { background: rgba(212,175,55,0.22); transform: scale(1.04); }
+  .fav-chip-icon { font-size: 14px; }
+
   /* Candle flame animation */
   .candle-container {
     text-align: center;
@@ -793,6 +1071,25 @@
 </div>
 <div class="search-results" id="searchResults"></div>
 
+<!-- Today Card -->
+<div class="today-card" id="todayCard" style="display:none">
+  <div class="today-card-inner" id="todayCardInner">
+    <span class="today-icon" id="todayIcon">🕯️</span>
+    <div class="today-text">
+      <div class="today-label">היום</div>
+      <div class="today-event" id="todayEvent">הילולה מיוחדת</div>
+      <div class="today-action" id="todayAction">לחץ לפתיחת התפילה</div>
+    </div>
+    <span class="today-arrow">◀</span>
+  </div>
+</div>
+
+<!-- Favorites -->
+<div class="favs-section" id="favsSection" style="display:none">
+  <div class="favs-title">⭐ מועדפים</div>
+  <div class="favs-row" id="favsRow"></div>
+</div>
+
 <!-- Banners -->
 <div class="banners">
 
@@ -859,13 +1156,52 @@
     </div>
   </div>
 
+  <div class="banner banner-8" onclick="openPrayerWithBurst(event, 'refua', '💚')">
+    <div class="banner-inner">
+      <span class="banner-icon">💚</span>
+      <div class="banner-title">תפילה לרפואה</div>
+      <div class="banner-subtitle">מי שברך לחולים</div>
+      <span class="banner-arrow">◀</span>
+    </div>
+  </div>
+
+
+  <div class="banner banner-9" onclick="openPrayerWithBurst(event, 'brachot', '🍇')">
+    <div class="banner-inner">
+      <span class="banner-icon">🍇</span>
+      <div class="banner-title">ברכות הנהנין</div>
+      <div class="banner-subtitle">ברכות ראשונות ואחרונות על כל מאכל</div>
+      <span class="banner-arrow">◀</span>
+    </div>
+  </div>
+
+  <div class="banner banner-10" onclick="openPrayerWithBurst(event, 'modeh', '🌅')">
+    <div class="banner-inner">
+      <span class="banner-icon">🌅</span>
+      <div class="banner-title">מודה אני ותפילת הבוקר</div>
+      <div class="banner-subtitle">תחילת היום בקדושה</div>
+      <span class="banner-arrow">◀</span>
+    </div>
+  </div>
+
 </div>
 
-<!-- Prayer Overlay -->
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Floating font control (fixed, shown only inside prayer) -->
+<div class="prayer-font-ctrl" id="prayerFontCtrl">
+  <button class="pfont-btn" onclick="prayerFontChange(8)">+</button>
+  <div class="pfont-pct" id="pfontPct"></div>
+  <button class="pfont-btn" onclick="prayerFontChange(-8)">−</button>
+</div>
 <div class="prayer-overlay" id="prayerOverlay">
   <div class="prayer-bg"></div>
   <div class="prayer-header">
-    <div style="width:38px"></div>
+    <div class="prayer-header-btns">
+      <button class="header-share-btn" onclick="sharePrayer()" title="שתף">⬆</button>
+      <button class="header-share-btn" id="headerFavBtn" onclick="toggleFavFromHeader()" title="מועדפים">☆</button>
+    </div>
     <div class="prayer-header-title" id="prayerTitle"></div>
     <button class="close-btn" onclick="closePrayer()">✕</button>
   </div>
@@ -1562,21 +1898,436 @@ const prayers = {
       לְשָׁמְרֵנִי מִצַּעַר וּמִמַּכְאוֹבִים כָּל הַיָּמִים.<br>
       <span class="highlight">אָמֵן.</span>
     `
+  },
+  refua: {
+    title: "תפילה לרפואה",
+    body: `
+      <div class="candle-container"><span class="flame">💚</span></div>
+
+      <span class="section-title">✦ הכנס שם החולה ✦</span>
+      <label style="color:rgba(212,175,55,0.65);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:4px;direction:rtl;">שם החולה בן/בת שם האם</label>
+      <input type="text" class="refua-name-input" id="refuaNameInput"
+        placeholder="למשל: יוסף בן רחל"
+        oninput="updateRefuaName(this.value)" />
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ מי שברך לחולה ✦</span>
+      מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ<br>
+      אַבְרָהָם יִצְחָק וְיַעֲקֹב<br>
+      שָׂרָה רִבְקָה רָחֵל וְלֵאָה,<br>
+      הוּא יְבָרֵךְ וִירַפֵּא אֶת הַחוֹלֶה<br>
+      <span class="highlight" id="refuaNameDisplay">______</span>.<br><br>
+
+      הַקָּדוֹשׁ בָּרוּךְ הוּא יִמָּלֵא רַחֲמִים עָלָיו<br>
+      לְהַחֲלִימוֹ וּלְרַפְּאוֹתוֹ<br>
+      לְהַחֲזִיקוֹ וּלְהַחֲיוֹתוֹ,<br>
+      וְיִשְׁלַח לוֹ מְהֵרָה<br>
+      רְפוּאָה שְׁלֵמָה<br>
+      <span class="highlight">רְפוּאַת הַנֶּפֶשׁ וּרְפוּאַת הַגּוּף</span>,<br>
+      בְּתוֹךְ שְׁאָר חוֹלֵי יִשְׂרָאֵל,<br>
+      הַשְׁתָּא בַּעֲגָלָא וּבִזְמַן קָרִיב,<br>
+      וְנֹאמַר אָמֵן.
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ תפילה לרפואה ✦</span>
+      יְהִי רָצוֹן מִלְּפָנֶיךָ<br>
+      יְהֹוָה אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      שֶׁתִּשְׁלַח מְהֵרָה רְפוּאָה שְׁלֵמָה<br>
+      מִן הַשָּׁמַיִם,<br>
+      רְפוּאַת הַנֶּפֶשׁ וּרְפוּאַת הַגּוּף<br>
+      לְחוֹלֶה <span class="highlight" id="refuaNameDisplay2">______</span>.<br><br>
+
+      אֵל נָא רְפָא נָא לוֹ.<br>
+      כִּי אַתָּה אֵל מֶלֶךְ<br>
+      רוֹפֵא נֶאֱמָן וְרַחֲמָן אָתָּה.<br><br>
+
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה<br>
+      רוֹפֵא חוֹלֵי עַמּוֹ יִשְׂרָאֵל.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ תהילים ק"ו – לִישׁוּעָה ✦</span>
+      יֹשֵׁב בְּסֵתֶר עֶלְיוֹן<br>
+      בְּצֵל שַׁדַּי יִתְלוֹנָן.<br>
+      אֹמַר לַיהֹוָה מַחְסִי וּמְצוּדָתִי<br>
+      אֱלֹהַי אֶבְטַח בּוֹ.<br><br>
+
+      יִקְרָאֵנִי וְאֶעֱנֵהוּ<br>
+      עִמּוֹ אָנֹכִי בְצָרָה<br>
+      אֲחַלְּצֵהוּ וַאֲכַבְּדֵהוּ.<br>
+      <span class="highlight">אֹרֶךְ יָמִים אַשְׂבִּיעֵהוּ<br>
+      וְאַרְאֵהוּ בִּישׁוּעָתִי.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <div class="candle-container"><span class="flame">💚</span></div>
+      <span class="highlight">רְפוּאָה שְׁלֵמָה לְכָל הַחוֹלִים!</span>
+    `
+  },
+  shabbat: {
+    title: "קבלת שבת",
+    body: `
+      <span class="section-title">✦ לְכָה דוֹדִי ✦</span>
+      <span class="highlight">לְכָה דוֹדִי לִקְרַאת כַּלָּה<br>
+      פְּנֵי שַׁבָּת נְקַבְּלָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      שָׁמוֹר וְזָכוֹר בְּדִבּוּר אֶחָד<br>
+      הִשְׁמִיעָנוּ אֵל הַמְיֻחָד.<br>
+      יְיָ אֶחָד וּשְׁמוֹ אֶחָד<br>
+      לְשֵׁם וּלְתִפְאֶרֶת וְלִתְהִלָּה.<br>
+      <span class="highlight">לְכָה דוֹדִי לִקְרַאת כַּלָּה פְּנֵי שַׁבָּת נְקַבְּלָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      לִקְרַאת שַׁבָּת לְכוּ וְנֵלְכָה<br>
+      כִּי הִיא מְקוֹר הַבְּרָכָה.<br>
+      מֵרֹאשׁ מִקֶּדֶם נְסוּכָה<br>
+      סוֹף מַעֲשֶׂה בְּמַחֲשָׁבָה תְּחִלָּה.<br>
+      <span class="highlight">לְכָה דוֹדִי לִקְרַאת כַּלָּה פְּנֵי שַׁבָּת נְקַבְּלָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      הִתְנַעֲרִי מֵעָפָר קוּמִי<br>
+      לִבְשִׁי בִּגְדֵי תִפְאַרְתֵּךְ עַמִּי.<br>
+      עַל יַד בֶּן יִשַׁי בֵּית הַלַּחְמִי<br>
+      קָרְבָה אֶל נַפְשִׁי גְּאָלָהּ.<br>
+      <span class="highlight">לְכָה דוֹדִי לִקְרַאת כַּלָּה פְּנֵי שַׁבָּת נְקַבְּלָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      בֹּאִי בְשָׁלוֹם עֲטֶרֶת בַּעְלָהּ<br>
+      גַּם בְּשִׂמְחָה וּבְצָהֳלָה.<br>
+      תּוֹךְ אֱמוּנֵי עַם סְגֻלָּה<br>
+      בֹּאִי כַלָּה בֹּאִי כַלָּה.<br>
+      <span class="highlight">לְכָה דוֹדִי לִקְרַאת כַּלָּה פְּנֵי שַׁבָּת נְקַבְּלָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ מזמור שיר ליום השבת ✦</span>
+      מִזְמוֹר שִׁיר לְיוֹם הַשַּׁבָּת.<br>
+      טוֹב לְהֹדוֹת לַיְהֹוָה<br>
+      וּלְזַמֵּר לְשִׁמְךָ עֶלְיוֹן.<br>
+      לְהַגִּיד בַּבֹּקֶר חַסְדֶּךָ<br>
+      וֶאֱמוּנָתְךָ בַּלֵּילוֹת.<br><br>
+
+      כִּי שִׂמַּחְתַּנִי יְהֹוָה בְּפָעֳלֶךָ<br>
+      בְּמַעֲשֵׂי יָדֶיךָ אֲרַנֵּן.<br>
+      <span class="highlight">מַה גָּדְלוּ מַעֲשֶׂיךָ יְהֹוָה<br>
+      מְאֹד עָמְקוּ מַחְשְׁבֹתֶיךָ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ שלום עליכם ✦</span>
+      <span class="highlight">שָׁלוֹם עֲלֵיכֶם מַלְאֲכֵי הַשָּׁרֵת<br>
+      מַלְאֲכֵי עֶלְיוֹן<br>
+      מִמֶּלֶךְ מַלְכֵי הַמְּלָכִים<br>
+      הַקָּדוֹשׁ בָּרוּךְ הוּא.</span><br><br>
+
+      בֹּאֲכֶם לְשָׁלוֹם מַלְאֲכֵי הַשָּׁלוֹם<br>
+      מַלְאֲכֵי עֶלְיוֹן<br>
+      מִמֶּלֶךְ מַלְכֵי הַמְּלָכִים<br>
+      הַקָּדוֹשׁ בָּרוּךְ הוּא.<br><br>
+
+      בָּרְכוּנִי לְשָׁלוֹם מַלְאֲכֵי הַשָּׁלוֹם<br>
+      מַלְאֲכֵי עֶלְיוֹן<br>
+      מִמֶּלֶךְ מַלְכֵי הַמְּלָכִים<br>
+      הַקָּדוֹשׁ בָּרוּךְ הוּא.<br><br>
+
+      <span class="highlight">צֵאתְכֶם לְשָׁלוֹם מַלְאֲכֵי הַשָּׁלוֹם<br>
+      מַלְאֲכֵי עֶלְיוֹן<br>
+      מִמֶּלֶךְ מַלְכֵי הַמְּלָכִים<br>
+      הַקָּדוֹשׁ בָּרוּךְ הוּא.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ קידוש ליל שבת ✦</span>
+      וַיְהִי עֶרֶב וַיְהִי בֹקֶר<br>
+      יוֹם הַשִּׁשִּׁי.<br>
+      וַיְכֻלּוּ הַשָּׁמַיִם וְהָאָרֶץ וְכָל צְבָאָם.<br>
+      וַיְכַל אֱלֹהִים בַּיּוֹם הַשְּׁבִיעִי<br>
+      מְלַאכְתּוֹ אֲשֶׁר עָשָׂה<br>
+      וַיִּשְׁבֹּת בַּיּוֹם הַשְּׁבִיעִי<br>
+      מִכָּל מְלַאכְתּוֹ אֲשֶׁר עָשָׂה.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      בּוֹרֵא פְּרִי הַגָּפֶן.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      אֲשֶׁר קִדְּשָׁנוּ בְּמִצְווֹתָיו<br>
+      וְרָצָה בָנוּ,<br>
+      וְשַׁבַּת קָדְשׁוֹ בְּאַהֲבָה וּבְרָצוֹן הִנְחִילָנוּ<br>
+      זִכָּרוֹן לְמַעֲשֵׂה בְרֵאשִׁית.<br>
+      כִּי הוּא יוֹם תְּחִלָּה לְמִקְרָאֵי קֹדֶשׁ<br>
+      זֵכֶר לִיצִיאַת מִצְרָיִם.<br>
+      כִּי בָנוּ בָחַרְתָּ וְאוֹתָנוּ קִדַּשְׁתָּ מִכָּל הָעַמִּים.<br>
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה<br>
+      מְקַדֵּשׁ הַשַּׁבָּת.</span>
+    `
+  },
+  brachot: {
+    title: "ברכות הנהנין",
+    body: `
+      <span class="section-title">✦ ברכות ראשונות ✦</span>
+      <span style="color:rgba(212,175,55,0.6);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לפני האכילה והשתייה</span>
+
+      <span class="section-title">🍞 על הלחם ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">חיטה, שעורה, כוסמין, שיבולת שועל, שיפון</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">הַמּוֹצִיא לֶחֶם מִן הָאָרֶץ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">🥐 על מיני מזונות ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">עוגות, פסטה, אורז לדעת הספרדים, דייסה</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">בּוֹרֵא מִינֵי מְזוֹנוֹת.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">🍇 על היין ✦</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">בּוֹרֵא פְּרִי הַגָּפֶן.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">🍊 על פירות העץ ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">תפוח, תפוז, בננה, אגס, שקד, זית, רימון, תמר, תאנה</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">בּוֹרֵא פְּרִי הָעֵץ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">🥕 על פירות האדמה ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">ירקות, תפוח אדמה, גזר, בוטנים, פטריות, ענבים (אם לא מיץ)</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">בּוֹרֵא פְּרִי הָאֲדָמָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">🥛 שהכל – שאר המאכלים ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">בשר, דגים, ביצים, חלב, גבינה, מים, מיצים, ממתקים, פטריות לד"א</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">שֶׁהַכֹּל נִהְיֶה בִּדְבָרוֹ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ ברכות אחרונות ✦</span>
+      <span style="color:rgba(212,175,55,0.6);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לאחר האכילה</span>
+
+      <span class="section-title">✦ ברכת המזון ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר אכילת לחם (כזית ומעלה)</span>
+      <span class="highlight" style="cursor:pointer;text-decoration:underline" onclick="closePrayer();setTimeout(()=>openPrayer('mazon'),300)">← לברכת המזון המלאה לחץ כאן</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ מעין שלש ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: מיני מזונות / יין / שבעת המינים (לפי הפרי)</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,<br>
+      עַל הַמִּחְיָה וְעַל הַכַּלְכָּלָה<br>
+      וְעַל תְּנוּבַת הַשָּׂדֶה<br>
+      וְעַל אֶרֶץ חֶמְדָּה טוֹבָה וּרְחָבָה<br>
+      שֶׁרָצִיתָ וְהִנְחַלְתָּ לַאֲבוֹתֵינוּ<br>
+      לֶאֱכֹל מִפִּרְיָהּ וְלִשְׂבּוֹעַ מִטּוּבָהּ.<br>
+      רַחֵם נָא יְהֹוָה אֱלֹהֵינוּ עַל יִשְׂרָאֵל עַמֶּךָ<br>
+      וְעַל יְרוּשָׁלַיִם עִירֶךָ<br>
+      וְעַל צִיּוֹן מִשְׁכַּן כְּבוֹדֶךָ<br>
+      וְעַל מִזְבְּחֶךָ וְעַל הֵיכָלֶךָ.<br>
+      וּבְנֵה יְרוּשָׁלַיִם עִיר הַקֹּדֶשׁ בִּמְהֵרָה בְיָמֵינוּ<br>
+      וְהַעֲלֵנוּ לְתוֹכָהּ וְשַׂמְּחֵנוּ בְּבִנְיָנָהּ<br>
+      וְנֹאכַל מִפִּרְיָהּ וְנִשְׂבַּע מִטּוּבָהּ<br>
+      וּנְבָרֶכְךָ עָלֶיהָ בִּקְדֻשָּׁה וּבְטָהֳרָה.<br><br>
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה<br>
+      עַל הָאָרֶץ וְעַל הַמִּחְיָה.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ בורא נפשות ✦</span>
+      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: פירות עץ / פירות אדמה / שתייה / בשר / ביצים / שהכל</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      בּוֹרֵא נְפָשׁוֹת רַבּוֹת וְחֶסְרוֹנָן<br>
+      עַל כָּל מַה שֶּׁבָּרָאתָ<br>
+      לְהַחֲיוֹת בָּהֶם נֶפֶשׁ כָּל חָי.<br>
+      <span class="highlight">בָּרוּךְ חֵי הָעוֹלָמִים.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ סדר קדימה בברכות ✦</span>
+      <span style="color:rgba(255,255,255,0.8);font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.2;display:block;">
+        כשיש לפניך כמה מאכלים:<br>
+        <span class="highlight">א.</span> המוציא – פוטר הכל<br>
+        <span class="highlight">ב.</span> מזונות<br>
+        <span class="highlight">ג.</span> הגפן<br>
+        <span class="highlight">ד.</span> העץ<br>
+        <span class="highlight">ה.</span> האדמה<br>
+        <span class="highlight">ו.</span> שהכל<br><br>
+        מין שבעה קודם לשאר פירות העץ.
+      </span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ שבעת המינים ✦</span>
+      <span style="color:rgba(255,255,255,0.8);font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.4;display:block;">
+        🌾 חיטה ושעורה – המוציא / מזונות<br>
+        🍇 ענבים ויין – הגפן<br>
+        🫒 תאנה – העץ + מעין שלש<br>
+        🫒 רימון – העץ + מעין שלש<br>
+        🫒 זית – העץ + מעין שלש<br>
+        🍯 דבש תמרים – העץ + מעין שלש
+      </span>
+    `
+  },
+  modeh: {
+    title: "מודה אני ותפילת הבוקר",
+    body: `
+      <span class="section-title">✦ מודה אני ✦</span>
+      <span class="highlight">מוֹדֶה אֲנִי לְפָנֶיךָ<br>
+      מֶלֶךְ חַי וְקַיָּם,<br>
+      שֶׁהֶחֱזַרְתָּ בִּי נִשְׁמָתִי בְּחֶמְלָה,<br>
+      רַבָּה אֱמוּנָתֶךָ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ נטילת ידיים ✦</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      <span class="highlight">עַל נְטִילַת יָדָיִם.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ אשר יצר ✦</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      אֲשֶׁר יָצַר אֶת הָאָדָם בְּחָכְמָה<br>
+      וּבָרָא בוֹ נְקָבִים נְקָבִים חֲלוּלִים חֲלוּלִים.<br>
+      גָּלוּי וְיָדוּעַ לִפְנֵי כִסֵּא כְבוֹדֶךָ<br>
+      שֶׁאִם יִפָּתֵחַ אֶחָד מֵהֶם<br>
+      אוֹ יִסָּתֵם אֶחָד מֵהֶם<br>
+      אִי אֶפְשַׁר לְהִתְקַיֵּם<br>
+      וְלַעֲמֹד לְפָנֶיךָ.<br>
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה<br>
+      רוֹפֵא כָל בָּשָׂר וּמַפְלִיא לַעֲשׂוֹת.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ אלהי נשמה ✦</span>
+      אֱלֹהַי, נְשָׁמָה שֶׁנָּתַתָּ בִּי טְהוֹרָה הִיא.<br>
+      אַתָּה בְּרָאתָהּ, אַתָּה יְצַרְתָּהּ,<br>
+      אַתָּה נְפַחְתָּהּ בִּי,<br>
+      וְאַתָּה מְשַׁמְּרָהּ בְּקִרְבִּי,<br>
+      וְאַתָּה עָתִיד לִטְּלָהּ מִמֶּנִּי<br>
+      וּלְהַחֲזִירָהּ בִּי לֶעָתִיד לָבוֹא.<br><br>
+      כָּל זְמַן שֶׁהַנְּשָׁמָה בְקִרְבִּי<br>
+      מוֹדֶה אֲנִי לְפָנֶיךָ<br>
+      יְהֹוָה אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      רִבּוֹן כָּל הַמַּעֲשִׂים, אֲדוֹן כָּל הַנְּשָׁמוֹת.<br>
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה הַמַּחֲזִיר נְשָׁמוֹת לִפְגָרִים מֵתִים.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ ברכות השחר ✦</span>
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      אֲשֶׁר נָתַן לַשֶּׂכְוִי בִינָה לְהַבְחִין בֵּין יוֹם וּבֵין לָיְלָה.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      שֶׁלֹּא עָשָׂנִי גּוֹי.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      שֶׁלֹּא עָשָׂנִי עָבֶד.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      פּוֹקֵחַ עִוְרִים.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      מַלְבִּישׁ עֲרֻמִּים.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      מַתִּיר אֲסוּרִים.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      זוֹקֵף כְּפוּפִים.<br><br>
+
+      בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      הַמֵּכִין מִצְעֲדֵי גָבֶר.<br><br>
+
+      <span class="highlight">בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
+      הַנּוֹתֵן לַיָּעֵף כֹּחַ.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ יהי רצון לבוקר ✦</span>
+      יְהִי רָצוֹן מִלְּפָנֶיךָ<br>
+      יְהֹוָה אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      שֶׁתַּרְגִּילֵנִי בְּתוֹרָתְךָ<br>
+      וְתַדְבְּקֵנִי בְּמִצְווֹתֶיךָ,<br>
+      וְאַל תְּבִיאֵנִי לֹא לִידֵי חֵטְא<br>
+      וְלֹא לִידֵי עֲבֵרָה וָעָוֹן<br>
+      וְלֹא לִידֵי נִסָּיוֹן וְלֹא לִידֵי בִזָּיוֹן.<br><br>
+      וְאַל יִשְׁלֹט בִּי יֵצֶר הָרָע.<br>
+      וְהַרְחִיקֵנִי מֵאָדָם רָע וּמֵחָבֵר רָע.<br>
+      וְתֵן בְּלִבִּי לִרְאוֹת מַעְלַת חֲבֵרִים<br>
+      וְלֹא חֶסְרוֹנָם.<br>
+      <span class="highlight">וְיֵצֶר טוֹב יִמְשֹׁל בְּקִרְבִּי<br>
+      הַיּוֹם וְכָל יוֹם. אָמֵן.</span>
+    `
   }
 };
 
-let currentFontPercent = 100;
+let currentFontPercent = parseInt(localStorage.getItem('orHatfila_fontSize') || '100');
+
+function prayerFontChange(delta) {
+  currentFontPercent = Math.min(220, Math.max(60, currentFontPercent + delta));
+  localStorage.setItem('orHatfila_fontSize', currentFontPercent);
+  applyFontSize();
+  // Flash opaque on interaction
+  const ctrl = document.getElementById('prayerFontCtrl');
+  ctrl.classList.add('opaque');
+  clearTimeout(ctrl._fadeTimer);
+  ctrl._fadeTimer = setTimeout(() => ctrl.classList.remove('opaque'), 1800);
+}
 
 function changeFontSize(delta) {
-  currentFontPercent = Math.min(200, Math.max(60, currentFontPercent + delta));
-  document.getElementById('fontDisplay').textContent = currentFontPercent + '%';
-  applyFontSize();
+  prayerFontChange(delta);
+  const display = document.getElementById('fontDisplay');
+  if (display) display.textContent = currentFontPercent + '%';
 }
 
 function applyFontSize() {
   const el = document.querySelector('.prayer-text');
   if (el) el.style.fontSize = (22 * currentFontPercent / 100) + 'px';
+  const pct = document.getElementById('pfontPct');
+  if (pct) pct.textContent = currentFontPercent + '%';
+  const display = document.getElementById('fontDisplay');
+  if (display) display.textContent = currentFontPercent + '%';
 }
+
+// Show font ctrl when prayer opens, hide when closed
+function showPrayerFontCtrl() {
+  const ctrl = document.getElementById('prayerFontCtrl');
+  ctrl.classList.add('visible', 'opaque');
+  clearTimeout(ctrl._fadeTimer);
+  ctrl._fadeTimer = setTimeout(() => ctrl.classList.remove('opaque'), 1800);
+}
+function hidePrayerFontCtrl() {
+  const ctrl = document.getElementById('prayerFontCtrl');
+  ctrl.classList.remove('visible', 'opaque');
+}
+
+// Fade in on touch anywhere in prayer, fade out after scrolling
+document.querySelector('.prayer-content').addEventListener('touchstart', () => {
+  const ctrl = document.getElementById('prayerFontCtrl');
+  if (!ctrl.classList.contains('visible')) return;
+  ctrl.classList.add('opaque');
+  clearTimeout(ctrl._fadeTimer);
+}, { passive: true });
+
+document.querySelector('.prayer-content').addEventListener('scroll', () => {
+  const ctrl = document.getElementById('prayerFontCtrl');
+  if (!ctrl.classList.contains('visible')) return;
+  ctrl.classList.remove('opaque');
+  clearTimeout(ctrl._fadeTimer);
+}, { passive: true });
 
 function selectNissim(type, btn) {
   const nissimText = document.getElementById('nissimText');
@@ -1853,7 +2604,144 @@ function updateDateDisplay() {
     gregorian + '<br>' + dayLetter + ' ' + hebrewMonthYear;
 }
 
-// ===== HILULA NOTIFICATIONS =====
+// ===== REFUA NAME =====
+function updateRefuaName(val) {
+  const disp = val.trim() || '______';
+  document.querySelectorAll('#refuaNameDisplay, #refuaNameDisplay2').forEach(el => {
+    el.textContent = disp;
+  });
+}
+
+// ===== FAVORITES =====
+let favorites = JSON.parse(localStorage.getItem('orHatfila_favs') || '[]');
+
+const prayerMeta = {
+  derech: { icon: '🛤️', title: 'תפילת הדרך' },
+  mazon: { icon: '🙌', title: 'ברכת המזון' },
+  chayalim: { icon: '🛡️', title: 'תפילה לחיילים' },
+  hilula: { icon: '🕯️', title: 'הדלקת נר בהילולא' },
+  roshchodesh: { icon: '🌙', title: 'נר ראש חודש' },
+  challah: { icon: '🌾', title: 'הפרשת חלה' },
+  shema: { icon: '🌙', title: 'קריאת שמע' },
+  refua: { icon: '💚', title: 'תפילה לרפואה' },
+  shabbat: { icon: '🕍', title: 'קבלת שבת' },
+  brachot: { icon: '🍇', title: 'ברכות הנהנין' },
+  modeh: { icon: '🌅', title: 'תפילת הבוקר' }
+};
+
+let currentPrayerId = null;
+
+function renderFavs() {
+  const section = document.getElementById('favsSection');
+  const row = document.getElementById('favsRow');
+  if (favorites.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  row.innerHTML = favorites.map(id => {
+    const m = prayerMeta[id] || { icon: '📖', title: id };
+    return `<div class="fav-chip" onclick="openPrayerWithBurst(event,'${id}','${m.icon}')">
+      <span class="fav-chip-icon">${m.icon}</span>${m.title}
+    </div>`;
+  }).join('');
+}
+
+function toggleFav(id) {
+  const idx = favorites.indexOf(id);
+  if (idx === -1) {
+    favorites.push(id);
+    showToast('⭐ נוסף למועדפים');
+  } else {
+    favorites.splice(idx, 1);
+    showToast('הוסר מהמועדפים');
+  }
+  localStorage.setItem('orHatfila_favs', JSON.stringify(favorites));
+  renderFavs();
+  updateFavBtn();
+}
+
+function updateFavBtn() {
+  const btn = document.getElementById('headerFavBtn');
+  if (!btn || !currentPrayerId) return;
+  const isFav = favorites.includes(currentPrayerId);
+  btn.textContent = isFav ? '★' : '☆';
+  btn.style.color = isFav ? '#FFD700' : '';
+}
+
+function toggleFavFromHeader() {
+  if (currentPrayerId) toggleFav(currentPrayerId);
+}
+
+// ===== SHARE =====
+function sharePrayer() {
+  if (!currentPrayerId) return;
+  const m = prayerMeta[currentPrayerId] || { title: 'תפילה' };
+  const text = `${m.icon || '📖'} ${m.title} – מאפליקציית "אור התפילה"`;
+  if (navigator.share) {
+    navigator.share({ title: m.title, text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('הטקסט הועתק ✓'));
+  }
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ===== TODAY CARD =====
+function checkTodayEvents() {
+  const hDate = getHebrewDayMonth();
+  if (!hDate) return;
+
+  const monthMap = {
+    'תשרי': 'תשרי', 'חשון': 'מרחשוון', 'כסלו': 'כסלו',
+    'טבת': 'טבת', 'שבט': 'שבט', 'אדר': 'אדר',
+    'ניסן': 'ניסן', 'אייר': 'אייר', 'סיון': 'סיון',
+    'תמוז': 'תמוז', 'אב': 'אב', 'אלול': 'אלול'
+  };
+
+  let currentMonth = '';
+  for (const [key, val] of Object.entries(monthMap)) {
+    if (hDate.month.includes(key)) { currentMonth = val; break; }
+  }
+
+  // Check hilulot
+  const todayHilula = hilulaCalendar.find(h => h.month === currentMonth && h.day === hDate.day);
+
+  // Check rosh chodesh (day 1 or 30)
+  const isRoshChodesh = hDate.day === 1 || hDate.day === 30;
+
+  const card = document.getElementById('todayCard');
+
+  if (todayHilula) {
+    document.getElementById('todayIcon').textContent = '🕯️';
+    document.getElementById('todayEvent').textContent = `הילולת ${todayHilula.name}`;
+    document.getElementById('todayAction').textContent = 'פתח תפילת הדלקת נר';
+    document.getElementById('todayCardInner').onclick = () => openPrayerWithBurst({ currentTarget: document.getElementById('todayCardInner') }, 'hilula', '🕯️');
+    card.style.display = 'block';
+  } else if (isRoshChodesh) {
+    document.getElementById('todayIcon').textContent = '🌙';
+    document.getElementById('todayEvent').textContent = 'ראש חודש ' + (hDate.month || '');
+    document.getElementById('todayAction').textContent = 'פתח תפילת הדלקת נר';
+    document.getElementById('todayCardInner').onclick = () => openPrayerWithBurst({ currentTarget: document.getElementById('todayCardInner') }, 'roshchodesh', '🌙');
+    card.style.display = 'block';
+  }
+}
+
+// Override openPrayer to track current prayer
+const _origOpenPrayer = openPrayer;
+function openPrayer(id) {
+  currentPrayerId = id;
+  _origOpenPrayer(id);
+  updateFavBtn();
+}
+
+
 const hilulaCalendar = [
   { name: 'התנא הקדוש רבי שמעון בר יוחאי', month: 'אייר', day: 18 },
   { name: 'התנא הקדוש רבי מאיר בעל הנס', month: 'אייר', day: 14 },
@@ -1865,6 +2753,9 @@ const hilulaCalendar = [
   { name: 'רבי אלימלך מליז\'נסק', month: 'אדר', day: 21 },
   { name: 'רחל אמנו', month: 'מרחשוון', day: 11 }
 ];
+
+checkTodayEvents();
+renderFavs();
 
 function getHebrewDayMonth() {
   try {
@@ -2033,13 +2924,14 @@ function openPrayer(id) {
   overlay.querySelector('.prayer-content').scrollTop = 0;
   document.body.style.overflow = 'hidden';
   setTimeout(applyFontSize, 10);
+  setTimeout(showPrayerFontCtrl, 50);
 
   // Auto-select Hebrew month for Rosh Chodesh
   if (id === 'roshchodesh') {
     setTimeout(autoSelectHebrewMonth, 50);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh') {
+  if (id === 'mazon' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
@@ -2056,6 +2948,7 @@ function closePrayer() {
   document.getElementById('prayerOverlay').classList.remove('active');
   document.body.style.overflow = '';
   stopAutoScroll();
+  hidePrayerFontCtrl();
 }
 
 // Close on background tap
