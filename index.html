@@ -1226,7 +1226,26 @@ function updateScrollSpeed(val) {
   autoScrollSpeed = parseFloat(val) * 0.4;
 }
 
+// Fix keyboard dismiss - blur input without closing prayer
+document.addEventListener('touchstart', function(e) {
+  if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+    if (!e.target.closest('input')) {
+      document.activeElement.blur();
+      e.stopPropagation();
+    }
+  }
+}, true);
+
+// Handle back button - close prayer instead of exiting app
+window.addEventListener('popstate', function(e) {
+  const overlay = document.getElementById('prayerOverlay');
+  if (overlay.classList.contains('active')) {
+    closePrayer();
+  }
+});
+
 function openPrayer(id) {
+  history.pushState({ prayer: id }, '');
   const p = prayers[id];
   document.getElementById('prayerTitle').textContent = p.title;
   document.getElementById('prayerBody').innerHTML = p.body;
