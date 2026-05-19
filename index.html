@@ -1069,8 +1069,8 @@ function updateSoldierPrayer(name) {
   }
 }
 
-let autoScrollInterval = null;
-let autoScrollSpeed = 2;
+let autoScrollRAF = null;
+let autoScrollSpeed = 0.8;
 let isAutoScrolling = false;
 
 function setManualScroll() {
@@ -1096,27 +1096,27 @@ function toggleAutoScroll() {
 function startAutoScroll() {
   isAutoScrolling = true;
   const content = document.querySelector('.prayer-content');
-  autoScrollInterval = setInterval(() => {
+  function step() {
+    if (!isAutoScrolling) return;
     content.scrollTop += autoScrollSpeed;
     if (content.scrollTop + content.clientHeight >= content.scrollHeight - 5) {
       stopAutoScroll();
       document.getElementById('btnAuto').classList.remove('active');
       document.getElementById('btnAuto').textContent = '✔ הסתיים';
+      return;
     }
-  }, 50);
+    autoScrollRAF = requestAnimationFrame(step);
+  }
+  autoScrollRAF = requestAnimationFrame(step);
 }
 
 function stopAutoScroll() {
   isAutoScrolling = false;
-  clearInterval(autoScrollInterval);
+  cancelAnimationFrame(autoScrollRAF);
 }
 
 function updateScrollSpeed(val) {
-  autoScrollSpeed = parseFloat(val) * 0.5;
-  if (isAutoScrolling) {
-    stopAutoScroll();
-    startAutoScroll();
-  }
+  autoScrollSpeed = parseFloat(val) * 0.4;
 }
 
 function openPrayer(id) {
@@ -1131,7 +1131,7 @@ function openPrayer(id) {
 
   // Show scroll controls only for mazon
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'derech') {
+  if (id === 'mazon' || id === 'derech' || id === 'chayalim') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
