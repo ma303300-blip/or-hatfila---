@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- © 2024 מוטי עמר – אור התפילה. כל הזכויות שמורות. העתקה או שימוש ללא רשות אסורים. -->
+
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -1497,6 +1499,70 @@
 </div>
 
 <script>
+
+// ═══════════════════════════════════════════
+// הצפנת localStorage – AES-like XOR + Base64
+// ═══════════════════════════════════════════
+const _store = (() => {
+  const KEY = 'OrHaTfila_2024_אורהתפילה';
+
+  function _enc(str) {
+    try {
+      const k = KEY;
+      let out = '';
+      for (let i = 0; i < str.length; i++) {
+        out += String.fromCharCode(str.charCodeAt(i) ^ k.charCodeAt(i % k.length));
+      }
+      return btoa(unescape(encodeURIComponent(out)));
+    } catch(e) { return btoa(unescape(encodeURIComponent(str))); }
+  }
+
+  function _dec(enc) {
+    try {
+      const str = decodeURIComponent(escape(atob(enc)));
+      const k = KEY;
+      let out = '';
+      for (let i = 0; i < str.length; i++) {
+        out += String.fromCharCode(str.charCodeAt(i) ^ k.charCodeAt(i % k.length));
+      }
+      return out;
+    } catch(e) {
+      try { return decodeURIComponent(escape(atob(enc))); }
+      catch(e2) { return enc; }
+    }
+  }
+
+  return {
+    set(key, value) {
+      try { localStorage.setItem(_enc(key), _enc(value)); }
+      catch(e) {}
+    },
+    get(key, fallback = null) {
+      try {
+        // Try encrypted key first
+        const encKey = _enc(key);
+        const val = localStorage.getItem(encKey);
+        if (val !== null) return _dec(val);
+        // Fallback: try plain key (migration from old data)
+        const plain = localStorage.getItem(key);
+        if (plain !== null) {
+          // Migrate to encrypted
+          localStorage.removeItem(key);
+          localStorage.setItem(encKey, _enc(plain));
+          return plain;
+        }
+        return fallback;
+      } catch(e) { return fallback; }
+    },
+    remove(key) {
+      try {
+        localStorage.removeItem(_enc(key));
+        localStorage.removeItem(key); // clean old
+      } catch(e) {}
+    }
+  };
+})();
+
 const prayers = {
   derech: {
     title: "תפילת הדרך",
@@ -2552,11 +2618,11 @@ const prayers = {
   }
 };
 
-let currentFontPercent = parseInt(localStorage.getItem('orHatfila_fontSize') || '100');
+let currentFontPercent = parseInt(_store.get('orHatfila_fontSize') || '100');
 
 function prayerFontChange(delta) {
   currentFontPercent = Math.min(220, Math.max(60, currentFontPercent + delta));
-  localStorage.setItem('orHatfila_fontSize', currentFontPercent);
+  _store.set('orHatfila_fontSize', String(currentFontPercent));
   applyFontSize();
   
   const ctrl = document.getElementById('prayerFontCtrl');
@@ -2886,7 +2952,7 @@ function updateRefuaName(val) {
   });
 }
 
-let favorites = JSON.parse(localStorage.getItem('orHatfila_favs') || '[]');
+let favorites = JSON.parse(_store.get('orHatfila_favs') || '[]');
 
 const prayerMeta = {
   derech: { icon: '🗺️', title: 'תפילת הדרך' },
@@ -2918,7 +2984,7 @@ function toggleFav(id) {
     favorites.splice(idx, 1);
     showToast('הוסר מהמועדפים');
   }
-  localStorage.setItem('orHatfila_favs', JSON.stringify(favorites));
+  _store.set('orHatfila_favs', JSON.stringify(favorites));
   renderFavs();
   updateFavBtn();
   updateFhbCount();
@@ -3195,11 +3261,11 @@ function checkRoshChodesh() {
       const tomorrowMonth = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(tomorrow);
 
       
-      const lastNotified = localStorage.getItem('roshChodeshNotified');
+      const lastNotified = _store.get('roshChodeshNotified');
       const today = now.toDateString();
       if (lastNotified === today) return;
 
-      localStorage.setItem('roshChodeshNotified', today);
+      _store.set('roshChodeshNotified', today);
 
       new Notification('🌙 ראש חודש הלילה!', {
         body: `הלילה מתחיל ראש חודש ${tomorrowMonth}\nזכור להדליק נר! 🕯️`,
@@ -3328,6 +3394,45 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
     closePrayer();
   }
 });
+
+
+// ═══════════════════════════════════════
+// הגנת קוד מקור
+// ═══════════════════════════════════════
+(function _protect() {
+  // מניעת קליק ימני
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  // מניעת בחירת טקסט (Ctrl+A)
+  document.addEventListener('keydown', function(e) {
+    // Ctrl+U (view source), Ctrl+Shift+I (devtools), Ctrl+Shift+J, F12
+    if (
+      (e.ctrlKey && e.key === 'u') ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) ||
+      e.key === 'F12'
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // זיהוי devtools פתוח
+  let _devOpen = false;
+  const _threshold = 160;
+  setInterval(function() {
+    const widthDiff  = window.outerWidth  - window.innerWidth  > _threshold;
+    const heightDiff = window.outerHeight - window.innerHeight > _threshold;
+    if ((widthDiff || heightDiff) && !_devOpen) {
+      _devOpen = true;
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0A0E2E;color:#D4AF37;font-family:serif;font-size:24px;text-align:center;padding:40px;">🔒<br><br>הגישה לכלי הפיתוח חסומה</div>';
+    }
+  }, 1000);
+})();
 
 </script>
 </body>
