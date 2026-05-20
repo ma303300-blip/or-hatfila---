@@ -27,7 +27,6 @@
     overflow-x: hidden;
   }
 
-  /* Stars background */
   body::before {
     content: '';
     position: fixed;
@@ -45,7 +44,6 @@
     z-index: 0;
   }
 
-  /* Header */
   .header {
     position: relative;
     z-index: 10;
@@ -62,54 +60,153 @@
     filter: drop-shadow(0 0 10px rgba(212,175,55,0.8));
   }
 
-  .font-size-control {
+  .favs-home-btn {
     position: fixed;
-    left: 14px;
     top: 14px;
+    left: 14px;
     z-index: 50;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(212,175,55,0.25);
-    border-radius: 20px;
-    padding: 6px 10px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 14, 46, 0.85);
+    border: 1.5px solid rgba(212,175,55,0.45);
+    box-shadow: 0 0 18px rgba(212,175,55,0.2), inset 0 1px 0 rgba(212,175,55,0.15);
+    cursor: pointer;
+    gap: 1px;
+    transition: box-shadow 0.25s, transform 0.2s;
     backdrop-filter: blur(8px);
+    text-decoration: none;
   }
-
-  .font-size-control span {
-    color: rgba(212,175,55,0.5);
+  .favs-home-btn:hover, .favs-home-btn:active {
+    box-shadow: 0 0 28px rgba(212,175,55,0.45);
+    transform: scale(1.08);
+  }
+  .favs-home-btn .fhb-icon {
+    font-size: 16px;
+    line-height: 1;
+    filter: drop-shadow(0 0 5px rgba(255,215,0,0.5));
+  }
+  .favs-home-btn .fhb-label { display: none; }
+  .favs-home-btn .fhb-count {
+    display: none;
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    background: #c0392b;
+    color: #fff;
     font-family: 'Heebo', sans-serif;
-    font-size: 11px;
-    writing-mode: horizontal-tb;
-    transform: none;
-    letter-spacing: 1px;
-    margin: 0;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(10,14,46,0.9);
   }
+  .favs-home-btn .fhb-count.has-favs { display: flex; }
 
-  .font-btn {
-    background: rgba(212,175,55,0.1);
+
+  .favs-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 400;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .favs-modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .favs-modal {
+    background: linear-gradient(170deg, #0d1033 0%, #050e20 100%);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 600px;
+    padding: 24px 20px 40px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+    direction: rtl;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .favs-modal-overlay.active .favs-modal {
+    transform: translateY(0);
+  }
+  .favs-modal-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(212,175,55,0.3);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .favs-modal-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(212,175,55,0.3);
+  }
+  .favs-modal-empty {
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    padding: 30px 0;
+  }
+  .favs-modal-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .favs-modal-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(212,175,55,0.07);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .favs-modal-item:active { transform: scale(0.97); background: rgba(212,175,55,0.15); }
+  .favs-modal-item-icon { font-size: 26px; flex-shrink: 0; }
+  .favs-modal-item-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 18px;
+    color: var(--gold-light);
+    flex: 1;
+  }
+  .favs-modal-item-arrow { color: rgba(212,175,55,0.4); font-size: 14px; }
+  .favs-modal-close {
+    display: block;
+    margin: 20px auto 0;
+    background: rgba(212,175,55,0.12);
     border: 1px solid rgba(212,175,55,0.3);
     color: var(--gold-light);
     font-family: 'Heebo', sans-serif;
-    font-size: 13px;
-    width: 34px; height: 34px;
-    border-radius: 50%;
+    font-size: 14px;
+    padding: 10px 30px;
+    border-radius: 20px;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
     transition: background 0.2s;
-    flex-shrink: 0;
   }
-  .font-btn:hover { background: rgba(212,175,55,0.28); }
+  .favs-modal-close:hover { background: rgba(212,175,55,0.22); }
 
-  .font-size-display {
-    color: var(--gold-light);
-    font-family: 'Heebo', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    text-align: center;
-  }
 
   .date-display {
     position: fixed;
@@ -232,7 +329,6 @@
     margin: 16px auto 0;
   }
 
-  /* Banners container */
   .banners {
     position: relative;
     z-index: 10;
@@ -244,7 +340,6 @@
     margin: 0 auto;
   }
 
-  /* 3D Banner */
   .banner {
     position: relative;
     cursor: pointer;
@@ -294,7 +389,6 @@
     border: 1px solid rgba(212,175,55,0.3);
   }
 
-  /* Gold shimmer effect */
   .banner-inner::before {
     content: '';
     position: absolute;
@@ -311,7 +405,6 @@
     transform: translateX(-100%);
   }
 
-  /* Each banner unique gradient */
   .banner-1 .banner-inner {
     background: linear-gradient(135deg, #1A0A3E 0%, #2D1060 40%, #0A1A4E 100%);
     box-shadow: 0 10px 40px rgba(80,20,160,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
@@ -354,7 +447,6 @@
   }
   .banner-7:hover { box-shadow: 0 20px 60px rgba(60,0,150,0.7); }
 
-  /* Decorative gold corners */
   .banner-inner::after {
     content: '';
     position: absolute;
@@ -405,7 +497,6 @@
     color: var(--gold);
   }
 
-  /* ===== PRAYER OVERLAY ===== */
   .prayer-overlay {
     position: fixed;
     inset: 0;
@@ -466,12 +557,11 @@
 
   .close-btn:hover { background: rgba(212,175,55,0.3); transform: scale(1.1); }
 
-  /* ===== FLOATING FONT CONTROL INSIDE PRAYER ===== */
   .prayer-font-ctrl {
     position: fixed;
     left: 12px;
-    bottom: 120px;
-    z-index: 200;
+    top: 60px;
+    z-index: 110;
     display: none;
     flex-direction: column;
     align-items: center;
@@ -770,7 +860,6 @@
     padding: 20px;
   }
 
-  /* ===== TODAY CARD ===== */
   .today-card {
     position: relative;
     z-index: 10;
@@ -831,7 +920,6 @@
     font-size: 16px;
   }
 
-  /* ===== FAVORITES ===== */
   .fav-btn {
     position: absolute;
     left: 16px;
@@ -855,7 +943,6 @@
     filter: drop-shadow(0 0 6px rgba(255,215,0,0.6));
   }
 
-  /* ===== SHARE BTN ===== */
   .share-btn {
     position: absolute;
     left: 56px;
@@ -873,7 +960,6 @@
   }
   .share-btn:hover { background: rgba(212,175,55,0.25); color: var(--gold-light); }
 
-  /* ===== TOAST ===== */
   .toast {
     position: fixed;
     bottom: 40px;
@@ -898,7 +984,6 @@
     opacity: 1;
   }
 
-  /* ===== NEW BANNERS 8-10 ===== */
   .banner-8 .banner-inner {
     background: linear-gradient(135deg, #0A1A0A 0%, #1A4A1E 40%, #051010 100%);
     box-shadow: 0 10px 40px rgba(20,100,40,0.5), inset 0 1px 0 rgba(212,175,55,0.2);
@@ -917,8 +1002,6 @@
   }
   .banner-10:hover { box-shadow: 0 20px 60px rgba(20,100,40,0.7); }
 
-
-  /* ===== REFUA INPUT ===== */
   .refua-name-input {
     width: 100%;
     padding: 12px 16px;
@@ -941,7 +1024,6 @@
   }
   .refua-name-input::placeholder { color: rgba(255,255,255,0.35); }
 
-  /* Prayer header share */
   .prayer-header-btns {
     display: flex;
     gap: 6px;
@@ -961,7 +1043,6 @@
   }
   .header-share-btn:hover { background: rgba(212,175,55,0.25); color: var(--gold-light); }
 
-  /* Favorites section */
   .favs-section {
     position: relative;
     z-index: 10;
@@ -1000,7 +1081,6 @@
   .fav-chip:hover { background: rgba(212,175,55,0.22); transform: scale(1.04); }
   .fav-chip-icon { font-size: 14px; }
 
-  /* Candle flame animation */
   .candle-container {
     text-align: center;
     margin: 20px 0;
@@ -1021,7 +1101,6 @@
     100% { transform: scaleY(1) scaleX(1) rotate(-0.5deg); opacity: 1; }
   }
 
-  /* Gold ornament */
   .ornament {
     text-align: center;
     color: rgba(212,175,55,0.4);
@@ -1036,11 +1115,24 @@
 <div class="bsd">בס"ד</div>
 <div class="date-display" id="dateDisplay"></div>
 
-<div class="font-size-control">
-  <button class="font-btn" onclick="changeFontSize(10)">A+</button>
-  <div class="font-size-display" id="fontDisplay">100%</div>
-  <button class="font-btn" onclick="changeFontSize(-10)">A-</button>
-  <span>גודל גופן</span>
+<!-- Favs Home Button -->
+<button class="favs-home-btn" onclick="openFavsModal()" title="מועדפים">
+  <span class="fhb-count" id="fhbCount"></span>
+  <span class="fhb-icon">⭐</span>
+  <span class="fhb-label">מועדפים</span>
+</button>
+
+  <button class="home-font-btn" onclick="prayerFontChange(-8)" title="הקטן">−</button>
+</div>
+
+<!-- Favs Modal -->
+<div class="favs-modal-overlay" id="favsModalOverlay" onclick="closeFavsModal(event)">
+  <div class="favs-modal">
+    <div class="favs-modal-handle"></div>
+    <div class="favs-modal-title">⭐ המועדפים שלי</div>
+    <div class="favs-modal-grid" id="favsModalGrid"></div>
+    <button class="favs-modal-close" onclick="closeFavsModalDirect()">סגור</button>
+  </div>
 </div>
 
 <!-- Header -->
@@ -1085,7 +1177,7 @@
 </div>
 
 <!-- Favorites -->
-<div class="favs-section" id="favsSection" style="display:none">
+<div class="favs-section" id="favsSection" style="display:none!important">
   <div class="favs-title">⭐ מועדפים</div>
   <div class="favs-row" id="favsRow"></div>
 </div>
@@ -2280,7 +2372,7 @@ function prayerFontChange(delta) {
   currentFontPercent = Math.min(220, Math.max(60, currentFontPercent + delta));
   localStorage.setItem('orHatfila_fontSize', currentFontPercent);
   applyFontSize();
-  // Flash opaque on interaction
+  
   const ctrl = document.getElementById('prayerFontCtrl');
   ctrl.classList.add('opaque');
   clearTimeout(ctrl._fadeTimer);
@@ -2289,8 +2381,6 @@ function prayerFontChange(delta) {
 
 function changeFontSize(delta) {
   prayerFontChange(delta);
-  const display = document.getElementById('fontDisplay');
-  if (display) display.textContent = currentFontPercent + '%';
 }
 
 function applyFontSize() {
@@ -2298,11 +2388,8 @@ function applyFontSize() {
   if (el) el.style.fontSize = (22 * currentFontPercent / 100) + 'px';
   const pct = document.getElementById('pfontPct');
   if (pct) pct.textContent = currentFontPercent + '%';
-  const display = document.getElementById('fontDisplay');
-  if (display) display.textContent = currentFontPercent + '%';
 }
 
-// Show font ctrl when prayer opens, hide when closed
 function showPrayerFontCtrl() {
   const ctrl = document.getElementById('prayerFontCtrl');
   ctrl.classList.add('visible', 'opaque');
@@ -2314,7 +2401,6 @@ function hidePrayerFontCtrl() {
   ctrl.classList.remove('visible', 'opaque');
 }
 
-// Fade in on touch anywhere in prayer, fade out after scrolling
 document.querySelector('.prayer-content').addEventListener('touchstart', () => {
   const ctrl = document.getElementById('prayerFontCtrl');
   if (!ctrl.classList.contains('visible')) return;
@@ -2443,7 +2529,7 @@ function performSearch(query) {
 }
 
 function openPrayerWithBurst(e, id, icon) {
-  // Create burst element at click position
+  
   const burst = document.createElement('div');
   burst.className = 'icon-burst';
   burst.textContent = icon;
@@ -2452,7 +2538,7 @@ function openPrayerWithBurst(e, id, icon) {
   burst.style.top = (rect.top + rect.height / 2 - 20) + 'px';
   document.body.appendChild(burst);
 
-  // Open prayer after short delay
+  
   setTimeout(() => {
     openPrayer(id);
     burst.remove();
@@ -2536,7 +2622,6 @@ function updateScrollSpeed(val) {
   autoScrollSpeed = parseFloat(val) * 0.4;
 }
 
-// Fix keyboard dismiss - blur input without closing prayer
 document.addEventListener('touchstart', function(e) {
   if (document.activeElement && document.activeElement.tagName === 'INPUT') {
     if (!e.target.closest('input')) {
@@ -2546,23 +2631,21 @@ document.addEventListener('touchstart', function(e) {
   }
 }, true);
 
-// Push initial state
 history.pushState({ page: 'main' }, '');
 
-// Track if keyboard was open
 let keyboardWasOpen = false;
 window.addEventListener('resize', function() {
   keyboardWasOpen = window.innerHeight < window.screen.height * 0.75;
 });
 
 window.addEventListener('popstate', function(e) {
-  // If keyboard was just open, it was dismissed - repush state and do nothing
+  
   if (keyboardWasOpen) {
     keyboardWasOpen = false;
     history.pushState({ page: 'main' }, '');
     return;
   }
-  // Real back button
+  
   const overlay = document.getElementById('prayerOverlay');
   if (overlay.classList.contains('active')) {
     closePrayer();
@@ -2593,7 +2676,7 @@ function updateDateDisplay() {
     month: 'long', year: 'numeric'
   }).format(now);
 
-  // Convert number to Hebrew letters
+  
   const dayNum = parseInt(hebrewDay);
   const hebrewLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י',
     'י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ',
@@ -2604,7 +2687,6 @@ function updateDateDisplay() {
     gregorian + '<br>' + dayLetter + ' ' + hebrewMonthYear;
 }
 
-// ===== REFUA NAME =====
 function updateRefuaName(val) {
   const disp = val.trim() || '______';
   document.querySelectorAll('#refuaNameDisplay, #refuaNameDisplay2').forEach(el => {
@@ -2612,7 +2694,6 @@ function updateRefuaName(val) {
   });
 }
 
-// ===== FAVORITES =====
 let favorites = JSON.parse(localStorage.getItem('orHatfila_favs') || '[]');
 
 const prayerMeta = {
@@ -2624,7 +2705,6 @@ const prayerMeta = {
   challah: { icon: '🌾', title: 'הפרשת חלה' },
   shema: { icon: '🌙', title: 'קריאת שמע' },
   refua: { icon: '💚', title: 'תפילה לרפואה' },
-  shabbat: { icon: '🕍', title: 'קבלת שבת' },
   brachot: { icon: '🍇', title: 'ברכות הנהנין' },
   modeh: { icon: '🌅', title: 'תפילת הבוקר' }
 };
@@ -2633,18 +2713,8 @@ let currentPrayerId = null;
 
 function renderFavs() {
   const section = document.getElementById('favsSection');
-  const row = document.getElementById('favsRow');
-  if (favorites.length === 0) {
-    section.style.display = 'none';
-    return;
-  }
-  section.style.display = 'block';
-  row.innerHTML = favorites.map(id => {
-    const m = prayerMeta[id] || { icon: '📖', title: id };
-    return `<div class="fav-chip" onclick="openPrayerWithBurst(event,'${id}','${m.icon}')">
-      <span class="fav-chip-icon">${m.icon}</span>${m.title}
-    </div>`;
-  }).join('');
+  if (section) section.style.display = 'none';
+  updateFhbCount();
 }
 
 function toggleFav(id) {
@@ -2659,6 +2729,7 @@ function toggleFav(id) {
   localStorage.setItem('orHatfila_favs', JSON.stringify(favorites));
   renderFavs();
   updateFavBtn();
+  updateFhbCount();
 }
 
 function updateFavBtn() {
@@ -2673,19 +2744,51 @@ function toggleFavFromHeader() {
   if (currentPrayerId) toggleFav(currentPrayerId);
 }
 
-// ===== SHARE =====
+function openFavsModal() {
+  const grid = document.getElementById('favsModalGrid');
+  if (favorites.length === 0) {
+    grid.innerHTML = '<div class="favs-modal-empty">עדיין אין מועדפים<br><span style="font-size:12px;opacity:0.6">פתח תפילה ולחץ על ★ להוספה</span></div>';
+  } else {
+    grid.innerHTML = favorites.map(id => {
+      const m = prayerMeta[id] || { icon: '📖', title: id };
+      return `<div class="favs-modal-item" onclick="closeFavsModalDirect();setTimeout(()=>openPrayerWithBurst({currentTarget:document.body},'${id}','${m.icon}'),200)">
+        <span class="favs-modal-item-icon">${m.icon}</span>
+        <span class="favs-modal-item-title">${m.title}</span>
+        <span class="favs-modal-item-arrow">◀</span>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('favsModalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeFavsModal(e) {
+  if (e.target === document.getElementById('favsModalOverlay')) closeFavsModalDirect();
+}
+function closeFavsModalDirect() {
+  document.getElementById('favsModalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function updateFhbCount() {
+  const el = document.getElementById('fhbCount');
+  if (!el) return;
+  const n = favorites.length;
+  el.textContent = n;
+  el.classList.toggle('has-favs', n > 0);
+}
+
 function sharePrayer() {
   if (!currentPrayerId) return;
-  const m = prayerMeta[currentPrayerId] || { title: 'תפילה' };
-  const text = `${m.icon || '📖'} ${m.title} – מאפליקציית "אור התפילה"`;
+  const m = prayerMeta[currentPrayerId] || { title: 'תפילה', icon: '📖' };
+  const baseUrl = 'https://ma303300-blip.github.io/or-hatfila---/';
+  const url = `${baseUrl}?prayer=${currentPrayerId}`;
+  const title = `${m.icon} ${m.title} – אור התפילה`;
   if (navigator.share) {
-    navigator.share({ title: m.title, text }).catch(() => {});
+    navigator.share({ title, url }).catch(() => {});
   } else {
-    navigator.clipboard.writeText(text).then(() => showToast('הטקסט הועתק ✓'));
+    navigator.clipboard.writeText(url).then(() => showToast('הקישור הועתק ✓'));
   }
 }
 
-// ===== TOAST =====
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -2693,7 +2796,6 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-// ===== TODAY CARD =====
 function checkTodayEvents() {
   const hDate = getHebrewDayMonth();
   if (!hDate) return;
@@ -2710,10 +2812,10 @@ function checkTodayEvents() {
     if (hDate.month.includes(key)) { currentMonth = val; break; }
   }
 
-  // Check hilulot
+  
   const todayHilula = hilulaCalendar.find(h => h.month === currentMonth && h.day === hDate.day);
 
-  // Check rosh chodesh (day 1 or 30)
+  
   const isRoshChodesh = hDate.day === 1 || hDate.day === 30;
 
   const card = document.getElementById('todayCard');
@@ -2733,15 +2835,6 @@ function checkTodayEvents() {
   }
 }
 
-// Override openPrayer to track current prayer
-const _origOpenPrayer = openPrayer;
-function openPrayer(id) {
-  currentPrayerId = id;
-  _origOpenPrayer(id);
-  updateFavBtn();
-}
-
-
 const hilulaCalendar = [
   { name: 'התנא הקדוש רבי שמעון בר יוחאי', month: 'אייר', day: 18 },
   { name: 'התנא הקדוש רבי מאיר בעל הנס', month: 'אייר', day: 14 },
@@ -2756,6 +2849,15 @@ const hilulaCalendar = [
 
 checkTodayEvents();
 renderFavs();
+updateFhbCount();
+
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const pid = params.get('prayer');
+  if (pid && prayers[pid]) {
+    setTimeout(() => openPrayerWithBurst({ currentTarget: document.body }, pid, prayerMeta[pid]?.icon || '📖'), 400);
+  }
+})();
 
 function getHebrewDayMonth() {
   try {
@@ -2809,7 +2911,6 @@ function requestNotificationPermission() {
   }
 }
 
-// ===== ROSH CHODESH NOTIFICATION =====
 function checkRoshChodesh() {
   if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
 
@@ -2817,10 +2918,10 @@ function checkRoshChodesh() {
     const now = new Date();
     const hour = now.getHours();
 
-    // Only notify in the evening (18:00 - 22:00)
+    
     if (hour < 18 || hour > 22) return;
 
-    // Get tomorrow's Hebrew date
+    
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -2828,11 +2929,11 @@ function checkRoshChodesh() {
       new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(tomorrow)
     );
 
-    // If tomorrow is the 1st of Hebrew month = tonight is Rosh Chodesh eve
+    
     if (tomorrowHebrewDay === 1) {
       const tomorrowMonth = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(tomorrow);
 
-      // Avoid duplicate notifications - check if already notified today
+      
       const lastNotified = localStorage.getItem('roshChodeshNotified');
       const today = now.toDateString();
       if (lastNotified === today) return;
@@ -2847,7 +2948,6 @@ function checkRoshChodesh() {
   } catch(e) { console.log('Rosh Chodesh check error:', e); }
 }
 
-// Request permission on load and check daily
 requestNotificationPermission();
 setInterval(checkHilula, 3600000);
 setInterval(checkRoshChodesh, 3600000);
@@ -2859,7 +2959,7 @@ setInterval(updateDateDisplay, 60000);
 function getHebrewMonth() {
   try {
     const now = new Date();
-    // Get full Hebrew date string
+    
     const fullDate = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', {
       day: 'numeric', month: 'long', year: 'numeric'
     }).format(now);
@@ -2904,7 +3004,7 @@ function autoSelectHebrewMonth() {
     el.textContent = month.name;
   });
 
-  // Find button by matching label without nikud and without double letters
+  
   const normalize = s => stripNikud(s).replace(/וו/g,'ו').replace(/יי/g,'י').trim();
   document.querySelectorAll('.month-btn').forEach(btn => {
     btn.classList.remove('selected');
@@ -2915,6 +3015,8 @@ function autoSelectHebrewMonth() {
 }
 
 function openPrayer(id) {
+  currentPrayerId = id;
+  updateFavBtn();
   history.pushState({ prayer: id }, '');
   const p = prayers[id];
   document.getElementById('prayerTitle').textContent = p.title;
@@ -2926,7 +3028,7 @@ function openPrayer(id) {
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
 
-  // Auto-select Hebrew month for Rosh Chodesh
+  
   if (id === 'roshchodesh') {
     setTimeout(autoSelectHebrewMonth, 50);
   }
@@ -2951,12 +3053,10 @@ function closePrayer() {
   hidePrayerFontCtrl();
 }
 
-// Close on background tap
 document.getElementById('prayerOverlay').addEventListener('click', function(e) {
   if (e.target === this) closePrayer();
 });
 
-// Swipe down to close
 let touchStartY = 0;
 document.querySelector('.prayer-content').addEventListener('touchstart', e => {
   touchStartY = e.touches[0].clientY;
@@ -2967,6 +3067,7 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
     closePrayer();
   }
 });
+
 </script>
 </body>
 </html>
