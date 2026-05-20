@@ -2781,12 +2781,81 @@ function sharePrayer() {
   const m = prayerMeta[currentPrayerId] || { title: 'תפילה', icon: '📖' };
   const baseUrl = 'https://ma303300-blip.github.io/or-hatfila---/';
   const url = `${baseUrl}?prayer=${currentPrayerId}`;
-  const title = `${m.icon} ${m.title} – אור התפילה`;
+  const text = `${m.icon} ${m.title} – אור התפילה\n${url}`;
+
+  // Try native share API first (works in some WebViews)
   if (navigator.share) {
-    navigator.share({ title, url }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(url).then(() => showToast('הקישור הועתק ✓'));
+    navigator.share({ title: m.title, text, url }).catch(() => openShareFallback(text, url));
+    return;
   }
+  openShareFallback(text, url);
+}
+
+function openShareFallback(text, url) {
+  // Show custom share sheet
+  const encoded = encodeURIComponent(text);
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;
+    display:flex;align-items:flex-end;justify-content:center;
+    backdrop-filter:blur(4px);
+  `;
+  modal.innerHTML = `
+    <div style="
+      background:linear-gradient(170deg,#0d1033,#050e20);
+      border:1px solid rgba(212,175,55,0.35);
+      border-radius:24px 24px 0 0;
+      width:100%;max-width:600px;
+      padding:24px 20px 40px;
+      direction:rtl;
+    ">
+      <div style="width:40px;height:4px;background:rgba(212,175,55,0.3);border-radius:2px;margin:0 auto 20px;"></div>
+      <div style="font-family:'Frank Ruhl Libre',serif;font-size:18px;color:#D4AF37;text-align:center;margin-bottom:20px;">שתף תפילה</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <a href="whatsapp://send?text=${encoded}" style="
+          display:flex;align-items:center;gap:14px;
+          background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);
+          border-radius:14px;padding:14px 16px;text-decoration:none;color:#fff;
+          font-family:'Heebo',sans-serif;font-size:16px;
+        ">
+          <span style="font-size:26px;">💬</span> וואטסאפ
+        </a>
+        <a href="mailto:?subject=אור התפילה&body=${encoded}" style="
+          display:flex;align-items:center;gap:14px;
+          background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);
+          border-radius:14px;padding:14px 16px;text-decoration:none;color:#fff;
+          font-family:'Heebo',sans-serif;font-size:16px;
+        ">
+          <span style="font-size:26px;">📧</span> אימייל
+        </a>
+        <a href="sms:?body=${encoded}" style="
+          display:flex;align-items:center;gap:14px;
+          background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);
+          border-radius:14px;padding:14px 16px;text-decoration:none;color:#fff;
+          font-family:'Heebo',sans-serif;font-size:16px;
+        ">
+          <span style="font-size:26px;">💌</span> SMS
+        </a>
+        <button onclick="navigator.clipboard.writeText('${url}').then(()=>{});this.closest('[data-share]').remove();showToast('הקישור הועתק ✓')" style="
+          display:flex;align-items:center;gap:14px;
+          background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);
+          border-radius:14px;padding:14px 16px;color:#fff;width:100%;
+          font-family:'Heebo',sans-serif;font-size:16px;cursor:pointer;
+        ">
+          <span style="font-size:26px;">📋</span> העתק קישור
+        </button>
+      </div>
+      <button onclick="this.closest('[data-share]').remove()" style="
+        display:block;margin:20px auto 0;
+        background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);
+        color:#D4AF37;font-family:'Heebo',sans-serif;font-size:14px;
+        padding:10px 30px;border-radius:20px;cursor:pointer;
+      ">סגור</button>
+    </div>
+  `;
+  modal.setAttribute('data-share','1');
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
 }
 
 function showToast(msg) {
