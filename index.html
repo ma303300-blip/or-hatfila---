@@ -303,9 +303,9 @@
   .ray:nth-child(1)  { transform: rotate(0deg);    animation-delay: 0s; }
   .ray:nth-child(2)  { transform: rotate(30deg);   animation-delay: 0.1s; }
   .ray:nth-child(3)  { transform: rotate(60deg);   animation-delay: 0.2s; }
-  .ray:nth-child(4)  { transform: rotate(90deg);   animation-delay: 0.5s; }
+  .ray:nth-child(4)  { transform: rotate(90deg);   animation-delay: 0.2s; }
   .ray:nth-child(5)  { transform: rotate(120deg);  animation-delay: 0.4s; }
-  .ray:nth-child(6)  { transform: rotate(150deg);  animation-delay: 0.5s; }
+  .ray:nth-child(6)  { transform: rotate(150deg);  animation-delay: 0.2s; }
   .ray:nth-child(7)  { transform: rotate(180deg);  animation-delay: 0.6s; }
   .ray:nth-child(8)  { transform: rotate(210deg);  animation-delay: 0.7s; }
   .ray:nth-child(9)  { transform: rotate(240deg);  animation-delay: 0.8s; }
@@ -369,9 +369,9 @@
 
   .banner:nth-child(1) { animation-delay: 0.1s; }
   .banner:nth-child(2) { animation-delay: 0.2s; }
-  .banner:nth-child(3) { animation-delay: 0.5s; }
+  .banner:nth-child(3) { animation-delay: 0.2s; }
   .banner:nth-child(4) { animation-delay: 0.4s; }
-  .banner:nth-child(5) { animation-delay: 0.5s; }
+  .banner:nth-child(5) { animation-delay: 0.2s; }
 
   @keyframes iconBurst {
     0%   { transform: scale(1);    opacity: 1; }
@@ -1257,8 +1257,8 @@
     object-fit: cover;
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
-    animation: splashGrow 3.5s cubic-bezier(0.16,1,0.3,1) forwards;
-    animation-delay: 0.5s;
+    animation: splashGrow 2s cubic-bezier(0.16,1,0.3,1) forwards;
+    animation-delay: 0.2s;
   }
   @keyframes splashGrow {
     0%   { transform: translate(-50%,-50%) scale(0.5); opacity: 0; }
@@ -1271,7 +1271,7 @@
     background: linear-gradient(to top, rgba(10,14,46,0.85) 0%, rgba(10,14,46,0.1) 50%, rgba(10,14,46,0.35) 100%);
     opacity: 0;
     animation: fadeUp 0.8s ease forwards;
-    animation-delay: 2s;
+    animation-delay: 1.2s;
   }
   #splash-text {
     position: absolute;
@@ -1279,7 +1279,7 @@
     text-align: center;
     opacity: 0;
     animation: fadeUp 0.9s ease forwards;
-    animation-delay: 2.3s;
+    animation-delay: 1.5s;
   }
   #splash-title {
     display: block;
@@ -1321,7 +1321,7 @@
       var splash = document.getElementById('splash');
       splash.classList.add('hide');
       setTimeout(function() { splash.style.display = 'none'; }, 700);
-    }, 4500);
+    }, 2500);
   });
 </script>
 
