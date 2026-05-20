@@ -97,7 +97,7 @@
     top: -4px;
     left: -4px;
     background: #c0392b;
-    color: #fff;
+    color: #1a0e05;
     font-family: 'Heebo', sans-serif;
     font-size: 10px;
     font-weight: 700;
@@ -162,7 +162,7 @@
   }
   .favs-modal-empty {
     text-align: center;
-    color: rgba(255,255,255,0.4);
+    color: #7a5030;
     font-family: 'Heebo', sans-serif;
     font-size: 14px;
     padding: 30px 0;
@@ -680,40 +680,52 @@
     letter-spacing: 8px;
   }
 
+  @keyframes tzaddikPulse {
+    0%   { border-color: rgba(220,50,50,0.3); box-shadow: 0 0 0 0 rgba(220,50,50,0); background: rgba(139,90,20,0.08); }
+    45%  { border-color: rgba(220,50,50,1);   box-shadow: 0 0 0 5px rgba(220,50,50,0.2); background: rgba(139,90,20,0.18); }
+    100% { border-color: rgba(220,50,50,0.3); box-shadow: 0 0 0 0 rgba(220,50,50,0); background: rgba(139,90,20,0.08); }
+  }
+
+  @keyframes tzaddikPulseSelected {
+    0%   { border-color: rgba(220,50,50,0.5); box-shadow: 0 0 0 0 rgba(220,50,50,0); background: rgba(139,90,20,0.2); }
+    45%  { border-color: rgba(220,50,50,1);   box-shadow: 0 0 0 8px rgba(220,50,50,0.3); background: rgba(139,90,20,0.32); }
+    100% { border-color: rgba(220,50,50,0.5); box-shadow: 0 0 0 0 rgba(220,50,50,0); background: rgba(139,90,20,0.2); }
+  }
+
   .tzaddik-btn {
-    background: rgba(212,175,55,0.1);
-    border: 1px solid rgba(212,175,55,0.35);
-    color: var(--gold-light);
+    background: rgba(139,90,20,0.08);
+    border: 1px solid rgba(139,90,20,0.3);
+    color: #3a1a05;
     font-family: 'Frank Ruhl Libre', serif;
     font-size: 17px;
     padding: 12px 16px;
     border-radius: 12px;
     cursor: pointer;
     text-align: center;
-    transition: background 0.2s, transform 0.15s, border-color 0.2s;
     direction: rtl;
     width: 100%;
+    animation: tzaddikPulse 2s ease-in-out infinite;
   }
-  .tzaddik-btn:hover { background: rgba(212,175,55,0.22); }
+  .tzaddik-btn:hover { animation-play-state: paused; background: rgba(139,90,20,0.2); }
   .tzaddik-btn.selected {
-    background: rgba(212,175,55,0.28);
-    border-color: var(--gold);
+    color: #1a0800;
+    font-weight: 700;
     transform: scale(1.02);
-    box-shadow: 0 0 12px rgba(212,175,55,0.3);
+    animation: tzaddikPulseSelected 1.6s ease-in-out infinite;
   }
   .tzaddik-date {
     display: block;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #7a4a18;
     margin-top: 3px;
     font-family: 'Heebo', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   .month-btn {
-    background: rgba(212,175,55,0.1);
-    border: 1px solid rgba(212,175,55,0.3);
-    color: var(--gold-light);
+    background: rgba(139,90,20,0.1);
+    border: 1px solid rgba(139,90,20,0.35);
+    color: #3a1a05;
     font-family: 'Frank Ruhl Libre', serif;
     font-size: 16px;
     padding: 10px 16px;
@@ -723,11 +735,11 @@
     direction: rtl;
     min-width: 80px;
   }
-  .month-btn:hover { background: rgba(212,175,55,0.2); }
+  .month-btn:hover { background: rgba(139,90,20,0.2); }
   .month-btn.selected {
-    background: rgba(212,175,55,0.28);
-    border-color: var(--gold);
-    box-shadow: 0 0 12px rgba(212,175,55,0.3);
+    background: rgba(139,90,20,0.25);
+    border-color: #8B5A14;
+    box-shadow: 0 0 12px rgba(139,90,20,0.3);
     animation: heartbeat 1.2s ease-in-out infinite;
   }
 
@@ -759,16 +771,16 @@
     justify-content: center;
     gap: 12px;
     padding: 10px 20px;
-    background: rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(212,175,55,0.15);
+    background: rgba(42,26,8,0.92);
+    border-bottom: 1px solid rgba(180,130,20,0.3);
     backdrop-filter: blur(8px);
   }
   .scroll-controls.visible { display: flex; }
 
   .scroll-btn {
-    background: rgba(212,175,55,0.12);
-    border: 1px solid rgba(212,175,55,0.35);
-    color: var(--gold-light);
+    background: rgba(180,130,20,0.15);
+    border: 1px solid rgba(240,200,74,0.4);
+    color: #f0c84a;
     font-family: 'Heebo', sans-serif;
     font-size: 14px;
     padding: 8px 18px;
@@ -777,18 +789,18 @@
     transition: background 0.2s, transform 0.15s;
     display: flex; align-items: center; gap: 6px;
   }
-  .scroll-btn:hover { background: rgba(212,175,55,0.25); }
+  .scroll-btn:hover { background: rgba(180,130,20,0.3); }
   .scroll-btn.active {
-    background: rgba(212,175,55,0.3);
-    border-color: var(--gold);
-    box-shadow: 0 0 10px rgba(212,175,55,0.3);
+    background: rgba(180,130,20,0.35);
+    border-color: #f0c84a;
+    box-shadow: 0 0 10px rgba(240,200,74,0.3);
   }
 
   .scroll-speed {
     display: none;
     align-items: center;
     gap: 8px;
-    color: rgba(212,175,55,0.6);
+    color: rgba(240,200,74,0.7);
     font-family: 'Heebo', sans-serif;
     font-size: 13px;
   }
@@ -839,14 +851,14 @@
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(212,175,55,0.4);
     border-radius: 24px;
-    color: #fff;
+    color: #1a0e05;
     font-family: 'Frank Ruhl Libre', serif;
     font-size: 17px;
     direction: rtl;
     outline: none;
     box-shadow: 0 0 12px rgba(212,175,55,0.15);
   }
-  .search-input::placeholder { color: rgba(255,255,255,0.4); }
+  .search-input::placeholder { color: #7a5030; }
 
   .search-clear {
     position: absolute;
@@ -888,20 +900,20 @@
     margin-bottom: 4px;
   }
   .search-result-excerpt {
-    color: rgba(255,255,255,0.6);
+    color: #4a2510;
     font-family: 'Heebo', sans-serif;
     font-size: 13px;
     line-height: 1.5;
   }
   .search-result-excerpt mark {
     background: rgba(212,175,55,0.4);
-    color: #fff;
+    color: #1a0e05;
     border-radius: 2px;
     padding: 0 2px;
   }
   .search-no-results {
     text-align: center;
-    color: rgba(255,255,255,0.4);
+    color: #7a5030;
     font-family: 'Heebo', sans-serif;
     font-size: 14px;
     padding: 20px;
@@ -1053,23 +1065,23 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 12px;
-    border: 1px solid rgba(212,175,55,0.4);
-    background: rgba(255,255,255,0.07);
-    color: #fff;
+    border: 1px solid rgba(139,90,20,0.4);
+    background: rgba(255,255,255,0.5);
+    color: #1a0e05;
     font-family: 'Frank Ruhl Libre', serif;
     font-size: 18px;
     text-align: center;
     direction: rtl;
     outline: none;
-    box-shadow: 0 0 12px rgba(212,175,55,0.1);
+    box-shadow: 0 0 8px rgba(139,90,20,0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
     margin: 12px 0;
   }
   .refua-name-input:focus {
-    border-color: rgba(212,175,55,0.7);
-    box-shadow: 0 0 20px rgba(212,175,55,0.2);
+    border-color: rgba(139,90,20,0.7);
+    box-shadow: 0 0 16px rgba(139,90,20,0.2);
   }
-  .refua-name-input::placeholder { color: rgba(255,255,255,0.35); }
+  .refua-name-input::placeholder { color: rgba(90,50,16,0.4); }
 
   .prayer-font-ctrl {
     position: fixed;
@@ -2154,7 +2166,7 @@ const prayers = {
       <div class="candle-container"><span class="flame">💚</span></div>
 
       <span class="section-title">✦ הכנס שם החולה ✦</span>
-      <label style="color:rgba(212,175,55,0.65);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:4px;direction:rtl;">שם החולה בן/בת שם האם</label>
+      <label style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:4px;direction:rtl;">שם החולה בן/בת שם האם</label>
       <input type="text" class="refua-name-input" id="refuaNameInput"
         placeholder="למשל: יוסף בן רחל"
         oninput="updateRefuaName(this.value)" />
@@ -2321,17 +2333,17 @@ const prayers = {
     title: "ברכות הנהנין",
     body: `
       <span class="section-title">✦ ברכות ראשונות ✦</span>
-      <span style="color:rgba(212,175,55,0.6);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לפני האכילה והשתייה</span>
+      <span style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לפני האכילה והשתייה</span>
 
       <span class="section-title">🍞 על הלחם ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">חיטה, שעורה, כוסמין, שיבולת שועל, שיפון</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">חיטה, שעורה, כוסמין, שיבולת שועל, שיפון</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       <span class="highlight">הַמּוֹצִיא לֶחֶם מִן הָאָרֶץ.</span>
 
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">🥐 על מיני מזונות ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">עוגות, פסטה, אורז לדעת הספרדים, דייסה</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">עוגות, פסטה, אורז לדעת הספרדים, דייסה</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       <span class="highlight">בּוֹרֵא מִינֵי מְזוֹנוֹת.</span>
 
@@ -2344,37 +2356,37 @@ const prayers = {
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">🍊 על פירות העץ ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">תפוח, תפוז, בננה, אגס, שקד, זית, רימון, תמר, תאנה</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">תפוח, תפוז, בננה, אגס, שקד, זית, רימון, תמר, תאנה</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       <span class="highlight">בּוֹרֵא פְּרִי הָעֵץ.</span>
 
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">🥕 על פירות האדמה ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">ירקות, תפוח אדמה, גזר, בוטנים, פטריות, ענבים (אם לא מיץ)</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">ירקות, תפוח אדמה, גזר, בוטנים, פטריות, ענבים (אם לא מיץ)</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       <span class="highlight">בּוֹרֵא פְּרִי הָאֲדָמָה.</span>
 
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">🥛 שהכל – שאר המאכלים ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">בשר, דגים, ביצים, חלב, גבינה, מים, מיצים, ממתקים, פטריות לד"א</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">בשר, דגים, ביצים, חלב, גבינה, מים, מיצים, ממתקים, פטריות לד"א</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       <span class="highlight">שֶׁהַכֹּל נִהְיֶה בִּדְבָרוֹ.</span>
 
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ ברכות אחרונות ✦</span>
-      <span style="color:rgba(212,175,55,0.6);font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לאחר האכילה</span>
+      <span style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:16px;direction:rtl;">הברכה הנאמרת לאחר האכילה</span>
 
       <span class="section-title">✦ ברכת המזון ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר אכילת לחם (כזית ומעלה)</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר אכילת לחם (כזית ומעלה)</span>
       <span class="highlight" style="cursor:pointer;text-decoration:underline" onclick="closePrayer();setTimeout(()=>openPrayer('mazon'),300)">← לברכת המזון המלאה לחץ כאן</span>
 
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ מעין שלש ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: מיני מזונות / יין / שבעת המינים (לפי הפרי)</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: מיני מזונות / יין / שבעת המינים (לפי הפרי)</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,<br>
       עַל הַמִּחְיָה וְעַל הַכַּלְכָּלָה<br>
       וְעַל תְּנוּבַת הַשָּׂדֶה<br>
@@ -2395,7 +2407,7 @@ const prayers = {
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ בורא נפשות ✦</span>
-      <span style="color:rgba(255,255,255,0.55);font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: פירות עץ / פירות אדמה / שתייה / בשר / ביצים / שהכל</span>
+      <span style="color:#5a3010;font-family:'Heebo',sans-serif;font-size:13px;direction:rtl;display:block;margin-bottom:8px;">לאחר: פירות עץ / פירות אדמה / שתייה / בשר / ביצים / שהכל</span>
       בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם<br>
       בּוֹרֵא נְפָשׁוֹת רַבּוֹת וְחֶסְרוֹנָן<br>
       עַל כָּל מַה שֶּׁבָּרָאתָ<br>
@@ -2405,7 +2417,7 @@ const prayers = {
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ סדר קדימה בברכות ✦</span>
-      <span style="color:rgba(255,255,255,0.8);font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.2;display:block;">
+      <span style="color:#2c1205;font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.2;display:block;">
         כשיש לפניך כמה מאכלים:<br>
         <span class="highlight">א.</span> המוציא – פוטר הכל<br>
         <span class="highlight">ב.</span> מזונות<br>
@@ -2419,7 +2431,7 @@ const prayers = {
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ שבעת המינים ✦</span>
-      <span style="color:rgba(255,255,255,0.8);font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.4;display:block;">
+      <span style="color:#2c1205;font-family:'Heebo',sans-serif;font-size:15px;direction:rtl;line-height:2.4;display:block;">
         🌾 חיטה ושעורה – המוציא / מזונות<br>
         🍇 ענבים ויין – הגפן<br>
         🫒 תאנה – העץ + מעין שלש<br>
@@ -2714,8 +2726,14 @@ function selectTzaddik(name, btn) {
   document.querySelectorAll('.tzaddik-name-1, .tzaddik-name-2, .tzaddik-name-3, .tzaddik-name-4').forEach(el => {
     el.textContent = name;
   });
-  document.querySelectorAll('.tzaddik-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.tzaddik-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.animationPlayState = 'paused';
+    b.style.opacity = '0.5';
+  });
   btn.classList.add('selected');
+  btn.style.animationPlayState = 'running';
+  btn.style.opacity = '1';
 }
 
 function updateSoldierPrayer(name) {
