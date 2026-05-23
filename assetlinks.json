@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.ma303300_blip.orhatfila2",
+    "sha256_cert_fingerprints": ["91:31:37:59:D1:52:28:C9:21:51:DB:66:1F:A3:47:20:87:D6:3C:89:B9:83:99:FC:52:80:9C:91:A7:C4:E5:E6"]
+  }
+}]
