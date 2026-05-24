@@ -1493,12 +1493,7 @@
 </div>
 
 <!-- תיבה רצה אוטומטית לפרשת השבוע - מורדכי -->
-<div class="parasha-marquee-container">
-  <div class="parasha-marquee-wrapper">
-    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-  </div>
-</div>
+
 
 
 <!-- SPLASH SCREEN -->
@@ -3751,11 +3746,12 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/service-worker.js").then(reg => {
+      // בדיקה יזומה מול השרת בכל כניסה כדי למנוע הצגת קוד ישן מה-Cache
+      reg.update();
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // זיהוי גרסה חדשה בשרת וביצוע רענון אוטומטי שקט
             window.location.reload();
           }
         });
@@ -3768,45 +3764,26 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 (function() {
   async function updateParashaDynamically() {
     try {
-      const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on');
+      // שליפת פרשת השבוע העדכנית ביותר ישירות מהשרת (בתוספת חותמת זמן ייחודית לעקיפת ה-Cache של הדפדפן)
+      const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + new Date().getTime());
       const data = await res.json();
       const pItem = data.items.find(item => item.category === 'parashat');
       if (pItem && pItem.hebrew) {
         const pName = pItem.hebrew;
         const outStr = `✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
+        
+        // עדכון כל האלמנטים של פרשת השבוע הקיימים בדף ללא יוצא מן הכלל
         const el1 = document.getElementById('parashaTextElement1');
         const el2 = document.getElementById('parashaTextElement2');
         if(el1) el1.innerHTML = outStr;
         if(el2) el2.innerHTML = outStr;
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error("שגיאה בטעינת פרשת השבוע:", e);
+    }
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateParashaDynamically);
-  } else {
-    updateParashaDynamically();
-  }
-})();
-</script>
-
-<script>
-(function() {
-  // 1. עדכון אוטומטי של פרשת השבוע ברקע
-  async function updateParashaDynamically() {
-    try {
-      const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on');
-      const data = await res.json();
-      const pItem = data.items.find(item => item.category === 'parashat');
-      if (pItem && pItem.hebrew) {
-        const pName = pItem.hebrew;
-        const outStr = `✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
-        const el1 = document.getElementById('parashaTextElement1');
-        const el2 = document.getElementById('parashaTextElement2');
-        if(el1) el1.innerHTML = outStr;
-        if(el2) el2.innerHTML = outStr;
-      }
-    } catch(e) {}
-  }
+  
+  // הפעלה מיידית ברגע שהדף מוכן
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateParashaDynamically);
   } else {
