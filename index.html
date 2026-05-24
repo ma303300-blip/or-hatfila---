@@ -1487,16 +1487,16 @@
 <!-- תיבה רצה אוטומטית לפרשת השבוע - מורדכי -->
 <div class="parasha-marquee-container">
   <div class="parasha-marquee-wrapper">
-    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   </div>
 </div>
 
 <!-- תיבה רצה אוטומטית לפרשת השבוע - מורדכי -->
 <div class="parasha-marquee-container">
   <div class="parasha-marquee-wrapper">
-    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת נשא ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   </div>
 </div>
 
@@ -3479,35 +3479,72 @@ function getHebrewDayMonth() {
 }
 
 function checkHilula() {
-  const hDate = getHebrewDayMonth();
-  if (!hDate) return;
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
 
-  const monthMap = {
-    'תשרי': 'תשרי', 'חשון': 'מרחשוון', 'כסלו': 'כסלו',
-    'טבת': 'טבת', 'שבט': 'שבט', 'אדר': 'אדר',
-    'ניסן': 'ניסן', 'אייר': 'אייר', 'סיון': 'סיון',
-    'תמוז': 'תמוז', 'אב': 'אב', 'אלול': 'אלול'
-  };
+  try {
+    const now = new Date();
+    const hour = now.getHours();
 
-  let currentMonth = '';
-  for (const [key, val] of Object.entries(monthMap)) {
-    if (hDate.month.includes(key)) { currentMonth = val; break; }
-  }
+    // נבדוק גם עבור היום וגם עבור מחר (כדי לתפוס את ההתראה כמה שעות לפני שהערב מתחיל או ממש בתחילתו)
+    const datesToCheck = [];
+    
+    // 1. היום הנוכחי
+    const hDateToday = getHebrewDayMonth();
+    if (hDateToday) datesToCheck.push({ day: hDateToday.day, month: hDateToday.month, isAdvance: false });
 
-  const todayHilulot = hilulaCalendar.filter(h =>
-    h.month === currentMonth && h.day === hDate.day
-  );
+    // 2. מחר (בדיקה מקדימה כמה שעות לפני כניסת ההילולה בערב)
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    try {
+      const tDay = parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(tomorrow));
+      const tMonth = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(tomorrow);
+      datesToCheck.push({ day: tDay, month: tMonth, isAdvance: true });
+    } catch(e) {}
 
-  if (todayHilulot.length > 0) {
-    todayHilulot.forEach(h => {
-      if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification('🕯️ הילולא היום!', {
-          body: `היום הילולת ${h.name}\nהדלק נר לעילוי נשמתו`,
-          icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
-        });
+    const monthMap = {
+      'תשרי': 'תשרי', 'חשון': 'מרחשוון', 'כסלו': 'כסלו',
+      'טבת': 'טבת', 'שבט': 'שבט', 'אדר': 'אדר',
+      'ניסן': 'ניסן', 'אייר': 'אייר', 'סיון': 'סיון',
+      'תמוז': 'תמוז', 'אב': 'אב', 'אלול': 'אלול'
+    };
+
+    datesToCheck.forEach(d => {
+      let currentMonth = '';
+      for (const [key, val] of Object.entries(monthMap)) {
+        if (d.month.includes(key)) { currentMonth = val; break; }
       }
+
+      const matchHilulot = hilulaCalendar.filter(h => h.month === currentMonth && h.day === d.day);
+
+      matchHilulot.forEach(h => {
+        const todayStr = now.toDateString();
+        const storageKey = `hilula_notified_${h.name}_${d.day}_${currentMonth}`;
+        
+        // מניעת כפילויות של אותה התראה באותו יום
+        if (_store.get(storageKey) === todayStr) return;
+
+        if (d.isAdvance) {
+          // התראה מוקדמת: מקפיץ כמה שעות לפני (החל משעה 16:00 אחה"צ שלפני ערב ההילולה)
+          if (hour >= 16 && hour <= 23) {
+            _store.set(storageKey, todayStr);
+            new Notification('🕯️ תזכורת להילולא מחר!', {
+              body: `הערב מתחילה הילולת ${h.name}.\nזכור להדליק נר נשמה לעילוי נשמתו! ✨`,
+              icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+            });
+          }
+        } else {
+          // התראה ביום ההילולה עצמו (בשעות הבוקר/צהריים לתזכורת נוספת)
+          if (hour >= 8 && hour <= 15) {
+            _store.set(storageKey, todayStr);
+            new Notification('🕯️ הילולא היום!', {
+              body: `היום חלה הילולת ${h.name}.\nזכותו תגן עלינו ועל כל ישראל אמן!`,
+              icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+            });
+          }
+        }
+      });
     });
-  }
+  } catch(e) { console.log('Hilula check error:', e); }
 }
 
 function requestNotificationPermission() {
