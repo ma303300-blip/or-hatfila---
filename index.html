@@ -3473,6 +3473,43 @@ function getHebrewDayMonth() {
   } catch(e) { return null; }
 }
 
+
+// פונקציית סימולציה מיוחדת לבדיקת התראות - מורדכי
+window.simulateNotificationsTest = function() {
+  if (typeof Notification === 'undefined') {
+    alert("הדפדפן או המכשיר הזה אינם תומכים בהתראות מערכת.");
+    return;
+  }
+  
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        runSimulation();
+      } else {
+        alert("לא ניתן להציג סימולציה - הרשאת ההתראות חסומה במכשיר זה. אנא אשר התראות בהגדרות האתר.");
+      }
+    });
+  } else {
+    runSimulation();
+  }
+
+  function runSimulation() {
+    // 1. סימולציית התראת הילולא מוקדמת (כמה שעות לפני)
+    new Notification('🕯️ סימולציה: תזכורת להילולא מחר!', {
+      body: `הערב מתחילה הילולת התנא הקדוש רבי שמעון בר יוחאי.\nזכור להדליק נר נשמה לעילוי נשמתו! ✨`,
+      icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+    });
+
+    // 2. סימולציית התראת ראש חודש
+    setTimeout(() => {
+      new Notification('🌙 סימולציה: ראש חודש הלילה!', {
+        body: `הלילה מתחיל ראש חודש תמוז.\nזכור להדליק נר! 🕯️`,
+        icon: 'https://ma303300-blip.github.io/or-hatfila---/icon.png'
+      });
+    }, 1500);
+  }
+};
+
 function checkHilula() {
   if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
 
