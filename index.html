@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#D4AF37">
 <title>אור התפילה</title>
@@ -30,12 +30,26 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* iOS Safari: remove tap highlight on interactive elements */
+  a, button, [onclick], [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* iOS Safari: prevent text selection during tap */
+  button {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+  }
+
   html { background: #0A0E2E; }
 
   body {
     background: #0A0E2E;
     font-family: 'Frank Ruhl Libre', serif;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     overflow-x: hidden;
   }
 
@@ -43,7 +57,10 @@
   body::before {
     content: '';
     position: fixed;
-    inset: 0;
+    top: -env(safe-area-inset-top, 0px);
+    left: -env(safe-area-inset-left, 0px);
+    right: -env(safe-area-inset-right, 0px);
+    bottom: -env(safe-area-inset-bottom, 0px);
     background-image: url('https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png');
     background-size: cover;
     background-position: center top;
@@ -57,7 +74,10 @@
   body::after {
     content: '';
     position: fixed;
-    inset: 0;
+    top: -env(safe-area-inset-top, 0px);
+    left: -env(safe-area-inset-left, 0px);
+    right: -env(safe-area-inset-right, 0px);
+    bottom: -env(safe-area-inset-bottom, 0px);
     background: linear-gradient(
       180deg,
       rgba(0,0,0,0.35) 0%,
@@ -73,6 +93,7 @@
     z-index: 10;
     text-align: center;
     padding: max(40px, env(safe-area-inset-top)) 20px 20px;
+    padding-top: max(40px, env(safe-area-inset-top, 0px));
     margin-top: 30px;
   }
 
@@ -104,6 +125,7 @@
     gap: 1px;
     transition: box-shadow 0.25s, transform 0.2s;
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     text-decoration: none;
   }
   .favs-home-btn:hover, .favs-home-btn:active {
@@ -148,6 +170,7 @@
     pointer-events: none;
     transition: opacity 0.3s;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
   .favs-modal-overlay.active {
     opacity: 1;
@@ -160,12 +183,15 @@
     width: 100%;
     max-width: 600px;
     padding: 24px 20px 40px;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
     box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
     direction: rtl;
     max-height: 70vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
   .favs-modal-overlay.active .favs-modal {
     transform: translateY(0);
@@ -359,6 +385,7 @@
     position: relative;
     z-index: 10;
     padding: 30px 16px 40px;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -531,6 +558,8 @@
   .prayer-overlay {
     position: fixed;
     inset: 0;
+    top: env(safe-area-inset-top, 0px);
+    bottom: env(safe-area-inset-bottom, 0px);
     z-index: 100;
     display: flex;
     flex-direction: column;
@@ -602,8 +631,11 @@
     z-index: 2;
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 16px 16px 50px;
+    padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     background: #1a0e05;
   }
 
@@ -805,6 +837,7 @@
     background: rgba(42,26,8,0.92);
     border-bottom: 1px solid rgba(180,130,20,0.3);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .scroll-controls.visible { display: flex; }
 
@@ -838,17 +871,27 @@
   .scroll-speed.visible { display: flex; }
   .scroll-speed input[type=range] {
     -webkit-appearance: none;
+    appearance: none;
     width: 80px; height: 4px;
     background: rgba(212,175,55,0.3);
     border-radius: 2px;
     outline: none;
+    cursor: pointer;
   }
   .scroll-speed input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 16px; height: 16px;
+    appearance: none;
+    width: 22px; height: 22px; /* Larger touch target for iOS */
     border-radius: 50%;
     background: var(--gold);
     cursor: pointer;
+  }
+  .scroll-speed input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: none;
   }
 
   .search-icon-btn {
@@ -888,6 +931,8 @@
     direction: rtl;
     outline: none;
     box-shadow: 0 0 12px rgba(212,175,55,0.15);
+    -webkit-appearance: none;
+    appearance: none;
   }
   .search-input::placeholder { color: #7a5030; }
 
@@ -1052,7 +1097,7 @@
 
   .toast {
     position: fixed;
-    bottom: 40px;
+    bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%) translateY(80px);
     background: rgba(20, 10, 50, 0.95);
@@ -1100,13 +1145,15 @@
     background: rgba(255,255,255,0.5);
     color: #1a0e05;
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 18px;
+    font-size: 18px; /* iOS requires >=16px to prevent auto-zoom */
     text-align: center;
     direction: rtl;
     outline: none;
     box-shadow: 0 0 8px rgba(139,90,20,0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
     margin: 12px 0;
+    -webkit-appearance: none; /* Remove iOS default styling */
+    appearance: none;
   }
   .refua-name-input:focus {
     border-color: rgba(139,90,20,0.7);
@@ -1264,9 +1311,12 @@
     width: 100vw; height: 100vh;
     object-fit: cover;
     transform: translate(-50%, -50%) scale(0.5);
+    -webkit-transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
     animation: splashGrow 2s cubic-bezier(0.16,1,0.3,1) forwards;
+    -webkit-animation: splashGrow 2s cubic-bezier(0.16,1,0.3,1) forwards;
     animation-delay: 0.2s;
+    -webkit-animation-delay: 0.2s;
   }
   @keyframes splashGrow {
     0%   { transform: translate(-50%,-50%) scale(0.5); opacity: 0; }
@@ -1357,12 +1407,14 @@
     border-radius: 24px;
     color: #0A0E2E !important;
     font-family: 'Heebo', sans-serif;
-    font-size: 18px;
+    font-size: 18px; /* iOS requires >=16px to prevent auto-zoom */
     font-weight: bold;
     direction: rtl;
     outline: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .search-input:focus {
     border-color: var(--gold-light) !important;
@@ -1446,12 +1498,14 @@
     border-radius: 24px;
     color: #0A0E2E !important;
     font-family: 'Heebo', sans-serif;
-    font-size: 18px;
+    font-size: 18px; /* iOS requires >=16px to prevent auto-zoom */
     font-weight: bold;
     direction: rtl;
     outline: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .search-input:focus {
     border-color: var(--gold-light) !important;
@@ -3325,9 +3379,16 @@ function sharePrayer() {
   const url = `${baseUrl}?prayer=${currentPrayerId}`;
   const text = `${m.icon} ${m.title} – אור התפילה\n${url}`;
 
-  // Try native share API first (works in some WebViews)
+  // navigator.share must be called directly from a user gesture (iOS Safari requirement)
   if (navigator.share) {
-    navigator.share({ title: m.title, text, url }).catch(() => openShareFallback(text, url));
+    navigator.share({ title: m.title, text: text, url: url })
+      .then(() => {})
+      .catch((err) => {
+        // User cancelled or share failed — fallback only for real errors (not AbortError)
+        if (err && err.name !== 'AbortError') {
+          openShareFallback(text, url);
+        }
+      });
     return;
   }
   openShareFallback(text, url);
@@ -3378,7 +3439,7 @@ function openShareFallback(text, url) {
         ">
           <span style="font-size:26px;">💌</span> SMS
         </a>
-        <button onclick="navigator.clipboard.writeText('${url}').then(()=>{});this.closest('[data-share]').remove();showToast('הקישור הועתק ✓')" style="
+        <button onclick="(function(btn){var textToCopy='${url}';if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(textToCopy).then(function(){btn.closest('[data-share]').remove();showToast('הקישור הועתק ✓');}).catch(function(){var ta=document.createElement('textarea');ta.value=textToCopy;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);btn.closest('[data-share]').remove();showToast('הקישור הועתק ✓');});}else{var ta=document.createElement('textarea');ta.value=textToCopy;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);btn.closest('[data-share]').remove();showToast('הקישור הועתק ✓');}})(this)" style="
           display:flex;align-items:center;gap:14px;
           background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);
           border-radius:14px;padding:14px 16px;color:#fff;width:100%;
@@ -3586,7 +3647,14 @@ function checkHilula() {
 }
 
 function requestNotificationPermission() {
+  // iOS Safari supports notifications only when installed as PWA (Add to Home Screen)
+  // In browser mode, Notification API may be undefined or permission will always be denied
   if (typeof Notification === 'undefined') return;
+  // Check if we're likely in iOS Safari browser (not installed PWA) — skip prompting
+  const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && !isStandalone) return; // Don't prompt in iOS browser
   if (Notification.permission === 'default') {
     Notification.requestPermission().then(permission => {
       if (permission === 'granted') checkHilula();
@@ -3788,6 +3856,8 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 </script>
 <script>
   if ("serviceWorker" in navigator) {
+    // iOS Safari 11.3+ supports service workers
+    // Use a try-catch to handle any registration errors gracefully
     navigator.serviceWorker.register("/service-worker.js").then(reg => {
       // בדיקה יזומה מול השרת בכל כניסה כדי למנוע הצגת קוד ישן מה-Cache
       reg.update();
@@ -3799,6 +3869,9 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
           }
         });
       });
+    }).catch(function(err) {
+      // Service worker registration failed — app continues to work without it
+      console.log('Service Worker registration failed:', err);
     });
   }
 </script>
