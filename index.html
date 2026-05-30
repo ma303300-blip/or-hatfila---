@@ -1856,29 +1856,19 @@
     will-change: transform;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.5) 100%),
+      url('https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/nature-bg.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
   }
   .category-page.active {
     display: block;
   }
-  .category-page::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url('https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/nature-bg.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .category-page::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.5) 100%);
-    z-index: 0;
-    pointer-events: none;
-  }
+  .category-page::before { display: none; }
+  .category-page::after  { display: none; }
   .category-page-inner {
     position: relative;
     z-index: 1;
@@ -2027,9 +2017,6 @@
   <span class="fhb-icon">⭐</span>
   <span class="fhb-label">מועדפים</span>
 </button>
-
-  <button class="home-font-btn" onclick="prayerFontChange(-8)" title="הקטן">−</button>
-</div>
 
 <!-- Favs Modal -->
 <div class="favs-modal-overlay" id="favsModalOverlay" onclick="closeFavsModal(event)">
