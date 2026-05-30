@@ -4478,7 +4478,7 @@ const parashaNameMap = {
   'Achrei Mot-Kedoshim': 'אַחֲרֵי מוֹת', // מחוברות
   'Emor': 'אֱמֹר', 'Behar': 'בְּהַר', 'Bechukotai': 'בְּחֻקֹּתַי',
   'Behar-Bechukotai': 'בְּהַר', // מחוברות
-  'Bamidbar': 'בְּמִדְבַּר', 'Nasso': 'נָשֹׂא', 'Beha\'alotcha': 'בְּהַעֲלֹתְךָ',
+  'Bamidbar': 'בְּמִדְבַּר', 'Nasso': 'נָשֹׂא', 'Naso': 'נָשֹׂא', "Beha'alotcha": 'בְּהַעֲלֹתְךָ',
   'Shelach': 'שְׁלַח', 'Korach': 'קֹרַח', 'Chukat': 'חֻקַּת',
   'Balak': 'בָּלָק', 'Pinchas': 'פִּינְחָס', 'Matot': 'מַטּוֹת',
   'Masei': 'מַסְעֵי', 'Matot-Masei': 'מַטּוֹת', // מחוברות
@@ -4492,26 +4492,48 @@ const parashaNameMap = {
 var _currentParashaKey = null;
 
 async function openParasha() {
+  // אפס תמיד — כדי לא להשאיר פרשה ישנה
+  _currentParashaKey = null;
+
   // נסה לטעון מ-hebcal
   try {
     const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + Date.now());
     const data = await res.json();
     const pItem = data.items.find(i => i.category === 'parashat');
     if (pItem) {
-      // hebcal מחזיר שם אנגלי — ממירים למפתח עברי
-      const engName = pItem.title.replace('Parashat ', '').replace('Shabbat ', '');
+      // hebcal מחזיר title כגון "Parashat Beha'alotcha" — מנקים
+      const engName = pItem.title
+        .replace('Parashat ', '')
+        .replace('Shabbat ', '')
+        .trim();
+
+      // נסה מיפוי ישיר
       _currentParashaKey = parashaNameMap[engName] || null;
-      // נסה גם לפי שם עברי ישירות
+
+      // תיקון: hebcal משתמש ב-"Naso" במקום "Nasso"
+      if (!_currentParashaKey) {
+        const normalized = engName
+          .replace(/ss/g, 's')   // Nasso -> Naso
+          .replace(/tz/g, 'z');  // וריאציות
+        _currentParashaKey = parashaNameMap[normalized] || null;
+      }
+
+      // fallback: חיפוש לפי שם עברי (מה-hebrew field)
       if (!_currentParashaKey && pItem.hebrew) {
         const heb = pItem.hebrew.replace('פרשת ', '').trim();
-        _currentParashaKey = Object.keys(parashotData).find(k =>
-          k.replace(/[^\u05D0-\u05EA]/g, '') === heb.replace(/[^\u05D0-\u05EA]/g, '')
-        ) || null;
+        // השווה רק אותיות עבריות (בלי ניקוד)
+        const hebStrip = heb.replace(/[\u05B0-\u05C7]/g, '');
+        _currentParashaKey = Object.keys(parashotData).find(k => {
+          const kStrip = k.replace(/[\u05B0-\u05C7]/g, '').replace(/-/g,'');
+          return kStrip === hebStrip.replace(/-/g,'');
+        }) || null;
       }
     }
-  } catch(e) {}
+  } catch(e) {
+    // hebcal לא זמין — fallback
+  }
 
-  // אם לא מצאנו מ-hebcal — השתמש בפרשה הנוכחית לפי חישוב
+  // fallback מדויק לפי לוח עברי
   if (!_currentParashaKey) {
     _currentParashaKey = _getParashaByDate();
   }
@@ -4555,13 +4577,21 @@ async function openParasha() {
   updateFavBtn();
 }
 
-// חישוב פרשה לפי תאריך (fallback)
+// חישוב פרשה לפי תאריך (fallback) — לוח תשפ"ו
 function _getParashaByDate() {
   const keys = Object.keys(parashotData);
   const now = new Date();
-  const start = new Date('2024-10-05'); // בראשית תשפ"ה
-  const weeksSince = Math.floor((now - start) / (7 * 24 * 3600 * 1000));
-  return keys[weeksSince % keys.length] || keys[0];
+  // מצא שבת הקרובה (יום 6)
+  const day = now.getDay();
+  const daysToSat = (6 - day + 7) % 7;
+  const nextSat = new Date(now);
+  nextSat.setDate(now.getDate() + daysToSat);
+
+  // תחילת מחזור תשפ"ו — שבת בראשית: 4 אוקטובר 2025
+  const cycleStart = new Date('2025-10-04');
+  const weeksSince = Math.floor((nextSat - cycleStart) / (7 * 24 * 3600 * 1000));
+  const idx = ((weeksSince % keys.length) + keys.length) % keys.length;
+  return keys[idx] || keys[0];
 }
 
 const prayerMeta = {
