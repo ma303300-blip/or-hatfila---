@@ -1706,7 +1706,7 @@
     pointer-events: all;
   }
   .welcome-modal {
-    background: linear-gradient(170deg, #0d1033 0%, #050e20 100%);
+    background: linear-gradient(170deg, rgba(13,16,51,0.85) 0%, rgba(5,14,32,0.85) 100%);
     border: 1px solid rgba(212,175,55,0.4);
     border-radius: 24px;
     padding: 28px 24px 24px;
@@ -1716,6 +1716,8 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.1);
     transform: translateY(20px);
     transition: transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .welcome-overlay.visible .welcome-modal {
     transform: translateY(0);
@@ -1892,7 +1894,7 @@
   }
   .category-back-btn {
     position: absolute;
-    right: 0;
+    left: 0;
     background: rgba(212,175,55,0.15);
     border: 1px solid rgba(212,175,55,0.35);
     border-radius: 50%;
@@ -4741,6 +4743,41 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 </script>
 
 <script>
+
+// כפתור חזרה פיזי (אנדרואיד)
+window.addEventListener('popstate', function(e) {
+  // אם תפילה פתוחה — סגור אותה
+  var prayerOverlay = document.getElementById('prayerOverlay');
+  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
+    closePrayer();
+    return;
+  }
+  // אם דף הדלקת נר פתוח — סגור אותו
+  var hadlaka = document.getElementById('categoryHadlaka');
+  if (hadlaka && hadlaka.classList.contains('active')) {
+    closeCategoryPage('hadlaka');
+    return;
+  }
+  // אם דף תפילות פתוח — סגור אותו
+  var tefilot = document.getElementById('categoryTefilot');
+  if (tefilot && tefilot.classList.contains('active')) {
+    closeCategoryPage('tefilot');
+    return;
+  }
+  // אם מועדפים פתוח — סגור
+  var favsOverlay = document.getElementById('favsModalOverlay');
+  if (favsOverlay && favsOverlay.classList.contains('active')) {
+    closeFavsModalDirect();
+    return;
+  }
+});
+
+// הוסף history state בפתיחת כל דף כדי שה-popstate יירה
+var _origOpenCategory = openCategoryPage;
+openCategoryPage = function(pageId) {
+  history.pushState({ page: pageId }, '');
+  _origOpenCategory(pageId);
+};
 
 // ═══════════════════════════════════════════════════════
 // חלון ברוכים הבאים
