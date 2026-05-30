@@ -1822,6 +1822,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .bubble:active { transform: scale(0.93); }
+  .bubble-1 .bubble-label { font-size: 11px; }
   .bubble-1 { animation: bubbleFloat 3.2s ease-in-out infinite; }
   .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
   .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
@@ -2142,7 +2143,7 @@
 <div class="floating-bubbles" id="floatingBubbles">
   <div class="bubble bubble-1" onclick="openParasha()">
     <div class="bubble-icon">📜</div>
-    <div class="bubble-label">פרשת השבוע</div>
+    <div class="bubble-label">תמצית פרשת השבוע</div>
   </div>
   <div class="bubble bubble-2" onclick="openCategoryPage('tefilot')">
     <div class="bubble-icon">🙏</div>
@@ -4492,73 +4493,71 @@ const parashaNameMap = {
 var _currentParashaKey = null;
 
 async function openParasha() {
-  // אפס תמיד — כדי לא להשאיר פרשה ישנה
   _currentParashaKey = null;
 
-  // נסה לטעון מ-hebcal
-  try {
-    const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + Date.now());
-    const data = await res.json();
-    const pItem = data.items.find(i => i.category === 'parashat');
-    if (pItem) {
-      // hebcal מחזיר title כגון "Parashat Beha'alotcha" — מנקים
-      const engName = pItem.title
-        .replace('Parashat ', '')
-        .replace('Shabbat ', '')
-        .trim();
-
-      // נסה מיפוי ישיר
-      _currentParashaKey = parashaNameMap[engName] || null;
-
-      // תיקון: hebcal משתמש ב-"Naso" במקום "Nasso"
-      if (!_currentParashaKey) {
-        const normalized = engName
-          .replace(/ss/g, 's')   // Nasso -> Naso
-          .replace(/tz/g, 'z');  // וריאציות
-        _currentParashaKey = parashaNameMap[normalized] || null;
-      }
-
-      // fallback: חיפוש לפי שם עברי (מה-hebrew field)
-      if (!_currentParashaKey && pItem.hebrew) {
-        const heb = pItem.hebrew.replace('פרשת ', '').trim();
-        // השווה רק אותיות עבריות (בלי ניקוד)
-        const hebStrip = heb.replace(/[\u05B0-\u05C7]/g, '');
-        _currentParashaKey = Object.keys(parashotData).find(k => {
-          const kStrip = k.replace(/[\u05B0-\u05C7]/g, '').replace(/-/g,'');
-          return kStrip === hebStrip.replace(/-/g,'');
-        }) || null;
-      }
-    }
-  } catch(e) {
-    // hebcal לא זמין — fallback
+  function stripNik(s) {
+    return s.replace(/[\u05B0-\u05C7]/g, '').trim();
   }
 
-  // fallback מדויק לפי לוח עברי
+  // שלב 1: קרא מהבאנר הרץ — תמיד מסונכרן עם המציאות
+  var marqueeEl = document.getElementById('parashaTextElement1');
+  if (marqueeEl) {
+    var text = marqueeEl.textContent || '';
+    var idx = text.indexOf('\u05E4\u05E8\u05E9\u05EA \u05D4\u05E9\u05D1\u05D5\u05E2:');
+    if (idx !== -1) {
+      var after = text.substring(idx + '\u05E4\u05E8\u05E9\u05EA \u05D4\u05E9\u05D1\u05D5\u05E2:'.length).trim();
+      // קח עד סמן ✨ או סוף שורה
+      var endIdx = after.search(/[\u2728\n]/);
+      var hebRaw = (endIdx === -1 ? after : after.substring(0, endIdx)).trim();
+      var hebClean = stripNik(hebRaw).replace(/-/g, ' ');
+
+      _currentParashaKey = Object.keys(parashotData).find(function(k) {
+        var kS = stripNik(k).replace(/-/g, ' ');
+        return kS === hebClean || hebClean.startsWith(kS) || kS.startsWith(hebClean);
+      }) || null;
+    }
+  }
+
+  // שלב 2: fallback hebcal
+  if (!_currentParashaKey) {
+    try {
+      var res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + Date.now());
+      var data = await res.json();
+      var pItem = data.items.find(function(i) { return i.category === 'parashat'; });
+      if (pItem && pItem.hebrew) {
+        var heb = stripNik(pItem.hebrew.replace('\u05E4\u05E8\u05E9\u05EA ', '')).replace(/-/g, ' ');
+        _currentParashaKey = Object.keys(parashotData).find(function(k) {
+          var kS = stripNik(k).replace(/-/g, ' ');
+          return kS === heb || heb.startsWith(kS) || kS.startsWith(heb);
+        }) || null;
+      }
+    } catch(e) {}
+  }
+
+  // שלב 3: fallback תאריך
   if (!_currentParashaKey) {
     _currentParashaKey = _getParashaByDate();
   }
 
-  const data = parashotData[_currentParashaKey];
-  if (!data) return;
+  var pData = parashotData[_currentParashaKey];
+  if (!pData) return;
 
-  // פתח overlay בסגנון תפילה
   currentPrayerId = 'parasha_' + _currentParashaKey;
   history.pushState({ prayer: currentPrayerId }, '');
 
-  document.getElementById('prayerTitle').textContent = data.title;
-  document.getElementById('prayerBody').innerHTML = `
-    <span class="section-title">✦ ${data.sefer} ✦</span>
-    <span class="highlight" style="font-size:1.1em;">${data.title}</span>
-    <div class="ornament">✦ ✦ ✦</div>
-    <span class="section-title">✦ עיקרי הפרשה ✦</span>
-    ${data.content}
-  `;
+  document.getElementById('prayerTitle').textContent = pData.title;
+  document.getElementById('prayerBody').innerHTML =
+    '<span class="section-title">\u2756 ' + pData.sefer + ' \u2756</span>' +
+    '<span class="highlight" style="font-size:1.1em;">' + pData.title + '</span>' +
+    '<div class="ornament">\u2756 \u2756 \u2756</div>' +
+    '<span class="section-title">\u2756 \u05E2\u05D9\u05E7\u05E8\u05D9 \u05D4\u05E4\u05E8\u05E9\u05D4 \u2756</span>' +
+    pData.content;
 
-  const overlay = document.getElementById('prayerOverlay');
+  var overlay = document.getElementById('prayerOverlay');
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
-  const scrollY = window.scrollY;
+  var scrollY = window.scrollY;
   document.body.style.position = 'fixed';
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
@@ -4567,11 +4566,11 @@ async function openParasha() {
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
 
-  const controls = document.getElementById('scrollControls');
+  var controls = document.getElementById('scrollControls');
   controls.classList.add('visible');
   document.getElementById('btnManual').classList.add('active');
   document.getElementById('btnAuto').classList.remove('active');
-  document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+  document.getElementById('btnAuto').textContent = '\u25B6 \u05D2\u05DC\u05D9\u05DC\u05D4 \u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA';
   document.getElementById('speedControl').classList.remove('visible');
   stopAutoScroll();
   updateFavBtn();
@@ -4581,14 +4580,17 @@ async function openParasha() {
 function _getParashaByDate() {
   const keys = Object.keys(parashotData);
   const now = new Date();
-  // מצא שבת הקרובה (יום 6)
+  // מצא שבת הקרובה (יום 6 ב-JS)
   const day = now.getDay();
   const daysToSat = (6 - day + 7) % 7;
   const nextSat = new Date(now);
   nextSat.setDate(now.getDate() + daysToSat);
 
   // תחילת מחזור תשפ"ו — שבת בראשית: 4 אוקטובר 2025
-  const cycleStart = new Date('2025-10-04');
+  // T12:00:00 מונע בעיות timezone (UTC vs ישראל)
+  const cycleStart = new Date('2025-10-04T12:00:00');
+  nextSat.setHours(12, 0, 0, 0); // אחיד
+
   const weeksSince = Math.floor((nextSat - cycleStart) / (7 * 24 * 3600 * 1000));
   const idx = ((weeksSince % keys.length) + keys.length) % keys.length;
   return keys[idx] || keys[0];
@@ -5208,26 +5210,28 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 (function() {
   async function updateParashaDynamically() {
     try {
-      // שליפת פרשת השבוע העדכנית ביותר ישירות מהשרת (בתוספת חותמת זמן ייחודית לעקיפת ה-Cache של הדפדפן)
       const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + new Date().getTime());
       const data = await res.json();
       const pItem = data.items.find(item => item.category === 'parashat');
       if (pItem && pItem.hebrew) {
         const pName = pItem.hebrew;
         const outStr = `✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
-        
-        // עדכון כל האלמנטים של פרשת השבוע הקיימים בדף ללא יוצא מן הכלל
         const el1 = document.getElementById('parashaTextElement1');
         const el2 = document.getElementById('parashaTextElement2');
         if(el1) el1.innerHTML = outStr;
         if(el2) el2.innerHTML = outStr;
+
+        // שמור לשימוש openParasha — שם עברי ואנגלי
+        window._hebcalParashaHebrew = pName;
+        window._hebcalParashaEnglish = pItem.title
+          ? pItem.title.replace('Parashat ','').replace('Shabbat ','').trim()
+          : '';
       }
     } catch(e) {
       console.error("שגיאה בטעינת פרשת השבוע:", e);
     }
   }
   
-  // הפעלה מיידית ברגע שהדף מוכן
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateParashaDynamically);
   } else {
