@@ -394,6 +394,7 @@
     transform: perspective(1000px) rotateX(0deg);
     transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
     animation: fadeSlideIn 0.6s ease both;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .banner:nth-child(1) { animation-delay: 0.1s; }
@@ -425,7 +426,8 @@
   }
 
   .banner:active {
-    transform: perspective(1000px) rotateX(2deg) translateY(2px) scale(0.98);
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
   }
 
   .banner-inner {
@@ -1552,8 +1554,34 @@
 <body>
 
 <!-- ═══════════════════════════════════════ -->
-<!-- מסך שמירת שבת                          -->
+<!-- חלון ברוכים הבאים                      -->
 <!-- ═══════════════════════════════════════ -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-modal">
+    <div class="welcome-modal-icon">🕯️</div>
+    <div class="welcome-modal-title">ברוכים הבאים לאור התפילה</div>
+    <div class="welcome-modal-body">
+      <div class="wm-row">
+        <span class="wm-dot">✦</span>
+        <span>לחץ על <strong style="color:#F5D96B;">תפילות</strong> או <strong style="color:#F5D96B;">הדלקת נר</strong> כדי להיכנס לקטגוריה הרצויה</span>
+      </div>
+      <div class="wm-row">
+        <span class="wm-dot">✦</span>
+        <span>לחץ על <strong style="color:#F5D96B;">העיגול הקטן</strong> בצד שמאל של כל באנר כדי לסדר את התפילות לפי רצונך, ולחץ <strong style="color:#F5D96B;">שמור סידור</strong></span>
+      </div>
+      <div class="wm-row">
+        <span class="wm-dot">✦</span>
+        <span>הוסף תפילות ל<strong style="color:#F5D96B;">מועדפים</strong> בלחיצה על הכוכב ⭐ בתוך כל תפילה</span>
+      </div>
+    </div>
+    <div class="welcome-modal-btns">
+      <button class="welcome-btn-got" onclick="closeWelcome(true)">✅ הבנתי</button>
+      <button class="welcome-btn-later" onclick="closeWelcome(false)">🔔 הזכר לי מאוחר יותר</button>
+    </div>
+  </div>
+</div>
+
+
 <style>
   #shabbat-screen {
     display: none;
@@ -1654,6 +1682,293 @@
     color: rgba(212,175,55,0.5);
     margin-top: 6px;
   }
+
+  /* ═══════════════════════════════════
+     חלון ברוכים הבאים
+  ═══════════════════════════════════ */
+  .welcome-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .welcome-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .welcome-modal {
+    background: linear-gradient(170deg, #0d1033 0%, #050e20 100%);
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 24px;
+    padding: 28px 24px 24px;
+    max-width: 360px;
+    width: 100%;
+    direction: rtl;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.1);
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
+  }
+  .welcome-overlay.visible .welcome-modal {
+    transform: translateY(0);
+  }
+  .welcome-modal-icon {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 12px rgba(255,180,0,0.6));
+  }
+  .welcome-modal-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #F5D96B;
+    text-align: center;
+    margin-bottom: 18px;
+    text-shadow: 0 0 16px rgba(212,175,55,0.5);
+  }
+  .welcome-modal-body {
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    color: rgba(255,240,200,0.85);
+    line-height: 1.9;
+    margin-bottom: 22px;
+  }
+  .welcome-modal-body .wm-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .welcome-modal-body .wm-dot {
+    color: #F5D96B;
+    font-size: 16px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .welcome-modal-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .welcome-btn-got {
+    background: linear-gradient(135deg, #D4AF37, #F5D96B);
+    color: #0A0E2E;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    border: none;
+    border-radius: 14px;
+    padding: 13px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    width: 100%;
+  }
+  .welcome-btn-later {
+    background: rgba(255,255,255,0.06);
+    color: rgba(212,175,55,0.7);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 14px;
+    padding: 11px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    width: 100%;
+  }
+
+  /* ═══════════════════════════════════
+     בועות צפות
+  ═══════════════════════════════════ */
+  .floating-bubbles {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0 24px;
+  }
+  .bubble {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    border: 1.5px solid rgba(212,175,55,0.5);
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.18), rgba(212,175,55,0.08) 60%, rgba(10,14,46,0.55));
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .bubble:active { transform: scale(0.93); }
+  .bubble-1 { animation: bubbleFloat 3.2s ease-in-out infinite; }
+  .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
+  .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
+  @keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+  .bubble-icon { font-size: 34px; margin-bottom: 4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+  .bubble-label {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #F5D96B;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* ═══════════════════════════════════
+     דפי קטגוריה
+  ═══════════════════════════════════ */
+  .category-page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    will-change: transform;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  .category-page.active {
+    display: block;
+  }
+  .category-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .category-page::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.55) 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .category-page-inner {
+    position: relative;
+    z-index: 1;
+    padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px 40px;
+  }
+  .category-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 18px 0 14px;
+    margin-bottom: 8px;
+  }
+  .category-back-btn {
+    position: absolute;
+    right: 0;
+    background: rgba(212,175,55,0.15);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    color: #F5D96B;
+    font-size: 20px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .category-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: clamp(22px, 6vw, 30px);
+    font-weight: 900;
+    color: #F5D96B;
+    text-shadow: 0 0 20px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.9);
+    text-align: center;
+  }
+
+  /* ═══════════════════════════════════
+     עיגול מספור בבאנרים
+  ═══════════════════════════════════ */
+  .banner-sort-circle {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(212,175,55,0.5);
+    background: rgba(10,14,46,0.7);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(212,175,55,0.5);
+    font-family: 'Heebo', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 5;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    flex-shrink: 0;
+  }
+  .banner-sort-circle.numbered {
+    background: #F5D96B;
+    border-color: #D4AF37;
+    color: #000000;
+    font-weight: 900;
+  }
+
+  /* כפתור סיום סידור */
+  .sort-done-btn {
+    display: none;
+    position: fixed;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    background: linear-gradient(135deg, #D4AF37, #F5D96B);
+    color: #0A0E2E;
+    font-family: 'Heebo', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 36px;
+    box-shadow: 0 6px 24px rgba(212,175,55,0.5);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .sort-done-btn.visible { display: block; }
+
 </style>
 
 <div id="shabbat-screen">
@@ -1770,117 +2085,159 @@
   <div class="favs-row" id="favsRow"></div>
 </div>
 
+<!-- בועות צפות -->
+<div class="floating-bubbles" id="floatingBubbles">
+  <div class="bubble bubble-1" onclick="/* פרשת השבוע - בקרוב */">
+    <div class="bubble-icon">📜</div>
+    <div class="bubble-label">פרשת השבוע</div>
+  </div>
+  <div class="bubble bubble-2" onclick="openCategoryPage('tefilot')">
+    <div class="bubble-icon">🙏</div>
+    <div class="bubble-label">תפילות</div>
+  </div>
+  <div class="bubble bubble-3" onclick="openCategoryPage('hadlaka')">
+    <div class="bubble-icon">🕯️</div>
+    <div class="bubble-label">הדלקת נר</div>
+  </div>
+</div>
+
+<!-- דף קטגוריה: תפילות -->
+<div class="category-page" id="categoryTefilot">
+  <div class="category-page-inner">
+    <div class="category-header">
+      <button class="category-back-btn" onclick="closeCategoryPage('tefilot')">◀</button>
+      <div class="category-title">🙏 תפילות</div>
+    </div>
+    <div class="banners" id="bannersTefilot">
+      <div class="banner banner-1" data-prayer-id="derech" data-page="tefilot" onclick="openPrayerWithBurst(event, 'derech', '🗺️')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🗺️</span>
+          <div class="banner-title">תפילת הדרך</div>
+          <div class="banner-subtitle">לנוסעים ולמטיילים</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="openPrayerWithBurst(event, 'mazon', '🍞')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🍞</span>
+          <div class="banner-title">ברכת המזון</div>
+          <div class="banner-subtitle">נוסח ספרדי</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-3" data-prayer-id="chayalim" data-page="tefilot" onclick="openPrayerWithBurst(event, 'chayalim', '🪖')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🪖</span>
+          <div class="banner-title">תפילה לחיילי צה"ל</div>
+          <div class="banner-subtitle">ופרקי תהילים מיוחדים</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-6" data-prayer-id="challah" data-page="tefilot" onclick="openPrayerWithBurst(event, 'challah', '🥖')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🥖</span>
+          <div class="banner-title">הפרשת חלה</div>
+          <div class="banner-subtitle">ברכה ותחינה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-7" data-prayer-id="shema" data-page="tefilot" onclick="openPrayerWithBurst(event, 'shema', '📖')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">📖</span>
+          <div class="banner-title">קריאת שמע שעל המיטה</div>
+          <div class="banner-subtitle">נוסח ספרדי</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-8" data-prayer-id="refua" data-page="tefilot" onclick="openPrayerWithBurst(event, 'refua', '🩺')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🩺</span>
+          <div class="banner-title">תפילה לרפואה</div>
+          <div class="banner-subtitle">מי שברך לחולים</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-9" data-prayer-id="brachot" data-page="tefilot" onclick="openPrayerWithBurst(event, 'brachot', '🫒')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🫒</span>
+          <div class="banner-title">ברכות הנהנין</div>
+          <div class="banner-subtitle">ברכות ראשונות ואחרונות על כל מאכל</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-10" data-prayer-id="modeh" data-page="tefilot" onclick="openPrayerWithBurst(event, 'modeh', '☀️')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">☀️</span>
+          <div class="banner-title">מודה אני ותפילת הבוקר</div>
+          <div class="banner-subtitle">תחילת היום בקדושה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-12" data-prayer-id="tikun" data-page="tefilot" onclick="openPrayerWithBurst(event, 'tikun', '📖')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">📖</span>
+          <div class="banner-title">התיקון הכללי</div>
+          <div class="banner-subtitle">עשרה מזמורי תהילים – רבי נחמן מברסלב</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- דף קטגוריה: הדלקת נר -->
+<div class="category-page" id="categoryHadlaka">
+  <div class="category-page-inner">
+    <div class="category-header">
+      <button class="category-back-btn" onclick="closeCategoryPage('hadlaka')">◀</button>
+      <div class="category-title">🕯️ הדלקת נר</div>
+    </div>
+    <div class="banners" id="bannersHadlaka">
+      <div class="banner banner-4" data-prayer-id="hilula" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'hilula', '🕯️')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🕯️</span>
+          <div class="banner-title">הדלקת נר בהילולה</div>
+          <div class="banner-subtitle">לכבוד הצדיקים</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-5" data-prayer-id="roshchodesh" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'roshchodesh', '🌙')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🌙</span>
+          <div class="banner-title">הדלקת נר ראש חודש</div>
+          <div class="banner-subtitle">תפילה לחידוש הלבנה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-11" data-prayer-id="rachel" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'rachel', '🕯️')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🕯️</span>
+          <div class="banner-title">תפילת רחל אימנו</div>
+          <div class="banner-subtitle">תפילה לפני הדלקת הנר</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- כפתור סיום סידור -->
+<button class="sort-done-btn" id="sortDoneBtn" onclick="applySortOrder()">✓ שמור סידור</button>
+
 <!-- Banners -->
-<div class="banners">
-
-  <div class="banner banner-1" onclick="openPrayerWithBurst(event, 'derech', '🗺️')">
-    <div class="banner-inner">
-      <span class="banner-icon">🗺️</span>
-      <div class="banner-title">תפילת הדרך</div>
-      <div class="banner-subtitle">לנוסעים ולמטיילים</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-2" onclick="openPrayerWithBurst(event, 'mazon', '🍞')">
-    <div class="banner-inner">
-      <span class="banner-icon">🍞</span>
-      <div class="banner-title">ברכת המזון</div>
-      <div class="banner-subtitle">נוסח ספרדי</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-3" onclick="openPrayerWithBurst(event, 'chayalim', '🪖')">
-    <div class="banner-inner">
-      <span class="banner-icon">🪖</span>
-      <div class="banner-title">תפילה לחיילי צה"ל</div>
-      <div class="banner-subtitle">ופרקי תהילים מיוחדים</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-4" onclick="openPrayerWithBurst(event, 'hilula', '🕯️')">
-    <div class="banner-inner">
-      <span class="banner-icon">🕯️</span>
-      <div class="banner-title">הדלקת נר בהילולה</div>
-      <div class="banner-subtitle">לכבוד הצדיקים</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-5" onclick="openPrayerWithBurst(event, 'roshchodesh', '🌙')">
-    <div class="banner-inner">
-      <span class="banner-icon">🌙</span>
-      <div class="banner-title">הדלקת נר ראש חודש</div>
-      <div class="banner-subtitle">תפילה לחידוש הלבנה</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-6" onclick="openPrayerWithBurst(event, 'challah', '🥖')">
-    <div class="banner-inner">
-      <span class="banner-icon">🥖</span>
-      <div class="banner-title">הפרשת חלה</div>
-      <div class="banner-subtitle">ברכה ותחינה</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-7" onclick="openPrayerWithBurst(event, 'shema', '📖')">
-    <div class="banner-inner">
-      <span class="banner-icon">📖</span>
-      <div class="banner-title">קריאת שמע שעל המיטה</div>
-      <div class="banner-subtitle">נוסח ספרדי</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-8" onclick="openPrayerWithBurst(event, 'refua', '🩺')">
-    <div class="banner-inner">
-      <span class="banner-icon">🩺</span>
-      <div class="banner-title">תפילה לרפואה</div>
-      <div class="banner-subtitle">מי שברך לחולים</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-9" onclick="openPrayerWithBurst(event, 'brachot', '🫒')">
-    <div class="banner-inner">
-      <span class="banner-icon">🫒</span>
-      <div class="banner-title">ברכות הנהנין</div>
-      <div class="banner-subtitle">ברכות ראשונות ואחרונות על כל מאכל</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-10" onclick="openPrayerWithBurst(event, 'modeh', '☀️')">
-    <div class="banner-inner">
-      <span class="banner-icon">☀️</span>
-      <div class="banner-title">מודה אני ותפילת הבוקר</div>
-      <div class="banner-subtitle">תחילת היום בקדושה</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-11" onclick="openPrayerWithBurst(event, 'rachel', '🕯️')">
-    <div class="banner-inner">
-      <span class="banner-icon">🕯️</span>
-      <div class="banner-title">תפילת רחל אימנו</div>
-      <div class="banner-subtitle">תפילה לפני הדלקת הנר</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
-  <div class="banner banner-12" onclick="openPrayerWithBurst(event, 'tikun', '📖')">
-    <div class="banner-inner">
-      <span class="banner-icon">📖</span>
-      <div class="banner-title">התיקון הכללי</div>
-      <div class="banner-subtitle">עשרה מזמורי תהילים – רבי נחמן מברסלב</div>
-      <span class="banner-arrow">◀</span>
-    </div>
-  </div>
-
+<div class="banners" id="mainBanners">
 </div>
 
 <!-- Toast -->
@@ -3811,14 +4168,22 @@ function openFavsModal() {
     }).join('');
   }
   document.getElementById('favsModalOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
+  document.body.dataset.favsScrollY = scrollY;
 }
 function closeFavsModal(e) {
   if (e.target === document.getElementById('favsModalOverlay')) closeFavsModalDirect();
 }
 function closeFavsModalDirect() {
   document.getElementById('favsModalOverlay').classList.remove('active');
-  document.body.style.overflow = '';
+  const scrollY = parseInt(document.body.dataset.favsScrollY || '0');
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, scrollY);
 }
 function updateFhbCount() {
   const el = document.getElementById('fhbCount');
@@ -4233,11 +4598,17 @@ function openPrayer(id) {
   const overlay = document.getElementById('prayerOverlay');
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
-  document.body.style.overflow = 'hidden';
+
+  // נועל גלילה בלי קפיצה
+  const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
+  document.body.dataset.prayerScrollY = scrollY;
+
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
 
-  
   if (id === 'roshchodesh') {
     setTimeout(autoSelectHebrewMonth, 50);
   }
@@ -4257,7 +4628,12 @@ function openPrayer(id) {
 
 function closePrayer() {
   document.getElementById('prayerOverlay').classList.remove('active');
-  document.body.style.overflow = '';
+  // שחרר נעילת גלילה ושחזר מיקום
+  const scrollY = parseInt(document.body.dataset.prayerScrollY || '0');
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, scrollY);
   stopAutoScroll();
   hidePrayerFontCtrl();
 }
@@ -4365,9 +4741,189 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 </script>
 
 <script>
+
 // ═══════════════════════════════════════════════════════
-// שמירת שבת – בדיקה לפי מיקום המשתמש + hebcal API
+// חלון ברוכים הבאים
 // ═══════════════════════════════════════════════════════
+(function() {
+  function showWelcome() {
+    try {
+      var seen = localStorage.getItem('orHatfila_welcome_done');
+      if (seen === 'true') return; // "הבנתי" — לא מציג יותר
+    } catch(e) {}
+    // מציג אחרי שה-splash נעלם (2.7 שניות)
+    setTimeout(function() {
+      var el = document.getElementById('welcomeOverlay');
+      if (el) el.classList.add('visible');
+    }, 2700);
+  }
+
+  window.closeWelcome = function(permanent) {
+    var el = document.getElementById('welcomeOverlay');
+    if (el) el.classList.remove('visible');
+    if (permanent) {
+      try { localStorage.setItem('orHatfila_welcome_done', 'true'); } catch(e) {}
+    }
+    // אם "מאוחר יותר" — יופיע שוב בכניסה הבאה (לא שומר כלום)
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showWelcome);
+  } else {
+    showWelcome();
+  }
+})();
+
+// ═══════════════════════════════════════════════════════
+// דפי קטגוריה + מספור באנרים
+// ═══════════════════════════════════════════════════════
+
+var _currentSortPage = null;   // 'tefilot' | 'hadlaka'
+var _sortCounter = {};         // { pageId: currentNumber }
+var _sortMap = {};             // { pageId: { prayerId: number } }
+
+// פתיחת דף קטגוריה
+function openCategoryPage(pageId) {
+  var pageEl = document.getElementById(pageId === 'hadlaka' ? 'categoryHadlaka' : 'categoryTefilot');
+  if (!pageEl) return;
+  pageEl.classList.add('active');
+  pageEl.scrollTop = 0;
+  // נועל גלילה של הדף הראשי בלי לגרום לקפיצה
+  var scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
+  document.body.dataset.scrollY = scrollY;
+  _loadSortOrder(pageId);
+}
+
+// סגירת דף קטגוריה
+function closeCategoryPage(pageId) {
+  var pageEl = document.getElementById(pageId === 'hadlaka' ? 'categoryHadlaka' : 'categoryTefilot');
+  if (!pageEl) return;
+  pageEl.classList.remove('active');
+  // שחרר נעילת גלילה ושחזר מיקום
+  var scrollY = parseInt(document.body.dataset.scrollY || '0');
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, scrollY);
+  if (_currentSortPage === pageId) _cancelSort(pageId);
+}
+
+// לחיצה על עיגול המספור
+function handleSortClick(e, circleEl) {
+  e.stopPropagation();
+  var bannerEl = circleEl.closest('.banner');
+  if (!bannerEl) return;
+  var page = bannerEl.getAttribute('data-page');
+  var prayerId = bannerEl.getAttribute('data-prayer-id');
+  if (!page || !prayerId) return;
+
+  // אתחל מצב מספור לדף
+  if (!_sortCounter[page]) _sortCounter[page] = 0;
+  if (!_sortMap[page]) _sortMap[page] = {};
+
+  // אם כבר ממוספר — בטל
+  if (_sortMap[page][prayerId]) {
+    var oldNum = _sortMap[page][prayerId];
+    delete _sortMap[page][prayerId];
+    circleEl.textContent = '';
+    circleEl.classList.remove('numbered');
+    // הקטן מספר רץ אם זה היה האחרון
+    if (oldNum === _sortCounter[page]) _sortCounter[page]--;
+    _updateSortDoneBtn(page);
+    return;
+  }
+
+  // תן מספר חדש
+  _sortCounter[page]++;
+  _sortMap[page][prayerId] = _sortCounter[page];
+  circleEl.textContent = _sortCounter[page];
+  circleEl.classList.add('numbered');
+  _currentSortPage = page;
+  _updateSortDoneBtn(page);
+}
+
+function _updateSortDoneBtn(page) {
+  var btn = document.getElementById('sortDoneBtn');
+  if (!btn) return;
+  var hasAny = _sortMap[page] && Object.keys(_sortMap[page]).length > 0;
+  btn.classList.toggle('visible', hasAny);
+  if (hasAny) btn.setAttribute('data-sort-page', page);
+}
+
+// שמור וסדר מחדש
+function applySortOrder() {
+  var btn = document.getElementById('sortDoneBtn');
+  var page = btn ? btn.getAttribute('data-sort-page') : _currentSortPage;
+  if (!page || !_sortMap[page]) return;
+
+  var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var banners = Array.from(container.querySelectorAll('.banner'));
+  var numbered = [], unnumbered = [];
+
+  banners.forEach(function(b) {
+    var pid = b.getAttribute('data-prayer-id');
+    if (_sortMap[page][pid]) {
+      numbered.push({ el: b, num: _sortMap[page][pid] });
+    } else {
+      unnumbered.push(b);
+    }
+  });
+
+  numbered.sort(function(a, b) { return a.num - b.num; });
+
+  // שמור ב-localStorage
+  var order = numbered.map(function(n) { return n.el.getAttribute('data-prayer-id'); })
+              .concat(unnumbered.map(function(b) { return b.getAttribute('data-prayer-id'); }));
+  try { localStorage.setItem('orHatfila_sort_' + page, JSON.stringify(order)); } catch(e) {}
+
+  // סדר מחדש ב-DOM
+  numbered.forEach(function(n) { container.appendChild(n.el); });
+  unnumbered.forEach(function(b) { container.appendChild(b); });
+
+  // אפס עיגולים
+  _cancelSort(page);
+  showToast('הסידור נשמר ✓');
+}
+
+// ביטול מצב מספור
+function _cancelSort(page) {
+  _sortCounter[page] = 0;
+  _sortMap[page] = {};
+  _currentSortPage = null;
+  var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+  var container = document.getElementById(containerId);
+  if (container) {
+    container.querySelectorAll('.banner-sort-circle').forEach(function(c) {
+      c.textContent = '';
+      c.classList.remove('numbered');
+    });
+  }
+  var btn = document.getElementById('sortDoneBtn');
+  if (btn) btn.classList.remove('visible');
+}
+
+// טעינת סידור שמור
+function _loadSortOrder(page) {
+  try {
+    var saved = localStorage.getItem('orHatfila_sort_' + page);
+    if (!saved) return;
+    var order = JSON.parse(saved);
+    var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    order.forEach(function(pid) {
+      var banner = container.querySelector('[data-prayer-id="' + pid + '"]');
+      if (banner) container.appendChild(banner);
+    });
+  } catch(e) {}
+}
+
 (function() {
 
   var _shabbatCheckInterval = null;
@@ -4394,7 +4950,7 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 
     if (isShabbatNow()) {
       screen.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      // מסך שבת הוא z-index:99999 fixed — לא צריך לנעול body
 
       // עדכון טקסט צאת שבת
       var havdalaEl = document.getElementById('shabbatHavdalaText');
@@ -4418,7 +4974,6 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
       }
     } else {
       screen.classList.remove('active');
-      document.body.style.overflow = '';
     }
   }
 
