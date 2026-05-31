@@ -417,6 +417,8 @@
     animation: iconBurst 1s ease-out forwards;
     transform-origin: center;
   }
+
+  @keyframes fadeSlideIn {
     from { opacity: 0; transform: perspective(1000px) translateY(30px) rotateX(-5deg); }
     to { opacity: 1; transform: perspective(1000px) translateY(0) rotateX(0deg); }
   }
@@ -1408,98 +1410,7 @@
   }
   @keyframes parasha-marquee-anim {
     0% { transform: translateX(0%); }
-    100% { transform: translateX(50%); }
-  }
-  .bsd { top: calc(14px + 0.5cm) !important; }
-  .date-display { top: calc(36px + 0.5cm) !important; }
-  .favs-home-btn { top: calc(14px + 0.5cm) !important; }
-
-  /* תיקון והדגשת תיבת החיפוש - מורדכי */
-  .search-input {
-    width: 100%;
-    padding: 12px 44px 12px 16px;
-    background: #ffffff !important;
-    border: 2px solid var(--gold) !important;
-    border-radius: 24px;
-    color: #0A0E2E !important;
-    font-family: 'Heebo', sans-serif;
-    font-size: 18px; /* iOS requires >=16px to prevent auto-zoom */
-    font-weight: bold;
-    direction: rtl;
-    outline: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.25s ease;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  .search-input:focus {
-    border-color: var(--gold-light) !important;
-    box-shadow: 0 0 12px var(--gold-light), 0 4px 15px rgba(0, 0, 0, 0.4);
-  }
-  .search-input::placeholder { color: #555555 !important; font-weight: normal; }
-  .search-clear { color: #0A0E2E !important; font-weight: bold; z-index: 12; }
-
-  /* תיקון והדגשת קוביות תוצאות החיפוש - מורדכי */
-  .search-result-item {
-    background: #ffffff !important;
-    border: 2px solid var(--gold) !important;
-    border-radius: 14px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    direction: rtl;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    transition: all 0.2s ease;
-  }
-  .search-result-item:hover, .search-result-item:active {
-    background: #f7f5ee !important;
-    border-color: var(--gold-light) !important;
-    transform: translateY(-2px);
-  }
-  .search-result-title {
-    color: var(--purple) !important;
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: 18px;
-    font-weight: 900;
-    margin-bottom: 6px;
-  }
-  .search-result-excerpt { color: #222222 !important; font-family: 'Heebo', sans-serif; font-size: 14px; line-height: 1.6; }
-  .search-result-excerpt mark { background: rgba(212, 175, 55, 0.35) !important; color: #000000 !important; font-weight: bold; border-radius: 3px; padding: 0 4px; }
-  .search-no-results { text-align: center; color: var(--gold-light) !important; font-family: 'Heebo', sans-serif; font-size: 16px; font-weight: bold; padding: 24px; }
-
-  /* תיבה רצה אוטומטית - מורדכי */
-  .parasha-marquee-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 0.5cm;
-    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
-    z-index: 1000;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-  }
-  .parasha-marquee-wrapper {
-    display: flex;
-    width: max-content;
-    animation: parasha-marquee-anim 25s linear infinite;
-  }
-  .parasha-marquee-text {
-    font-family: 'Heebo', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: #0A0E2E;
-    white-space: nowrap;
-    direction: rtl;
-    text-shadow: 0 0 1px rgba(255,255,255,0.5);
-    padding-left: 50px;
-  }
-  @keyframes parasha-marquee-anim {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(50%); }
+    100% { transform: translateX(-50%); }
   }
   .bsd { top: calc(14px + 0.5cm) !important; }
   .date-display { top: calc(36px + 0.5cm) !important; }
@@ -2039,6 +1950,14 @@
     0%, 100% { transform: translateY(0px); }
     50%       { transform: translateY(-10px); }
   }
+  .bubble.pressing {
+    animation: bubblePress 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+  }
+  @keyframes bubblePress {
+    0%   { transform: scale(1)    translateY(0px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15); }
+    40%  { transform: scale(0.91) translateY(6px); box-shadow: 0 2px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 8px rgba(212,175,55,0.1); }
+    100% { transform: scale(1)    translateY(0px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15); }
+  }
   .bubble-icon { font-size: 34px; margin-bottom: 4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
   .bubble-label {
     font-family: 'Frank Ruhl Libre', serif;
@@ -2352,15 +2271,15 @@
 
 <!-- בועות צפות -->
 <div class="floating-bubbles" id="floatingBubbles">
-  <div class="bubble bubble-1" onclick="openParasha()">
+  <div class="bubble bubble-1" onclick="pressAndOpen(this, openParasha)">
     <div class="bubble-icon">📜</div>
     <div class="bubble-label">תמצית<br>פרשת השבוע</div>
   </div>
-  <div class="bubble bubble-2" onclick="openCategoryPage('tefilot')">
+  <div class="bubble bubble-2" onclick="pressAndOpen(this, function(){ openCategoryPage('tefilot'); })">
     <div class="bubble-icon">🙏</div>
     <div class="bubble-label">תפילות</div>
   </div>
-  <div class="bubble bubble-3" onclick="openCategoryPage('hadlaka')">
+  <div class="bubble bubble-3" onclick="pressAndOpen(this, function(){ openCategoryPage('hadlaka'); })">
     <div class="bubble-icon">🕯️</div>
     <div class="bubble-label">הדלקת נר</div>
   </div>
@@ -4253,6 +4172,15 @@ function performSearch(query) {
   }
 }
 
+function pressAndOpen(el, callback) {
+  if (el.classList.contains('pressing')) return;
+  el.classList.add('pressing');
+  setTimeout(function() {
+    el.classList.remove('pressing');
+    callback();
+  }, 250);
+}
+
 function openPrayerWithBurst(e, id, icon) {
   
   const burst = document.createElement('div');
@@ -4365,22 +4293,49 @@ document.addEventListener('touchstart', function(e) {
 history.pushState({ page: 'main' }, '');
 
 let keyboardWasOpen = false;
-window.addEventListener('resize', function() {
-  keyboardWasOpen = window.innerHeight < window.screen.height * 0.75;
-});
 
+// popstate מאוחד — תפילה / קטגוריה / מועדפים / מקלדת
 window.addEventListener('popstate', function(e) {
-  
+
+  // טיפול במקלדת פתוחה (iOS)
   if (keyboardWasOpen) {
     keyboardWasOpen = false;
     history.pushState({ page: 'main' }, '');
     return;
   }
-  
-  const overlay = document.getElementById('prayerOverlay');
-  if (overlay.classList.contains('active')) {
+
+  // אם תפילה פתוחה — סגור אותה
+  var prayerOverlay = document.getElementById('prayerOverlay');
+  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
     closePrayer();
+    history.pushState({ page: 'main' }, '');
+    return;
   }
+
+  // אם דף הדלקת נר פתוח — סגור אותו
+  var hadlaka = document.getElementById('categoryHadlaka');
+  if (hadlaka && hadlaka.classList.contains('active')) {
+    closeCategoryPage('hadlaka');
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+
+  // אם דף תפילות פתוח — סגור אותו
+  var tefilot = document.getElementById('categoryTefilot');
+  if (tefilot && tefilot.classList.contains('active')) {
+    closeCategoryPage('tefilot');
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+
+  // אם מועדפים פתוח — סגור
+  var favsOverlay = document.getElementById('favsModalOverlay');
+  if (favsOverlay && favsOverlay.classList.contains('active')) {
+    closeFavsModalDirect();
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+
   history.pushState({ page: 'main' }, '');
 });
 
@@ -4806,14 +4761,14 @@ async function openParasha() {
     pData.content;
 
   var overlay = document.getElementById('prayerOverlay');
+  // iOS Safari fix — קבע גובה אמיתי
+  overlay.style.height = window.innerHeight + 'px';
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
   var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
+  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
@@ -4919,10 +4874,8 @@ function openFavsModal() {
   }
   document.getElementById('favsModalOverlay').classList.add('active');
   const scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.favsScrollY = scrollY;
+  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 }
 function closeFavsModal(e) {
   if (e.target === document.getElementById('favsModalOverlay')) closeFavsModalDirect();
@@ -5288,8 +5241,6 @@ function getHebrewMonth() {
       day: 'numeric', month: 'long', year: 'numeric'
     }).format(now);
 
-    console.log('Full Hebrew date:', fullDate);
-
     const monthMap = [
       { keys: ['תשרי','בתשרי'], name: 'תִּשְׁרֵי', label: 'תִּשְׁרֵי' },
       { keys: ['חשון','מרחשון','חשוון','בחשון','במרחשון'], name: 'חֶשְׁוָן', label: 'חֶשְׁוָן' },
@@ -5347,9 +5298,7 @@ function openPrayer(id) {
   document.getElementById('prayerBody').innerHTML = p.body;
   const overlay = document.getElementById('prayerOverlay');
 
-  // iOS Safari fix — כוחות את ה-overlay למלא את כל המסך
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;';
-  // טריק ל-iOS: קבל את גובה המסך האמיתי
+  // iOS Safari fix — קבע גובה אמיתי בלבד, בלי למחוק את ה-transition
   var vh = window.innerHeight;
   overlay.style.height = vh + 'px';
 
@@ -5358,10 +5307,8 @@ function openPrayer(id) {
 
   // נועל גלילה בלי קפיצה
   const scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
+  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
@@ -5501,40 +5448,9 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 
 <script>
 
-// כפתור חזרה פיזי (אנדרואיד)
-window.addEventListener('popstate', function(e) {
-  // אם תפילה פתוחה — סגור אותה
-  var prayerOverlay = document.getElementById('prayerOverlay');
-  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
-    closePrayer();
-    return;
-  }
-  // אם דף הדלקת נר פתוח — סגור אותו
-  var hadlaka = document.getElementById('categoryHadlaka');
-  if (hadlaka && hadlaka.classList.contains('active')) {
-    closeCategoryPage('hadlaka');
-    return;
-  }
-  // אם דף תפילות פתוח — סגור אותו
-  var tefilot = document.getElementById('categoryTefilot');
-  if (tefilot && tefilot.classList.contains('active')) {
-    closeCategoryPage('tefilot');
-    return;
-  }
-  // אם מועדפים פתוח — סגור
-  var favsOverlay = document.getElementById('favsModalOverlay');
-  if (favsOverlay && favsOverlay.classList.contains('active')) {
-    closeFavsModalDirect();
-    return;
-  }
-});
 
-// הוסף history state בפתיחת כל דף כדי שה-popstate יירה
-var _origOpenCategory = openCategoryPage;
-openCategoryPage = function(pageId) {
-  history.pushState({ page: pageId }, '');
-  _origOpenCategory(pageId);
-};
+
+
 
 
 
@@ -5685,8 +5601,9 @@ openCategoryPage = function(pageId) {
   }
 })();
 
-// iOS Safari — עדכן גובה overlays כשה-viewport משתנה
+// resize מאוחד — מקלדת + גובה overlays
 window.addEventListener('resize', function() {
+  keyboardWasOpen = window.innerHeight < window.screen.height * 0.75;
   var vh = window.innerHeight;
   var overlay = document.getElementById('prayerOverlay');
   if (overlay && overlay.classList.contains('active')) overlay.style.height = vh + 'px';
@@ -5752,10 +5669,8 @@ function openCategoryPage(pageId) {
   pageEl.scrollTop = 0;
 
   var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.scrollY = scrollY;
+  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
   _loadSortOrder(pageId);
 }
 
