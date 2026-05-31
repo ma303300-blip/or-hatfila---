@@ -151,6 +151,61 @@
   }
   .favs-home-btn .fhb-count.has-favs { display: flex; }
 
+  .voice-btn {
+    position: fixed;
+    top: 64px;
+    left: 14px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 14, 46, 0.85);
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2), inset 0 1px 0 rgba(212,175,55,0.3);
+    cursor: pointer;
+    transition: box-shadow 0.25s, transform 0.2s;
+    font-size: 18px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .voice-btn:hover, .voice-btn:active {
+    box-shadow: 0 0 28px rgba(212,175,55,0.45);
+    transform: scale(1.08);
+  }
+  .voice-btn.listening {
+    border-color: #c0392b;
+    box-shadow: 0 0 20px rgba(192,57,43,0.6), 0 0 0 4px rgba(192,57,43,0.2);
+    animation: voicePulse 1s ease-in-out infinite;
+  }
+  @keyframes voicePulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(192,57,43,0.6), 0 0 0 4px rgba(192,57,43,0.2); }
+    50%       { box-shadow: 0 0 30px rgba(192,57,43,0.9), 0 0 0 8px rgba(192,57,43,0.1); }
+  }
+
+  .voice-toast {
+    position: fixed;
+    top: 110px;
+    left: 10px;
+    z-index: 200;
+    background: rgba(10,14,46,0.92);
+    border: 1px solid rgba(212,175,55,0.4);
+    color: var(--gold-light);
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    max-width: 200px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    direction: rtl;
+  }
+  .voice-toast.show { opacity: 1; }
+
 
   .favs-modal-overlay {
     position: fixed;
@@ -1436,6 +1491,7 @@
   .bsd { top: calc(14px + 0.5cm) !important; }
   .date-display { top: calc(36px + 0.5cm) !important; }
   .favs-home-btn { top: calc(14px + 0.5cm) !important; }
+  .voice-btn { top: calc(64px + 0.5cm) !important; }
 
   /* תיקון והדגשת תיבת החיפוש - מורדכי */
   .search-input {
@@ -2236,6 +2292,9 @@
   <span class="fhb-label">מועדפים</span>
 </button>
 
+<button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית">🗣️</button>
+<div class="voice-toast" id="voiceToast"></div>
+
 <!-- Favs Modal -->
 <div class="favs-modal-overlay" id="favsModalOverlay" onclick="closeFavsModal(event)">
   <div class="favs-modal">
@@ -2482,7 +2541,7 @@
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
-          <div class="banner-subtitle">נוסח ספרד עדות המזרח</div>
+          <div class="banner-subtitle">נוסח עדות המזרח</div>
           <span class="banner-arrow">◀</span>
         </div>
       </div>
@@ -2902,17 +2961,23 @@ const prayers = {
       <div class="ornament">✦ ✦ ✦</div>
 
       <span class="section-title">✦ ברכת האורח ✦</span>
-      הָרַחֲמָן הוּא יְבָרֵךְ אֶת הַשֻּׁלְחָן הַזֶּה שֶׁאָכַלְנוּ עָלָיו,<br>
-      וִיסַדֵּר בּוֹ כָּל מַעֲדַנֵּי עוֹלָם,<br>
-      וְיִהְיֶה כְשֻׁלְחָנוֹ שֶׁל אַבְרָהָם אָבִינוּ עָלָיו הַשָּׁלוֹם.<br>
-      כָּל רָעֵב מִמֶּנּוּ יֹאכַל, וְכָל צָמֵא מִמֶּנּוּ יִשְׁתֶּה,<br>
-      וְאַל יֶחְסַר מִמֶּנּוּ כָּל טוֹב לָעַד וּלְעוֹלְמֵי עוֹלָמִים, אָמֵן.<br><br>
-      הָרַחֲמָן הוּא יְבָרֵךְ אֶת בַּעַל הַבַּיִת הַזֶּה וּבַעַל הַסְּעֻדָּה הַזֹּאת,<br>
-      הוּא וּבָנָיו וְאִשְׁתּוֹ וְכָל אֲשֶׁר לוֹ,<br>
-      בְּבָנִים שֶׁיִּחְיוּ וּבִנְכָסִים שֶׁיִּרְבּוּ.<br>
-      בָּרֵךְ יְהֹוָה חֵילוֹ וּפֹעַל יָדָיו תִּרְצֶה,<br>
-      שָׂשׂ וְשָׂמֵחַ כָּל הַיָּמִים בְּעֹשֶׁר וְכָבוֹד מֵעַתָּה וְעַד עוֹלָם,<br>
-      <span class="highlight">לֹא יֵבוֹשׁ בָּעוֹלָם הַזֶּה וְלֹא יִכָּלֵם לָעוֹלָם הַבָּא, אָמֵן כֵּן יְהִי רָצוֹן.</span>
+      <div style="margin:10px 0 14px; display:flex; gap:10px; justify-content:center;">
+        <button class="month-btn" onclick="selectBirchatOrechSfarad('open', this)">ברכת האורח</button>
+        <button class="month-btn" onclick="selectBirchatOrechSfarad('none', this)">ביטול</button>
+      </div>
+      <div id="birchatOrechSfaradText" style="display:none; margin-bottom:14px;">
+        הָרַחֲמָן הוּא יְבָרֵךְ אֶת הַשֻּׁלְחָן הַזֶּה שֶׁאָכַלְנוּ עָלָיו,<br>
+        וִיסַדֵּר בּוֹ כָּל מַעֲדַנֵּי עוֹלָם,<br>
+        וְיִהְיֶה כְשֻׁלְחָנוֹ שֶׁל אַבְרָהָם אָבִינוּ עָלָיו הַשָּׁלוֹם.<br>
+        כָּל רָעֵב מִמֶּנּוּ יֹאכַל, וְכָל צָמֵא מִמֶּנּוּ יִשְׁתֶּה,<br>
+        וְאַל יֶחְסַר מִמֶּנּוּ כָּל טוֹב לָעַד וּלְעוֹלְמֵי עוֹלָמִים, אָמֵן.<br><br>
+        הָרַחֲמָן הוּא יְבָרֵךְ אֶת בַּעַל הַבַּיִת הַזֶּה וּבַעַל הַסְּעֻדָּה הַזֹּאת,<br>
+        הוּא וּבָנָיו וְאִשְׁתּוֹ וְכָל אֲשֶׁר לוֹ,<br>
+        בְּבָנִים שֶׁיִּחְיוּ וּבִנְכָסִים שֶׁיִּרְבּוּ.<br>
+        בָּרֵךְ יְהֹוָה חֵילוֹ וּפֹעַל יָדָיו תִּרְצֶה,<br>
+        שָׂשׂ וְשָׂמֵחַ כָּל הַיָּמִים בְּעֹשֶׁר וְכָבוֹד מֵעַתָּה וְעַד עוֹלָם,<br>
+        <span class="highlight">לֹא יֵבוֹשׁ בָּעוֹלָם הַזֶּה וְלֹא יִכָּלֵם לָעוֹלָם הַבָּא, אָמֵן כֵּן יְהִי רָצוֹן.</span>
+      </div>
 
       <div class="ornament">✦ ✦ ✦</div>
 
@@ -4284,8 +4349,8 @@ function selectNissim(type, btn) {
 
 function selectYaaleh(name, btn) {
   document.querySelectorAll('.yaaleh-name').forEach(el => el.textContent = name);
-  btn.closest('div').querySelectorAll('.month-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
+  btn.closest('div').querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 let searchOpen = false;
@@ -5402,6 +5467,16 @@ function checkRoshChodesh() {
 }
 
 requestNotificationPermission();
+
+// בקשת הרשאת מיקרופון בטעינה
+(function requestMicPermission() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream) {
+      stream.getTracks().forEach(function(t) { t.stop(); });
+    })
+    .catch(function() {});
+})();
 var _hilulaInterval = setInterval(checkHilula, 3600000);
 var _roshChodeshInterval = setInterval(checkRoshChodesh, 3600000);
 checkRoshChodesh();
@@ -6009,6 +6084,19 @@ function selectNissimAshkenaz(type, btn) {
   container.style.display = 'block';
   if (btn) btn.classList.add('active');
 }
+// ברכת האורח נוסח עדות המזרח
+function selectBirchatOrechSfarad(type, btn) {
+  var container = document.getElementById('birchatOrechSfaradText');
+  if (!container) return;
+  btn.closest('div').querySelectorAll('.month-btn').forEach(function(b) { b.classList.remove('active'); });
+  if (type === 'none') {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+  if (btn) btn.classList.add('active');
+}
+
 function selectBirchatOrech(type, btn) {
   var container = document.getElementById('birchatOrechText');
   if (!container) return;
@@ -6327,6 +6415,94 @@ function _loadSortOrder(page) {
     initShabbatCheck();
   }, 3600000);
 
+})();
+
+// ═══════════════════════════════════════════════════════
+// פקודה קולית
+// ═══════════════════════════════════════════════════════
+(function() {
+  var recognition = null;
+  var listening = false;
+
+  var voiceMap = [
+    { keys: ['חיילים', 'חייל', 'צבא', 'צה"ל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'chayalim', '🪖'); } },
+    { keys: ['אשכנז', 'אשכנזי'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon_ashkenaz', '🤲'); }, 600); } },
+    { keys: ['עדות המזרח', 'ספרד', 'מזרח'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon', '🤲'); }, 600); } },
+    { keys: ['ברכת המזון', 'מזון'], action: function() { openMazonSelector({ stopPropagation: function(){} }); } },
+    { keys: ['רחל אמנו', 'רחל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'rachel', '🕯️'); } },
+    { keys: ['הדלקת נר', 'הדלקה'], action: function() { openCategoryPage('hadlaka'); } },
+    { keys: ['חלה', 'הפרשת חלה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🍞'); } },
+    { keys: ['קריאת שמע', 'שמע'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shema', '📖'); } },
+    { keys: ['רפואה', 'מי שברך', 'חולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'refua', '🩺'); } },
+    { keys: ['ברכות', 'ברכת הנהנין'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'brachot', '🫒'); } },
+    { keys: ['מודה אני', 'מודה', 'בוקר'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'modeh', '☀️'); } },
+    { keys: ['תיקון כללי', 'תיקון', 'נחמן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'tikun', '📖'); } },
+    { keys: ['הילולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hilula', '🕯️'); } },
+    { keys: ['ראש חודש'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'roshchodesh', '🌙'); } },
+    { keys: ['תפילת הדרך', 'הדרך', 'נסיעה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'derech', '🗺️'); } },
+    { keys: ['תפילות'], action: function() { openCategoryPage('tefilot'); } },
+  ];
+
+  function showVoiceToast(msg, duration) {
+    var t = document.getElementById('voiceToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() { t.classList.remove('show'); }, duration || 2500);
+  }
+
+  function handleVoiceResult(text) {
+    showVoiceToast('שמעתי: ' + text, 2000);
+    var found = false;
+    for (var i = 0; i < voiceMap.length; i++) {
+      for (var j = 0; j < voiceMap[i].keys.length; j++) {
+        if (text.includes(voiceMap[i].keys[j])) {
+          voiceMap[i].action();
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    if (!found) showVoiceToast('לא הצלחתי להבין, נסה שוב', 2500);
+  }
+
+  window.toggleVoice = function() {
+    var btn = document.getElementById('voiceBtn');
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      showVoiceToast('הדפדפן לא תומך בזיהוי קול', 3000);
+      return;
+    }
+    if (listening) {
+      recognition && recognition.stop();
+      return;
+    }
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = 'he-IL';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = function() {
+      listening = true;
+      btn.classList.add('listening');
+      btn.textContent = '🔴';
+      showVoiceToast('מאזין... דבר עכשיו', 5000);
+    };
+    recognition.onresult = function(e) {
+      handleVoiceResult(e.results[0][0].transcript);
+    };
+    recognition.onerror = function(e) {
+      showVoiceToast(e.error === 'not-allowed' ? 'אין הרשאת מיקרופון' : 'שגיאה, נסה שוב', 3000);
+    };
+    recognition.onend = function() {
+      listening = false;
+      btn.classList.remove('listening');
+      btn.textContent = '🗣️';
+    };
+    recognition.start();
+  };
 })();
 </script>
 
