@@ -3461,7 +3461,7 @@ const prayers = {
         <button class="tzaddik-btn" onclick="selectTzaddik('האביר יעקב אבוחצירא', this)">האביר יעקב אבוחצירא<span class="tzaddik-date">כ"ז בטבת</span></button>
         <button class="tzaddik-btn" onclick="selectTzaddik('רבי נחמן מברסלב', this)">רבי נחמן מברסלב<span class="tzaddik-date">י"ח בתשרי</span></button>
         <button class="tzaddik-btn" onclick="selectTzaddik('רבי אלימלך מליז\'נסק', this)">רבי אלימלך מליז'נסק<span class="tzaddik-date">כ"א באדר</span></button>
-        <button class="tzaddik-btn" onclick="selectTzaddik('רחל אמנו', this)">רחל אמנו<span class="tzaddik-date">י"א במרחשוון</span></button>
+        
       </div>
 
       <span class="section-title">✦ קודם הדלקת הנר ✦</span>
@@ -4674,9 +4674,14 @@ function openPrayerWithBurst(e, id, icon) {
   const burst = document.createElement('div');
   burst.className = 'icon-burst';
   burst.textContent = icon;
-  const rect = e.currentTarget.getBoundingClientRect();
-  burst.style.left = (rect.left + rect.width / 2 - 20) + 'px';
-  burst.style.top = (rect.top + rect.height / 2 - 20) + 'px';
+  try {
+    const rect = e.currentTarget.getBoundingClientRect();
+    burst.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+    burst.style.top = (rect.top + rect.height / 2 - 20) + 'px';
+  } catch(err) {
+    burst.style.left = (window.innerWidth / 2 - 20) + 'px';
+    burst.style.top = (window.innerHeight / 2 - 20) + 'px';
+  }
   document.body.appendChild(burst);
 
   // סמן אם נכנסים מתוך דף בחירת נוסח מזון וסגור אותו ברקע
@@ -5522,8 +5527,7 @@ const hilulaCalendar = [
   { name: 'הבבא סאלי', month: 'שבט', day: 4 },
   { name: 'האביר יעקב אבוחצירא', month: 'טבת', day: 27 },
   { name: 'רבי נחמן מברסלב', month: 'תשרי', day: 18 },
-  { name: 'רבי אלימלך מליז\'נסק', month: 'אדר', day: 21 },
-  { name: 'רחל אמנו', month: 'מרחשוון', day: 11 }
+  { name: 'רבי אלימלך מליז\'נסק', month: 'אדר', day: 21 }
 ];
 
 checkTodayEvents();
