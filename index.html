@@ -151,6 +151,95 @@
   }
   .favs-home-btn .fhb-count.has-favs { display: flex; }
 
+  /* פוטר */
+  .app-footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .app-footer a {
+    color: rgba(212,175,55,0.55);
+    font-family: 'Heebo', sans-serif;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .app-footer a:hover { color: var(--gold-light); }
+
+  /* מודל משפטי */
+  .legal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .legal-overlay.active { opacity: 1; pointer-events: all; }
+  .legal-modal {
+    background: linear-gradient(170deg, #0d1033 0%, #050e20 100%);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 600px;
+    padding: 24px 22px calc(40px + env(safe-area-inset-bottom, 0px));
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
+    direction: rtl;
+  }
+  .legal-overlay.active .legal-modal { transform: translateY(0); }
+  .legal-handle {
+    width: 40px; height: 4px;
+    background: rgba(212,175,55,0.3);
+    border-radius: 2px;
+    margin: 0 auto 18px;
+  }
+  .legal-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+    text-align: center;
+    margin-bottom: 16px;
+    text-shadow: 0 0 10px rgba(212,175,55,0.3);
+  }
+  .legal-body {
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+  }
+  .legal-body h3 {
+    color: var(--gold-light);
+    font-size: 14px;
+    margin: 14px 0 6px;
+  }
+  .legal-close {
+    display: block;
+    margin: 22px auto 0;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid rgba(212,175,55,0.3);
+    color: var(--gold-light);
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    padding: 10px 32px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .legal-close:hover { background: rgba(212,175,55,0.22); }
+
   .voice-btn {
     position: fixed;
     top: 64px;
@@ -2605,6 +2694,68 @@
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- פוטר -->
+<div class="app-footer">
+  <a onclick="openLegal('privacy')">✦ מדיניות פרטיות</a>
+  <a onclick="openLegal('terms')">✦ תקנון</a>
+</div>
+
+<!-- מודל מדיניות פרטיות -->
+<div class="legal-overlay" id="legalPrivacy" onclick="closeLegalIfOutside(event,'legalPrivacy')">
+  <div class="legal-modal">
+    <div class="legal-handle"></div>
+    <div class="legal-title">✦ מדיניות פרטיות ✦</div>
+    <div class="legal-body">
+      <h3>כללי</h3>
+      אפליקציית "אור התפילה" (להלן: "האפליקציה") פותחה ומופעלת על ידי מוטי עמר (להלן: "המפתח"). השימוש באפליקציה מהווה הסכמה מלאה למדיניות פרטיות זו.
+
+      <h3>איסוף מידע</h3>
+      האפליקציה אינה אוספת, שומרת, מעבירה או משתפת כל מידע אישי מזהה של המשתמש. כל הנתונים (מועדפים, הגדרות) נשמרים באופן מקומי על מכשיר המשתמש בלבד ואינם מועברים לשרת כלשהו.
+
+      <h3>הרשאות</h3>
+      האפליקציה עשויה לבקש גישה למיקרופון לצורך הפקודה הקולית. מידע זה אינו נשמר ואינו מועבר לכל גורם חיצוני. האפליקציה עשויה לבקש הרשאת התראות לצורך תזכורות הלכתיות (הילולות, ראש חודש).
+
+      <h3>שירותי צד שלישי</h3>
+      האפליקציה משתמשת בשירות Hebcal לצורך חישוב זמני שבת ומועדים. מדיניות הפרטיות של Hebcal חלה על מידע המועבר אליהם.
+
+      <h3>עדכונים</h3>
+      המפתח שומר לעצמו את הזכות לעדכן מדיניות זו בכל עת. המשך השימוש באפליקציה לאחר עדכון מהווה הסכמה לשינויים.
+
+      <h3>יצירת קשר</h3>
+      לכל שאלה בנוגע למדיניות הפרטיות ניתן לפנות למפתח.
+    </div>
+    <button class="legal-close" onclick="closeLegal('legalPrivacy')">סגור</button>
+  </div>
+</div>
+
+<!-- מודל תקנון -->
+<div class="legal-overlay" id="legalTerms" onclick="closeLegalIfOutside(event,'legalTerms')">
+  <div class="legal-modal">
+    <div class="legal-handle"></div>
+    <div class="legal-title">✦ תקנון ותנאי שימוש ✦</div>
+    <div class="legal-body">
+      <h3>בעלות וזכויות יוצרים</h3>
+      © כל הזכויות שמורות למוטי עמר. האפליקציה, עיצובה, תוכנה, קודה ותכניה — לרבות טקסטים, תפילות מקוריות, עיצוב גרפי ופיתוח טכנולוגי — הינם רכושו הבלעדי של המפתח ומוגנים על פי חוק זכויות יוצרים, תשס"ח–2007, וחוקים בינלאומיים רלוונטיים.
+
+      <h3>איסור העתקה ושימוש</h3>
+      חל איסור מוחלט על העתקה, שכפול, הפצה, שינוי, מכירה, פרסום או כל שימוש מסחרי בכל חלק מהאפליקציה ללא אישור מפורש בכתב מהמפתח. הפרת תנאי זה עלולה לגרור הליכים משפטיים אזרביים ופליליים ותביעת פיצויים.
+
+      <h3>מטרת האפליקציה</h3>
+      האפליקציה פותחה למטרת זיכוי הרבים ולשירות הציבור בלבד, ואינה מיועדת למטרות רווח. כל תוכן רוחני ותפילות המופיעים באפליקציה נועדו לחיזוק הקשר עם הבורא ולשמירת המסורת היהודית.
+
+      <h3>הגבלת אחריות</h3>
+      המפתח אינו אחראי לכל נזק ישיר, עקיף או תוצאתי הנובע מהשימוש באפליקציה. התוכן ניתן "כמות שהוא" (AS IS) ללא כל אחריות. לנוסחי תפילות הלכתיים יש להיוועץ ברב מוסמך.
+
+      <h3>שינויים בתקנון</h3>
+      המפתח רשאי לשנות תקנון זה בכל עת. המשך השימוש באפליקציה מהווה הסכמה לתנאים המעודכנים.
+
+      <h3>שיפוט</h3>
+      כל סכסוך הנובע מהשימוש באפליקציה יידון בבתי המשפט המוסמכים בישראל, בהתאם לדין הישראלי.
+    </div>
+    <button class="legal-close" onclick="closeLegal('legalTerms')">סגור</button>
+  </div>
+</div>
 
 <!-- Floating font control (fixed, shown only inside prayer) -->
 <div class="prayer-font-ctrl" id="prayerFontCtrl">
@@ -5772,6 +5923,18 @@ function resumePage() {
   updateDateDisplay();
 }
 
+// מודלים משפטיים
+function openLegal(type) {
+  var id = type === 'privacy' ? 'legalPrivacy' : 'legalTerms';
+  document.getElementById(id).classList.add('active');
+}
+function closeLegal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+function closeLegalIfOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeLegal(id);
+}
+
 // הוסף history state בפתיחת כל דף כדי שה-popstate יירה
 var _origOpenCategory = openCategoryPage;
 openCategoryPage = function(pageId) {
@@ -6430,18 +6593,43 @@ function _loadSortOrder(page) {
     { keys: ['עדות המזרח', 'ספרד', 'מזרח'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon', '🤲'); }, 600); } },
     { keys: ['ברכת המזון', 'מזון'], action: function() { openMazonSelector({ stopPropagation: function(){} }); } },
     { keys: ['רחל אמנו', 'רחל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'rachel', '🕯️'); } },
-    { keys: ['הדלקת נר', 'הדלקה'], action: function() { openCategoryPage('hadlaka'); } },
+    { keys: ['איגרת הרמב"ן', 'איגרת', 'רמב"ן', 'רמבן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'igeret_haramban', '✍️'); } },
+    { keys: ['פרשת השבוע', 'פרשה', 'השבוע', 'פרשת'], action: function() {
+      var todayCard = document.getElementById('todayCardInner');
+      if (todayCard) todayCard.click();
+    }},
+    { keys: ['בבא סאלי', 'אבוחצירא', 'ישראל אבוחצירא'], action: function() { _openHilulaWithTzaddik('הבבא סאלי רבי ישראל אבוחצירא'); } },
+    { keys: ['שמעון בר יוחאי', 'רשבי', 'בר יוחאי', 'לג בעומר'], action: function() { _openHilulaWithTzaddik('התנא הקדוש רבי שמעון בר יוחאי'); } },
+    { keys: ['מאיר בעל הנס', 'רבי מאיר'], action: function() { _openHilulaWithTzaddik('התנא הקדוש רבי מאיר בעל הנס'); } },
+    { keys: ['אור החיים', 'חיים בן עטר'], action: function() { _openHilulaWithTzaddik('האור החיים הקדוש רבי חיים בן עטר'); } },
+    { keys: ['קרסטיר', 'ישעיה מקרסטיר'], action: function() { _openHilulaWithTzaddik('רבי ישעיה מקרסטיר'); } },
+    { keys: ['אביר יעקב', 'יעקב אבוחצירא'], action: function() { _openHilulaWithTzaddik('האביר יעקב אבוחצירא'); } },
+    { keys: ['נחמן מברסלב', 'נחמן', 'ברסלב'], action: function() { _openHilulaWithTzaddik('רבי נחמן מברסלב'); } },
+    { keys: ['אלימלך', 'ליז\'נסק'], action: function() { _openHilulaWithTzaddik('רבי אלימלך מליז\'נסק'); } },
+    { keys: ['הדלקת נר', 'הדלקה', 'הילולה'], action: function() { openCategoryPage('hadlaka'); } },
     { keys: ['חלה', 'הפרשת חלה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🍞'); } },
     { keys: ['קריאת שמע', 'שמע'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shema', '📖'); } },
     { keys: ['רפואה', 'מי שברך', 'חולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'refua', '🩺'); } },
     { keys: ['ברכות', 'ברכת הנהנין'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'brachot', '🫒'); } },
     { keys: ['מודה אני', 'מודה', 'בוקר'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'modeh', '☀️'); } },
     { keys: ['תיקון כללי', 'תיקון', 'נחמן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'tikun', '📖'); } },
-    { keys: ['הילולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hilula', '🕯️'); } },
     { keys: ['ראש חודש'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'roshchodesh', '🌙'); } },
     { keys: ['תפילת הדרך', 'הדרך', 'נסיעה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'derech', '🗺️'); } },
     { keys: ['תפילות'], action: function() { openCategoryPage('tefilot'); } },
   ];
+
+  // פתיחת הילולה עם בחירת צדיק אוטומטית
+  function _openHilulaWithTzaddik(tzaddikName) {
+    openPrayerWithBurst({ currentTarget: document.body }, 'hilula', '🕯️');
+    setTimeout(function() {
+      var btns = document.querySelectorAll('.tzaddik-btn');
+      btns.forEach(function(btn) {
+        if (btn.textContent.includes(tzaddikName.replace('רבי ', '').split(' ')[0])) {
+          btn.click();
+        }
+      });
+    }, 1200);
+  }
 
   function showVoiceToast(msg, duration) {
     var t = document.getElementById('voiceToast');
@@ -6481,7 +6669,7 @@ function _loadSortOrder(page) {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();
     recognition.lang = 'he-IL';
-    recognition.interimResults = false;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = function() {
@@ -6491,7 +6679,18 @@ function _loadSortOrder(page) {
       showVoiceToast('מאזין... דבר עכשיו', 5000);
     };
     recognition.onresult = function(e) {
-      handleVoiceResult(e.results[0][0].transcript);
+      var interim = '';
+      var final = '';
+      for (var i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          final += e.results[i][0].transcript;
+        } else {
+          interim += e.results[i][0].transcript;
+        }
+      }
+      // הצג בזמן אמת בתיבה
+      if (interim) showVoiceToast('🎙️ ' + interim, 8000);
+      if (final) handleVoiceResult(final);
     };
     recognition.onerror = function(e) {
       showVoiceToast(e.error === 'not-allowed' ? 'אין הרשאת מיקרופון' : 'שגיאה, נסה שוב', 3000);
