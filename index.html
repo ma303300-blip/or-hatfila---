@@ -1154,6 +1154,11 @@
     box-shadow: 0 10px 40px rgba(20,60,160,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
   }
   .banner-12:hover { box-shadow: 0 20px 60px rgba(20,60,160,0.55); }
+  .banner-13 .banner-inner {
+    background: linear-gradient(135deg, rgba(42,28,5,0.42) 0%, rgba(90,60,10,0.38) 40%, rgba(28,16,0,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(139,90,10,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-13:hover { box-shadow: 0 20px 60px rgba(139,90,10,0.55); }
 
   .refua-name-input {
     width: 100%;
@@ -2363,10 +2368,10 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="openPrayerWithBurst(event, 'mazon', '🍞')">
+      <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="openPrayerWithBurst(event, 'mazon', '🤲')">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
-          <span class="banner-icon">🍞</span>
+          <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
           <div class="banner-subtitle">נוסח ספרדי</div>
           <span class="banner-arrow">◀</span>
@@ -2381,10 +2386,10 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-6" data-prayer-id="challah" data-page="tefilot" onclick="openPrayerWithBurst(event, 'challah', '🥖')">
+      <div class="banner banner-6" data-prayer-id="challah" data-page="tefilot" onclick="openPrayerWithBurst(event, 'challah', '🍞')">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
-          <span class="banner-icon">🥖</span>
+          <span class="banner-icon">🍞</span>
           <div class="banner-title">הפרשת חלה</div>
           <div class="banner-subtitle">ברכה ותחינה</div>
           <span class="banner-arrow">◀</span>
@@ -2435,6 +2440,16 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
+      <div class="banner banner-13" data-prayer-id="igeret_haramban" data-page="tefilot" onclick="openPrayerWithBurst(event, 'igeret_haramban', '&#9997;')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">&#9997;</span>
+          <div class="banner-title">איגרת הרמב&quot;ן</div>
+          <div class="banner-subtitle">מוסר ועצות לחיים</div>
+          <span class="banner-arrow">&#9668;</span>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </div>
@@ -4009,7 +4024,22 @@ const prayers = {
 
       <span class="highlight">אָמֵן נֶצַח סֶלָה וָעֶד:</span>
     `
+  },
+  igeret_haramban: {
+    title: "איגרת הרמב\"ן",
+    body: `
+      <span class="section-title">&#x2726; איגרת הרמב"ן &#x2726;</span>
+      <span class="highlight">שְׁמַע בְּנִי מוּסַר אָבִיךָ, וְאַל תִּטֹּשׁ תּוֹרַת אִמֶּךָ:</span><br><br>
+      תִּתְנַהֵג תָּמִיד לְדַבֵּר כָּל דְּבָרֶיךָ בְּנַחַת, לְכָל אָדָם וּבְכָל עֵת, וּבַזֶּה תִּנָּצֵל מִן הַכַּעַס שֶׁהִיא מִדָּה רָעָה לְהַחְטִיא בְּנֵי אָדָם. וְכֵן אָמְרוּ רַבּוֹתֵינוּ זִכְרוֹנָם לִבְרָכָה: כָּל הַכּוֹעֵס כָּל מִינֵי גֵּהִינֹּם שׁוֹלְטִים בּוֹ, שֶׁנֶּאֱמַר: וְהָסֵר כַּעַס מִלִּבֶּךָ, וְהַעֲבֵר רָעָה מִבְּשָׂרֶךָ.<br><br>
+      וְכַאֲשֶׁר תִּנָּצֵל מִן הַכַּעַס תַּעֲלֶה עַל לִבְּךָ מִדַּת הָעֲנָוָה שֶׁהִיא מִדָּה טוֹבָה מִכָּל הַמִּדּוֹת טוֹבוֹת, שֶׁנֶּאֱמַר: עֵקֶב עֲנָוָה יִרְאַת ה'. וּבַעֲבוּר הָעֲנָוָה תַּעֲלֶה עַל לִבְּךָ מִדַּת הַיִּרְאָה, כִּי תִּתֵּן אֵל לִבְּךָ תָּמִיד: מֵאַיִן בָּאתָ, וּלְאָן אַתָּה הוֹלֵךְ, וְשֶׁאַתָּה רִמָּה וְתוֹלֵעָה בְּחַיֶּיךָ וְאַף כִּי בְּמוֹתְךָ, וְלִפְנֵי מִי אַתָּה עָתִיד לִתֵּן דִּין וְחֶשְׁבּוֹן, לִפְנֵי מֶלֶךְ הַכָּבוֹד.<br><br>
+      וְכַאֲשֶׁר תַּחְשֹׁב אֵת כָּל אֵלֶּה, תִּירָא מִבּוֹרְאֲךָ וְתִשָּׁמֵר מִן הַחֵטְא, וּבַמִּדּוֹת הָאֵלֶּה תִּהְיֶה שָׂמֵחַ בְּחֶלְקְךָ. וְכַאֲשֶׁר תִּתְנַהֵג בְּמִדַּת הָעֲנָוָה, אָז תִּשְׁרֶה עָלֶיךָ רוּחַ הַשְּׁכִינָה וְזִיו כְּבוֹדָהּ, וְחַיֵּי עוֹלָם הַבָּא.<br><br>
+      וְעַתָּה בְּנִי, דַּע וּרְאֵה, כִּי הַמִּתְגָּאֶה בְּלִבּוֹ עַל הַבְּרִיּוֹת, מוֹרֵד הוּא בְּמַלְכוּת שָׁמַיִם. וּבַמֶּה יִתְגָּאֶה לֵב הָאָדָם? אִם בְּעֹשֶׁר — ה' מוֹרִישׁ וּמַעֲשִׁיר. וְאִם בְּכָבוֹד — הֲלֹא לֵאלֹקִים הוּא. וְאִם מִתְפָּאֵר בְּחָכְמָה — מֵסִיר שָׂפָה לְנֶאֱמָנִים. לַכֵּן תַּשְׁפִּיל עַצְמְךָ וְיִנָּשְׂאֲךָ הַמָּקוֹם.<br><br>
+      כָּל דְּבָרֶיךָ יִהְיוּ בְּנַחַת, וְרֹאשְׁךָ כָּפוּף, וְעֵינֶיךָ יַבִּיטוּ לְמַטָּה לָאָרֶץ, וְכָל אָדָם יִהְיֶה גָּדוֹל מִמְּךָ בְּעֵינֶיךָ. בְּכָל דְּבָרֶיךָ וּמַעֲשֶׂיךָ וּמַחְשְׁבוֹתֶיךָ וּבְכָל עֵת, חֲשֹׁב בְּלִבְּךָ כְּאִלּוּ אַתָּה עוֹמֵד לִפְנֵי הַקָּדוֹשׁ בָּרוּךְ הוּא, כִּי כְּבוֹדוֹ מַלֵּא עוֹלָם.<br><br>
+      וֶהֱוֵי זָהִיר לִקְרוֹת בַּתּוֹרָה תָּמִיד, וּתְפַשְׁפֵּשׁ בְּמַעֲשֶׂיךָ בַּבֹּקֶר וּבָעֶרֶב, וּבַזֶּה יִהְיוּ כָּל יָמֶיךָ בִּתְשׁוּבָה. וְהָסֵר כָּל דִּבְרֵי הָעוֹלָם מִלִּבְּךָ בְּעֵת הַתְּפִלָּה, וְהָכֵן לִבְּךָ לִפְנֵי הַמָּקוֹם בָּרוּךְ הוּא.<br><br>
+      <span class="highlight">תִּקְרָא הָאִגֶּרֶת הַזֹּאת פַּעַם אַחַת בְּשָׁבוּעַ וְלֹא תִּפְחוֹת. וּבְכָל יוֹם שֶׁתִּקְרָאֶנָּה יַעַנּוּךָ מִן הַשָּׁמַיִם כַּאֲשֶׁר יַעֲלֶה עַל לִבְּךָ לִשְׁאוֹל עַד עוֹלָם, אָמֵן סֶלָה.</span>
+    `
   }
+
 };
 
 let currentFontPercent = parseInt(_store.get('orHatfila_fontSize') || '100');
