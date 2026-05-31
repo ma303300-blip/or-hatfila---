@@ -5027,9 +5027,35 @@ window.addEventListener('popstate', function(e) {
     return;
   }
   
-  const overlay = document.getElementById('prayerOverlay');
-  if (overlay && overlay.classList.contains('active')) {
+  var prayerOverlay = document.getElementById('prayerOverlay');
+  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
     closePrayer();
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+  var mazonPage = document.getElementById('categoryMazon');
+  if (mazonPage && mazonPage.classList.contains('active')) {
+    closeMazonSelector();
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+  var hadlaka = document.getElementById('categoryHadlaka');
+  if (hadlaka && hadlaka.classList.contains('active')) {
+    closeCategoryPage('hadlaka');
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+  var tefilot = document.getElementById('categoryTefilot');
+  if (tefilot && tefilot.classList.contains('active')) {
+    closeCategoryPage('tefilot');
+    history.pushState({ page: 'main' }, '');
+    return;
+  }
+  var favsOverlay = document.getElementById('favsModalOverlay');
+  if (favsOverlay && favsOverlay.classList.contains('active')) {
+    closeFavsModalDirect();
+    history.pushState({ page: 'main' }, '');
+    return;
   }
   history.pushState({ page: 'main' }, '');
 });
@@ -5757,11 +5783,15 @@ renderFavs();
 updateFhbCount();
 
 (function() {
-  const params = new URLSearchParams(window.location.search);
+  var search = window.location.search;
+  // נקה את ה-URL מיד לפני הכל
+  try { window.history.replaceState({}, '', window.location.pathname); } catch(e) {}
+  
+  if (!search) return;
+  const params = new URLSearchParams(search);
   const pid = params.get('prayer');
   const name = params.get('name');
   if (pid && prayers[pid]) {
-    // אם זו תפילת רפואה עם שם — מלא את השם אוטומטית
     if (pid === 'refua' && name) {
       var decodedName = decodeURIComponent(name);
       try {
@@ -5770,7 +5800,6 @@ updateFhbCount();
         if (el) el.textContent = decodedName;
         if (inp) inp.value = decodedName;
         localStorage.setItem('orHatfila_refuaName', decodedName);
-        // עדכן גם שדה השם בתפילה
         if (typeof updateRefuaName === 'function') updateRefuaName(decodedName);
       } catch(e) {}
     }
@@ -6209,39 +6238,6 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 <script>
 
 // כפתור חזרה פיזי (אנדרואיד)
-window.addEventListener('popstate', function(e) {
-  // אם תפילה פתוחה — סגור אותה
-  var prayerOverlay = document.getElementById('prayerOverlay');
-  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
-    closePrayer();
-    return;
-  }
-  // אם דף בחירת נוסח מזון פתוח — סגור אותו
-  var mazonPage = document.getElementById('categoryMazon');
-  if (mazonPage && mazonPage.classList.contains('active')) {
-    closeMazonSelector();
-    return;
-  }
-  // אם דף הדלקת נר פתוח — סגור אותו
-  var hadlaka = document.getElementById('categoryHadlaka');
-  if (hadlaka && hadlaka.classList.contains('active')) {
-    closeCategoryPage('hadlaka');
-    return;
-  }
-  // אם דף תפילות פתוח — סגור אותו
-  var tefilot = document.getElementById('categoryTefilot');
-  if (tefilot && tefilot.classList.contains('active')) {
-    closeCategoryPage('tefilot');
-    return;
-  }
-  // אם מועדפים פתוח — סגור
-  var favsOverlay = document.getElementById('favsModalOverlay');
-  if (favsOverlay && favsOverlay.classList.contains('active')) {
-    closeFavsModalDirect();
-    return;
-  }
-});
-
 // הקפאת כל הפונקציות הרצות ברקע
 function pausePage() {
   stopAutoScroll();
@@ -6646,13 +6642,19 @@ openCategoryPage = function(pageId) {
     var display = document.getElementById('refuaBoxNameDisplay');
     var input = document.getElementById('refuaBoxNameInput');
     if (!display || !input) return;
-    var name = input.value.trim() || 'חולה בן/בת אמו';
-    display.textContent = name;
-    input.value = name;
+    var name = input.value.trim();
+    var displayName = name || 'חולה בן/בת אמו';
+    display.textContent = displayName;
+    input.value = displayName;
     display.style.display = 'block';
     input.style.display = 'none';
-    try { localStorage.setItem('orHatfila_refuaName', name); } catch(e) {}
-    // עדכן גם שדה השם בתפילה
+    try {
+      if (name) {
+        localStorage.setItem('orHatfila_refuaName', name);
+      } else {
+        localStorage.removeItem('orHatfila_refuaName');
+      }
+    } catch(e) {}
     updateRefuaName(name);
   };
 
