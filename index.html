@@ -118,8 +118,8 @@
     cursor: pointer;
     gap: 1px;
     transition: box-shadow 0.25s, transform 0.2s;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+
+
     text-decoration: none;
   }
   .favs-home-btn:hover, .favs-home-btn:active {
@@ -163,8 +163,8 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+
+
   }
   .favs-modal-overlay.active {
     opacity: 1;
@@ -438,8 +438,8 @@
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(212,175,55,0.35);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+
+
   }
 
   .banner-inner::before {
@@ -842,8 +842,8 @@
     padding: 10px 20px;
     background: rgba(42,26,8,0.92);
     border-bottom: 1px solid rgba(180,130,20,0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+
+
   }
   .scroll-controls.visible { display: flex; }
 
@@ -1468,7 +1468,8 @@
   .search-result-excerpt { color: #222222 !important; font-family: 'Heebo', sans-serif; font-size: 14px; line-height: 1.6; }
   .search-result-excerpt mark { background: rgba(212, 175, 55, 0.35) !important; color: #000000 !important; font-weight: bold; border-radius: 3px; padding: 0 4px; }
   .search-no-results { text-align: center; color: var(--gold-light) !important; font-family: 'Heebo', sans-serif; font-size: 16px; font-weight: bold; padding: 24px; }
-</style>
+
+</style></style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -1615,8 +1616,8 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+
+
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
@@ -1636,8 +1637,8 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.1);
     transform: translateY(20px);
     transition: transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+
+
   }
   .welcome-overlay.visible .welcome-modal {
     transform: translateY(0);
@@ -1723,8 +1724,8 @@
     background: rgba(10,8,20,0.15);
     border: 2px solid #F5D96B;
     box-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 28px rgba(212,175,55,0.3);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+
+
     padding: 11px 10px 9px;
     direction: rtl;
     animation: bubbleFloat 5s ease-in-out infinite 2.5s, memBorderGlow 2s ease-in-out infinite alternate;
@@ -1937,8 +1938,8 @@
     border: 1.5px solid rgba(212,175,55,0.5);
     background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.18), rgba(212,175,55,0.08) 60%, rgba(10,14,46,0.55));
     box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+
+
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -1955,9 +1956,9 @@
     animation: bubblePress 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
   }
   @keyframes bubblePress {
-    0%   { transform: scale(1)    translateY(0px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15); }
-    40%  { transform: scale(0.91) translateY(6px); box-shadow: 0 2px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 8px rgba(212,175,55,0.1); }
-    100% { transform: scale(1)    translateY(0px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 20px rgba(212,175,55,0.15); }
+    0%   { transform: scale(1)    translateY(0px); }
+    40%  { transform: scale(0.91) translateY(6px); }
+    100% { transform: scale(1)    translateY(0px); }
   }
   .bubble-icon { font-size: 34px; margin-bottom: 4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
   .bubble-label {
@@ -1983,8 +1984,8 @@
     border: 1.5px solid rgba(212,175,55,0.45);
     background: radial-gradient(ellipse at 40% 30%, rgba(255,255,255,0.13), rgba(212,175,55,0.06) 60%, rgba(10,14,46,0.5));
     box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15), 0 0 20px rgba(212,175,55,0.12);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+
+
     padding: 16px 20px 12px;
     animation: bubbleFloat 4s ease-in-out infinite 1.8s;
     direction: rtl;
@@ -4294,49 +4295,22 @@ document.addEventListener('touchstart', function(e) {
 history.pushState({ page: 'main' }, '');
 
 let keyboardWasOpen = false;
+window.addEventListener('resize', function() {
+  keyboardWasOpen = window.innerHeight < window.screen.height * 0.75;
+});
 
-// popstate מאוחד — תפילה / קטגוריה / מועדפים / מקלדת
 window.addEventListener('popstate', function(e) {
-
-  // טיפול במקלדת פתוחה (iOS)
+  
   if (keyboardWasOpen) {
     keyboardWasOpen = false;
     history.pushState({ page: 'main' }, '');
     return;
   }
-
-  // אם תפילה פתוחה — סגור אותה
-  var prayerOverlay = document.getElementById('prayerOverlay');
-  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
+  
+  const overlay = document.getElementById('prayerOverlay');
+  if (overlay.classList.contains('active')) {
     closePrayer();
-    history.pushState({ page: 'main' }, '');
-    return;
   }
-
-  // אם דף הדלקת נר פתוח — סגור אותו
-  var hadlaka = document.getElementById('categoryHadlaka');
-  if (hadlaka && hadlaka.classList.contains('active')) {
-    closeCategoryPage('hadlaka');
-    history.pushState({ page: 'main' }, '');
-    return;
-  }
-
-  // אם דף תפילות פתוח — סגור אותו
-  var tefilot = document.getElementById('categoryTefilot');
-  if (tefilot && tefilot.classList.contains('active')) {
-    closeCategoryPage('tefilot');
-    history.pushState({ page: 'main' }, '');
-    return;
-  }
-
-  // אם מועדפים פתוח — סגור
-  var favsOverlay = document.getElementById('favsModalOverlay');
-  if (favsOverlay && favsOverlay.classList.contains('active')) {
-    closeFavsModalDirect();
-    history.pushState({ page: 'main' }, '');
-    return;
-  }
-
   history.pushState({ page: 'main' }, '');
 });
 
@@ -4762,14 +4736,14 @@ async function openParasha() {
     pData.content;
 
   var overlay = document.getElementById('prayerOverlay');
-  // iOS Safari fix — קבע גובה אמיתי
-  overlay.style.height = window.innerHeight + 'px';
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
   var scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
-  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
@@ -4875,8 +4849,10 @@ function openFavsModal() {
   }
   document.getElementById('favsModalOverlay').classList.add('active');
   const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
   document.body.dataset.favsScrollY = scrollY;
-  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 }
 function closeFavsModal(e) {
   if (e.target === document.getElementById('favsModalOverlay')) closeFavsModalDirect();
@@ -4926,7 +4902,7 @@ function openShareFallback(text, url) {
   modal.style.cssText = `
     position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;
     display:flex;align-items:flex-end;justify-content:center;
-    backdrop-filter:blur(4px);
+
   `;
   modal.innerHTML = `
     <div style="
@@ -5299,7 +5275,9 @@ function openPrayer(id) {
   document.getElementById('prayerBody').innerHTML = p.body;
   const overlay = document.getElementById('prayerOverlay');
 
-  // iOS Safari fix — קבע גובה אמיתי בלבד, בלי למחוק את ה-transition
+  // iOS Safari fix — כוחות את ה-overlay למלא את כל המסך
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;';
+  // טריק ל-iOS: קבל את גובה המסך האמיתי
   var vh = window.innerHeight;
   overlay.style.height = vh + 'px';
 
@@ -5308,8 +5286,10 @@ function openPrayer(id) {
 
   // נועל גלילה בלי קפיצה
   const scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
-  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
 
   setTimeout(applyFontSize, 10);
   setTimeout(showPrayerFontCtrl, 50);
@@ -5449,9 +5429,40 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 
 <script>
 
+// כפתור חזרה פיזי (אנדרואיד)
+window.addEventListener('popstate', function(e) {
+  // אם תפילה פתוחה — סגור אותה
+  var prayerOverlay = document.getElementById('prayerOverlay');
+  if (prayerOverlay && prayerOverlay.classList.contains('active')) {
+    closePrayer();
+    return;
+  }
+  // אם דף הדלקת נר פתוח — סגור אותו
+  var hadlaka = document.getElementById('categoryHadlaka');
+  if (hadlaka && hadlaka.classList.contains('active')) {
+    closeCategoryPage('hadlaka');
+    return;
+  }
+  // אם דף תפילות פתוח — סגור אותו
+  var tefilot = document.getElementById('categoryTefilot');
+  if (tefilot && tefilot.classList.contains('active')) {
+    closeCategoryPage('tefilot');
+    return;
+  }
+  // אם מועדפים פתוח — סגור
+  var favsOverlay = document.getElementById('favsModalOverlay');
+  if (favsOverlay && favsOverlay.classList.contains('active')) {
+    closeFavsModalDirect();
+    return;
+  }
+});
 
-
-
+// הוסף history state בפתיחת כל דף כדי שה-popstate יירה
+var _origOpenCategory = openCategoryPage;
+openCategoryPage = function(pageId) {
+  history.pushState({ page: pageId }, '');
+  _origOpenCategory(pageId);
+};
 
 
 
@@ -5584,16 +5595,11 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
   window.memShare = function() {
     var box = document.getElementById('memorialBox');
     if (!box) return;
-
-    // הסתר כפתורים זמנית לצילום נקי
     var btnsRow = box.querySelector('.memorial-btns-row');
     var editIcon = box.querySelector('.memorial-photo-edit');
     if (btnsRow) btnsRow.style.display = 'none';
     if (editIcon) editIcon.style.display = 'none';
-
     showToast('מכין תמונה...');
-
-    // הוסף רקע אמיתי זמנית לצילום
     var bgUrl = 'https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png';
     var origBg = box.style.backgroundImage;
     var origBgSize = box.style.backgroundSize;
@@ -5601,60 +5607,34 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
     box.style.backgroundImage = 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.45) 100%), url(' + bgUrl + ')';
     box.style.backgroundSize = 'cover';
     box.style.backgroundPosition = 'center top';
-
-    html2canvas(box, {
-      backgroundColor: null,
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      logging: false
-    }).then(function(canvas) {
-
-      // שחזר רקע מקורי והחזר כפתורים
+    html2canvas(box, { backgroundColor: null, scale: 2, useCORS: true, allowTaint: true, logging: false }).then(function(canvas) {
       box.style.backgroundImage = origBg;
       box.style.backgroundSize = origBgSize;
       box.style.backgroundPosition = origBgPos;
       if (btnsRow) btnsRow.style.display = '';
       if (editIcon) editIcon.style.display = '';
-
       canvas.toBlob(function(blob) {
         if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
-
         var nameEl = document.getElementById('memNameDisplay');
         var nameText = nameEl ? nameEl.textContent.trim() : 'זיכרון';
         var fileName = 'לעילוי_נשמת_' + nameText.replace(/\s+/g, '_') + '.png';
         var file = new File([blob], fileName, { type: 'image/png' });
-
-        // iOS/Android — שיתוף ישיר עם תמונה
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            title: 'לעילוי נשמת ' + nameText,
-            text: 'ת.נ.צ.ב.ה',
-            files: [file]
-          }).catch(function(e) {
-            if (e.name !== 'AbortError') _memShareFallback(blob, fileName);
-          });
-        } else {
-          _memShareFallback(blob, fileName);
-        }
+          navigator.share({ title: 'לעילוי נשמת ' + nameText, text: 'ת.נ.צ.ב.ה', files: [file] })
+            .catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
+        } else { _memShareFallback(blob, fileName); }
       }, 'image/png');
-
     }).catch(function() {
       if (btnsRow) btnsRow.style.display = '';
       if (editIcon) editIcon.style.display = '';
       showToast('שגיאה בצילום הבאנר');
     });
   };
-
   function _memShareFallback(blob, fileName) {
-    // Fallback — הורד את התמונה לגלריה
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
     showToast('התמונה הורדה — שתף מהגלריה ✓');
   }
@@ -5666,9 +5646,8 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
   }
 })();
 
-// resize מאוחד — מקלדת + גובה overlays
+// iOS Safari — עדכן גובה overlays כשה-viewport משתנה
 window.addEventListener('resize', function() {
-  keyboardWasOpen = window.innerHeight < window.screen.height * 0.75;
   var vh = window.innerHeight;
   var overlay = document.getElementById('prayerOverlay');
   if (overlay && overlay.classList.contains('active')) overlay.style.height = vh + 'px';
@@ -5734,8 +5713,10 @@ function openCategoryPage(pageId) {
   pageEl.scrollTop = 0;
 
   var scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
   document.body.dataset.scrollY = scrollY;
-  document.body.style.cssText += ';position:fixed;top:-' + scrollY + 'px;width:100%;';
   _loadSortOrder(pageId);
 }
 
