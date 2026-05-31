@@ -2041,14 +2041,12 @@
     position: relative;
     z-index: 10;
     flex: 1;
-    max-width: 190px;
-    border-radius: 16px;
+    max-width: 143px;
+    border-radius: 14px;
     background: rgba(10,8,20,0.15);
     border: 2px solid #F5D96B;
     box-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 28px rgba(212,175,55,0.3);
-
-
-    padding: 11px 10px 9px;
+    padding: 8px 8px 7px;
     direction: rtl;
     animation: bubbleFloat 5s ease-in-out infinite 2.5s, memBorderGlow 2s ease-in-out infinite alternate;
     overflow: hidden;
@@ -2058,7 +2056,6 @@
     50%  { border-color: #fff8b0; box-shadow: 0 0 22px rgba(255,240,100,0.9), 0 0 44px rgba(212,175,55,0.5); }
     100% { border-color: #D4AF37; box-shadow: 0 0 14px rgba(212,175,55,0.7), 0 0 28px rgba(212,175,55,0.3); }
   }
-  /* רקע גרדיאנט עדין */
   .memorial-box::before {
     content: '';
     position: absolute;
@@ -2069,31 +2066,31 @@
 
   .memorial-title-top {
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 900;
     color: #ffffff;
     text-align: center;
     text-shadow: 0 1px 4px rgba(0,0,0,0.9);
     letter-spacing: 1px;
-    margin-bottom: 9px;
+    margin-bottom: 7px;
   }
 
   .memorial-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    margin-bottom: 7px;
+    gap: 4px;
+    margin-bottom: 6px;
     position: relative;
     z-index: 1;
   }
 
   .memorial-photo-wrap {
-    width: 70px;
-    height: 78px;
+    width: 64px;
+    height: 72px;
     border-radius: 6px;
-    border: 1.5px solid rgba(212,175,55,0.4);
-    background: rgba(212,175,55,0.08);
+    border: 2px solid rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.15);
     overflow: hidden;
     position: relative;
     cursor: pointer;
@@ -2116,16 +2113,49 @@
     width: 100%;
     height: 100%;
   }
+  .memorial-photo-placeholder svg circle,
+  .memorial-photo-placeholder svg ellipse {
+    fill: rgba(255,255,255,0.3);
+  }
+  .memorial-photo-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 4px;
+  }
   .memorial-photo-edit {
+    background: rgba(255,255,255,0.85);
+    color: #0A0E2E;
+    border: none;
+    border-radius: 8px;
+    padding: 2px 7px;
+    font-size: 9px;
+    font-weight: 900;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .memorial-photo-remove {
+    background: rgba(192,57,43,0.85);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 2px 7px;
+    font-size: 9px;
+    font-weight: 900;
+    cursor: pointer;
+    display: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .memorial-photo-remove.visible { display: block; }
     position: absolute;
     bottom: 2px;
     left: 2px;
-    background: rgba(212,175,55,0.7);
+    background: rgba(255,255,255,0.9);
     color: #0A0E2E;
     border-radius: 50%;
-    width: 14px; height: 14px;
+    width: 16px; height: 16px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 900;
   }
 
@@ -2133,19 +2163,19 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding-right: 8px;
+    justify-content: flex-end;
+    padding-left: 4px;
   }
   .memorial-flame-big {
-    font-size: 32px;
+    font-size: 28px;
     animation: memFlicker 1.6s ease-in-out infinite alternate;
     filter: drop-shadow(0 0 10px rgba(255,140,0,0.9));
     line-height: 1;
   }
 
   .memorial-book {
-    width: 40px;
-    height: 48px;
+    width: 30px;
+    height: 36px;
     border-radius: 4px 6px 6px 4px;
     background: linear-gradient(160deg, rgba(180,150,80,0.35) 0%, rgba(120,90,30,0.45) 100%);
     border: 1.5px solid rgba(212,175,55,0.4);
@@ -2156,7 +2186,7 @@
   }
   .memorial-book-text {
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 7px;
+    font-size: 6px;
     font-weight: 700;
     color: rgba(212,175,55,0.8);
     text-align: center;
@@ -2165,22 +2195,23 @@
 
   .memorial-name-row {
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     position: relative;
     z-index: 1;
   }
   .memorial-name-display {
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 900;
     color: #ffffff;
     text-shadow: 0 1px 4px rgba(0,0,0,0.9);
     cursor: pointer;
     margin-bottom: 2px;
+    line-height: 1.2;
   }
   .memorial-name-input {
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     color: #0A0E2E;
     background: rgba(245,217,107,0.9);
@@ -2196,21 +2227,22 @@
   }
   .memorial-tnzb {
     font-family: 'Heebo', sans-serif;
-    font-size: 8px;
-    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
     letter-spacing: 1px;
   }
 
   .memorial-btns-row {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     justify-content: center;
     position: relative;
     z-index: 1;
   }
   .memorial-btn {
     font-family: 'Heebo', sans-serif;
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 700;
     border-radius: 10px;
     padding: 4px 8px;
@@ -2225,9 +2257,14 @@
   }
   .memorial-btn-edit {
     background: rgba(212,175,55,0.12);
-    color: rgba(212,175,55,0.85);
+    color: #ffffff;
     border: 1px solid rgba(212,175,55,0.3);
   }
+
+  #refuaBox .memorial-title-top { font-size: 16px; }
+  #refuaBox .memorial-name-display { font-size: 20px; }
+  #refuaBox .memorial-tnzb { font-size: 11px; }
+  #refuaBox .memorial-btn { font-size: 10px; padding: 5px 10px; }
 
   @keyframes memFlicker {
     0%   { transform: scaleY(1) rotate(-1deg);      filter: drop-shadow(0 0 12px rgba(255,140,0,0.8)); }
@@ -2659,28 +2696,27 @@
   <div class="memorial-title-top">לעילוי נשמת</div>
 
   <div class="memorial-main-row">
-
-    <!-- תמונה — מוגדלת -->
-    <div class="memorial-photo-wrap" onclick="document.getElementById('memPhotoInput').click()">
-      <img id="memPhotoImg" src="" alt="" />
-      <div class="memorial-photo-placeholder" id="memPhotoPlaceholder">
-        <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg" width="60">
-          <circle cx="40" cy="28" r="18" fill="rgba(212,175,55,0.25)"/>
-          <ellipse cx="40" cy="75" rx="26" ry="18" fill="rgba(212,175,55,0.2)"/>
-        </svg>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
+      <div class="memorial-photo-wrap" onclick="document.getElementById('memPhotoInput').click()">
+        <img id="memPhotoImg" src="" alt="" />
+        <div class="memorial-photo-placeholder" id="memPhotoPlaceholder">
+          <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg" width="60">
+            <circle cx="40" cy="28" r="18" fill="rgba(255,255,255,0.3)"/>
+            <ellipse cx="40" cy="75" rx="26" ry="18" fill="rgba(255,255,255,0.25)"/>
+          </svg>
+        </div>
       </div>
-      <div class="memorial-photo-edit">✎</div>
+      <div class="memorial-photo-actions">
+        <button class="memorial-photo-edit" onclick="document.getElementById('memPhotoInput').click()">✎</button>
+        <button class="memorial-photo-remove" id="memPhotoRemove" onclick="memRemovePhoto(event)">✕</button>
+      </div>
     </div>
     <input type="file" id="memPhotoInput" accept="image/*" style="display:none" onchange="memLoadPhoto(this)">
-
-    <!-- נר — זזה שמאלה -->
     <div class="memorial-candle-center">
       <div class="memorial-flame-big">🕯️</div>
     </div>
-
   </div>
 
-  <!-- שם -->
   <div class="memorial-name-row">
     <div class="memorial-name-display" id="memNameDisplay" onclick="memEditName()">עובד עטריה בן שרה</div>
     <input class="memorial-name-input" id="memNameInput" type="text" value="עובד עטריה בן שרה"
@@ -2688,7 +2724,6 @@
     <div class="memorial-tnzb">ת.נ.צ.ב.ה</div>
   </div>
 
-  <!-- כפתורים -->
   <div class="memorial-btns-row">
     <button class="memorial-btn memorial-btn-share" onclick="memShare()">שתף זיכרון</button>
     <button class="memorial-btn memorial-btn-edit" onclick="memEditName()">שנה שם</button>
@@ -2697,6 +2732,49 @@
 </div>
 
 </div><!-- סוף bottom-boxes-row -->
+
+<!-- שורה שנייה — רפואה -->
+<div class="bottom-boxes-row" style="margin-top:0;">
+  <div class="memorial-box" id="refuaBox" style="max-width:200px;width:100%;padding:8px;">
+
+    <div class="memorial-title-top">🩺 רפואה שלמה</div>
+
+    <div class="memorial-main-row">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
+        <div class="memorial-photo-wrap" onclick="document.getElementById('refuaPhotoInput').click()">
+          <img id="refuaPhotoImg" src="" alt="" />
+          <div class="memorial-photo-placeholder" id="refuaPhotoPlaceholder">
+            <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg" width="60">
+              <circle cx="40" cy="28" r="18" fill="rgba(255,255,255,0.3)"/>
+              <ellipse cx="40" cy="75" rx="26" ry="18" fill="rgba(255,255,255,0.25)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="memorial-photo-actions">
+          <button class="memorial-photo-edit" onclick="document.getElementById('refuaPhotoInput').click()">✎</button>
+          <button class="memorial-photo-remove" id="refuaPhotoRemove" onclick="refuaRemovePhoto(event)">✕</button>
+        </div>
+      </div>
+      <input type="file" id="refuaPhotoInput" accept="image/*" style="display:none" onchange="refuaLoadPhoto(this)">
+      <div class="memorial-candle-center">
+        <div class="memorial-flame-big">🙏</div>
+      </div>
+    </div>
+
+    <div class="memorial-name-row">
+      <div class="memorial-name-display" id="refuaNameDisplay" onclick="refuaEditName()">חולה בן/בת אמו</div>
+      <input class="memorial-name-input" id="refuaNameInput" type="text" value="חולה בן/בת אמו"
+        onblur="refuaSaveName()" onkeydown="if(event.key==='Enter')refuaSaveName()" style="display:none">
+      <div class="memorial-tnzb">רפואה שלמה</div>
+    </div>
+
+    <div class="memorial-btns-row">
+      <button class="memorial-btn memorial-btn-share" onclick="refuaShare()">שתף תפילה</button>
+      <button class="memorial-btn memorial-btn-edit" onclick="refuaEditName()">שנה שם</button>
+    </div>
+
+  </div>
+</div>
 <div class="category-page" id="categoryTefilot">
   <div class="category-page-inner">
     <div class="category-header">
@@ -6419,8 +6497,10 @@ openCategoryPage = function(pageId) {
       if (savedPhoto) {
         var img = document.getElementById('memPhotoImg');
         var ph = document.getElementById('memPhotoPlaceholder');
+        var rm = document.getElementById('memPhotoRemove');
         if (img) { img.src = savedPhoto; img.classList.add('loaded'); }
         if (ph) ph.style.display = 'none';
+        if (rm) rm.classList.add('visible');
       }
     } catch(e) {}
   }
@@ -6453,20 +6533,33 @@ openCategoryPage = function(pageId) {
     reader.onload = function(e) {
       var img = document.getElementById('memPhotoImg');
       var ph = document.getElementById('memPhotoPlaceholder');
+      var rm = document.getElementById('memPhotoRemove');
       if (img) { img.src = e.target.result; img.classList.add('loaded'); }
       if (ph) ph.style.display = 'none';
+      if (rm) rm.classList.add('visible');
       try { localStorage.setItem('orHatfila_memPhoto', e.target.result); } catch(e2) {}
     };
     reader.readAsDataURL(inp.files[0]);
+  };
+
+  window.memRemovePhoto = function(e) {
+    e.stopPropagation();
+    var img = document.getElementById('memPhotoImg');
+    var ph = document.getElementById('memPhotoPlaceholder');
+    var rm = document.getElementById('memPhotoRemove');
+    if (img) { img.src = ''; img.classList.remove('loaded'); }
+    if (ph) ph.style.display = '';
+    if (rm) rm.classList.remove('visible');
+    try { localStorage.removeItem('orHatfila_memPhoto'); } catch(e2) {}
   };
 
   window.memShare = function() {
     var box = document.getElementById('memorialBox');
     if (!box) return;
     var btnsRow = box.querySelector('.memorial-btns-row');
-    var editIcon = box.querySelector('.memorial-photo-edit');
+    var photoActions = box.querySelector('.memorial-photo-actions');
     if (btnsRow) btnsRow.style.display = 'none';
-    if (editIcon) editIcon.style.display = 'none';
+    if (photoActions) photoActions.style.display = 'none';
     showToast('מכין תמונה...');
     var bgUrl = 'https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png';
     var origBg = box.style.backgroundImage;
@@ -6480,7 +6573,7 @@ openCategoryPage = function(pageId) {
       box.style.backgroundSize = origBgSize;
       box.style.backgroundPosition = origBgPos;
       if (btnsRow) btnsRow.style.display = '';
-      if (editIcon) editIcon.style.display = '';
+      if (photoActions) photoActions.style.display = '';
       canvas.toBlob(function(blob) {
         if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
         var nameEl = document.getElementById('memNameDisplay');
@@ -6494,7 +6587,7 @@ openCategoryPage = function(pageId) {
       }, 'image/png');
     }).catch(function() {
       if (btnsRow) btnsRow.style.display = '';
-      if (editIcon) editIcon.style.display = '';
+      if (photoActions) photoActions.style.display = '';
       showToast('שגיאה בצילום הבאנר');
     });
   };
@@ -6506,6 +6599,112 @@ openCategoryPage = function(pageId) {
     setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
     showToast('התמונה הורדה — שתף מהגלריה ✓');
   }
+
+  // ══ פונקציות באנר רפואה ══
+  (function refuaInit() {
+    try {
+      var savedName = localStorage.getItem('orHatfila_refuaName');
+      if (savedName) {
+        var el = document.getElementById('refuaNameDisplay');
+        var inp = document.getElementById('refuaNameInput');
+        if (el) el.textContent = savedName;
+        if (inp) inp.value = savedName;
+      }
+      var savedPhoto = localStorage.getItem('orHatfila_refuaPhoto');
+      if (savedPhoto) {
+        var img = document.getElementById('refuaPhotoImg');
+        var ph = document.getElementById('refuaPhotoPlaceholder');
+        var rm = document.getElementById('refuaPhotoRemove');
+        if (img) { img.src = savedPhoto; img.classList.add('loaded'); }
+        if (ph) ph.style.display = 'none';
+        if (rm) rm.classList.add('visible');
+      }
+    } catch(e) {}
+  })();
+
+  window.refuaEditName = function() {
+    var display = document.getElementById('refuaNameDisplay');
+    var input = document.getElementById('refuaNameInput');
+    if (!display || !input) return;
+    display.style.display = 'none';
+    input.style.display = 'block';
+    input.focus(); input.select();
+  };
+
+  window.refuaSaveName = function() {
+    var display = document.getElementById('refuaNameDisplay');
+    var input = document.getElementById('refuaNameInput');
+    if (!display || !input) return;
+    var name = input.value.trim() || 'חולה בן/בת אמו';
+    display.textContent = name;
+    input.value = name;
+    display.style.display = 'block';
+    input.style.display = 'none';
+    try { localStorage.setItem('orHatfila_refuaName', name); } catch(e) {}
+  };
+
+  window.refuaLoadPhoto = function(inp) {
+    if (!inp.files || !inp.files[0]) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.getElementById('refuaPhotoImg');
+      var ph = document.getElementById('refuaPhotoPlaceholder');
+      var rm = document.getElementById('refuaPhotoRemove');
+      if (img) { img.src = e.target.result; img.classList.add('loaded'); }
+      if (ph) ph.style.display = 'none';
+      if (rm) rm.classList.add('visible');
+      try { localStorage.setItem('orHatfila_refuaPhoto', e.target.result); } catch(e2) {}
+    };
+    reader.readAsDataURL(inp.files[0]);
+  };
+
+  window.refuaRemovePhoto = function(e) {
+    e.stopPropagation();
+    var img = document.getElementById('refuaPhotoImg');
+    var ph = document.getElementById('refuaPhotoPlaceholder');
+    var rm = document.getElementById('refuaPhotoRemove');
+    if (img) { img.src = ''; img.classList.remove('loaded'); }
+    if (ph) ph.style.display = '';
+    if (rm) rm.classList.remove('visible');
+    try { localStorage.removeItem('orHatfila_refuaPhoto'); } catch(e2) {}
+  };
+
+  window.refuaShare = function() {
+    var box = document.getElementById('refuaBox');
+    if (!box) return;
+    var btnsRow = box.querySelector('.memorial-btns-row');
+    var photoActions = box.querySelector('.memorial-photo-actions');
+    if (btnsRow) btnsRow.style.display = 'none';
+    if (photoActions) photoActions.style.display = 'none';
+    showToast('מכין תמונה...');
+    var bgUrl = 'https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png';
+    var origBg = box.style.backgroundImage;
+    box.style.backgroundImage = 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.45) 100%), url(' + bgUrl + ')';
+    box.style.backgroundSize = 'cover';
+    box.style.backgroundPosition = 'center top';
+    html2canvas(box, { backgroundColor: null, scale: 2, useCORS: true, allowTaint: true, logging: false }).then(function(canvas) {
+      box.style.backgroundImage = origBg;
+      box.style.backgroundSize = '';
+      box.style.backgroundPosition = '';
+      if (btnsRow) btnsRow.style.display = '';
+      if (photoActions) photoActions.style.display = '';
+      canvas.toBlob(function(blob) {
+        if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
+        var nameEl = document.getElementById('refuaNameDisplay');
+        var nameText = nameEl ? nameEl.textContent.trim() : 'חולה';
+        var fileName = 'רפואה_שלמה_' + nameText.replace(/\s+/g, '_') + '.png';
+        var file = new File([blob], fileName, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ title: 'רפואה שלמה ל' + nameText, text: 'רפואה שלמה מן השמים', files: [file] })
+            .catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
+        } else { _memShareFallback(blob, fileName); }
+      }, 'image/png');
+    }).catch(function() {
+      if (btnsRow) btnsRow.style.display = '';
+      if (photoActions) photoActions.style.display = '';
+      showToast('שגיאה בצילום הבאנר');
+    });
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', memInit);
