@@ -1469,6 +1469,7 @@
   .search-result-excerpt mark { background: rgba(212, 175, 55, 0.35) !important; color: #000000 !important; font-weight: bold; border-radius: 3px; padding: 0 4px; }
   .search-no-results { text-align: center; color: var(--gold-light) !important; font-family: 'Heebo', sans-serif; font-size: 16px; font-weight: bold; padding: 24px; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -5581,18 +5582,82 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
   };
 
   window.memShare = function() {
-    var nameEl = document.getElementById('memNameDisplay');
-    var nameText = nameEl ? nameEl.textContent : 'עובד עטריה בן שרה';
-    var text = 'לעילוי נשמת ' + nameText + '\nת.נ.צ.ב.ה';
-    if (navigator.share) {
-      navigator.share({ title: 'לעילוי נשמת', text: text })
-        .catch(function(e) { if (e.name !== 'AbortError') showToast('שגיאה בשיתוף'); });
-    } else {
-      try {
-        navigator.clipboard.writeText(text).then(function() { showToast('הטקסט הועתק ✓'); });
-      } catch(e) { showToast('הועתק'); }
-    }
+    var box = document.getElementById('memorialBox');
+    if (!box) return;
+
+    // הסתר כפתורים זמנית לצילום נקי
+    var btnsRow = box.querySelector('.memorial-btns-row');
+    var editIcon = box.querySelector('.memorial-photo-edit');
+    if (btnsRow) btnsRow.style.display = 'none';
+    if (editIcon) editIcon.style.display = 'none';
+
+    showToast('מכין תמונה...');
+
+    // הוסף רקע אמיתי זמנית לצילום
+    var bgUrl = 'https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png';
+    var origBg = box.style.backgroundImage;
+    var origBgSize = box.style.backgroundSize;
+    var origBgPos = box.style.backgroundPosition;
+    box.style.backgroundImage = 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.45) 100%), url(' + bgUrl + ')';
+    box.style.backgroundSize = 'cover';
+    box.style.backgroundPosition = 'center top';
+
+    html2canvas(box, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false
+    }).then(function(canvas) {
+
+      // שחזר רקע מקורי והחזר כפתורים
+      box.style.backgroundImage = origBg;
+      box.style.backgroundSize = origBgSize;
+      box.style.backgroundPosition = origBgPos;
+      if (btnsRow) btnsRow.style.display = '';
+      if (editIcon) editIcon.style.display = '';
+
+      canvas.toBlob(function(blob) {
+        if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
+
+        var nameEl = document.getElementById('memNameDisplay');
+        var nameText = nameEl ? nameEl.textContent.trim() : 'זיכרון';
+        var fileName = 'לעילוי_נשמת_' + nameText.replace(/\s+/g, '_') + '.png';
+        var file = new File([blob], fileName, { type: 'image/png' });
+
+        // iOS/Android — שיתוף ישיר עם תמונה
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: 'לעילוי נשמת ' + nameText,
+            text: 'ת.נ.צ.ב.ה',
+            files: [file]
+          }).catch(function(e) {
+            if (e.name !== 'AbortError') _memShareFallback(blob, fileName);
+          });
+        } else {
+          _memShareFallback(blob, fileName);
+        }
+      }, 'image/png');
+
+    }).catch(function() {
+      if (btnsRow) btnsRow.style.display = '';
+      if (editIcon) editIcon.style.display = '';
+      showToast('שגיאה בצילום הבאנר');
+    });
   };
+
+  function _memShareFallback(blob, fileName) {
+    // Fallback — הורד את התמונה לגלריה
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+    showToast('התמונה הורדה — שתף מהגלריה ✓');
+  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', memInit);
