@@ -5948,6 +5948,10 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
         window._hebcalParashaEnglish = pItem.title
           ? pItem.title.replace('Parashat ','').replace('Shabbat ','').trim()
           : '';
+
+        // עדכן לוח שנה עברי
+        var hebCalParasha = document.getElementById('hebCalParasha');
+        if (hebCalParasha) hebCalParasha.textContent = '📖 ' + pName;
       }
     } catch(e) {
       console.error("שגיאה בטעינת פרשת השבוע:", e);
@@ -6045,11 +6049,14 @@ function resumePage() {
   document.getElementById('hebCalDate').textContent = hebDate;
   document.getElementById('hebCalGreg').textContent = dayName + ' | ' + now.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  // פרשת השבוע — מהאלמנט הקיים
-  var parashaEl = document.getElementById('parashaTextElement1');
-  if (parashaEl) {
-    var parashaText = parashaEl.textContent.replace(/✨/g, '').replace(/פרשת השבוע:/g, '').trim().split('&')[0].trim();
-    if (parashaText) document.getElementById('hebCalParasha').textContent = '📖 ' + parashaText;
+  // פרשת השבוע — מ-_hebcalParashaHebrew אם כבר נטען, אחרת ה-Hebcal יעדכן
+  var hebCalParasha = document.getElementById('hebCalParasha');
+  if (hebCalParasha) {
+    if (window._hebcalParashaHebrew) {
+      hebCalParasha.textContent = '📖 ' + window._hebcalParashaHebrew;
+    } else {
+      hebCalParasha.textContent = '';
+    }
   }
 
   // זמני היום — שחרית ומנחה משוערים
