@@ -702,6 +702,18 @@
   }
   .banner-14:hover { box-shadow: 0 20px 60px rgba(0,120,60,0.55); }
 
+  .banner-15 .banner-inner {
+    background: linear-gradient(135deg, rgba(0,40,55,0.42) 0%, rgba(0,90,110,0.38) 40%, rgba(0,30,50,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(0,140,160,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-15:hover { box-shadow: 0 20px 60px rgba(0,140,160,0.55); }
+
+  .banner-16 .banner-inner {
+    background: linear-gradient(135deg, rgba(55,10,30,0.42) 0%, rgba(110,20,55,0.38) 40%, rgba(40,5,20,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(160,30,80,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-16:hover { box-shadow: 0 20px 60px rgba(160,30,80,0.55); }
+
   .banner-arrow {
     position: absolute;
     left: 20px;
@@ -2706,6 +2718,15 @@
           <span class="banner-arrow">&#9668;</span>
         </div>
       </div>
+      <div class="banner banner-15" data-prayer-id="nishmat" data-page="tefilot" onclick="openPrayerWithBurst(event, 'nishmat', '🌊')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🌊</span>
+          <div class="banner-title">נשמת כל חי</div>
+          <div class="banner-subtitle">שיר שבח והלל לבורא</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
     </div>
     </div>
   </div>
@@ -2732,6 +2753,14 @@
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
           <div class="banner-subtitle">נוסח אשכנז</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-16" onclick="openPrayerWithBurst(event, 'borei_nefashot', '🍎')">
+        <div class="banner-inner">
+          <span class="banner-icon">🍎</span>
+          <div class="banner-title">בורא נפשות</div>
+          <div class="banner-subtitle">ברכה אחרונה על פירות ושתייה</div>
           <span class="banner-arrow">◀</span>
         </div>
       </div>
@@ -3344,6 +3373,45 @@ const prayers = {
       בָּרוּךְ הַגֶּבֶר אֲשֶׁר יִבְטַח בַּאֲדֹנָי וְהָיָה אֲדֹנָי מִבְטַחוֹ.<br>
       נַעַר הָיִיתִי גַם זָקַנְתִּי וְלא רָאִיתִי צַדִּיק נֶעֱזָב וְזַרְעוֹ מְבַקֶּשׁ לָחֶם.<br>
       <span class="highlight">אֲדֹנָי עֹז לְעַמּוֹ יִתֵּן אֲדֹנָי יְבָרֵךְ אֶת עַמּוֹ בַשָּׁלוֹם.</span>
+    `
+  },
+  nishmat: {
+    title: "נשמת כל חי",
+    body: `
+      <span class="section-title">✦ נִשְׁמַת כָּל חַי ✦</span>
+
+      נִשְׁמַת כָּל חַי תְּבָרֵךְ אֶת שִׁמְךָ יְהֹוָה אֱלֹהֵינוּ וְרוּחַ כָּל בָּשָׂר תְּפָאֵר וּתְרוֹמֵם זִכְרְךָ מַלְכֵּנוּ תָּמִיד, מִן הָעוֹלָם וְעַד הָעוֹלָם אַתָּה אֵל, וּמִבַּלְעֲדֶיךָ אֵין לָנוּ (מֶלֶךְ) גּוֹאֵל וּמוֹשִׁיעַ, פּוֹדֶה וּמַצִּיל, וְעוֹנֶה וּמְרַחֵם, בְּכָל עֵת צָרָה וְצוּקָה, אֵין לָנוּ מֶלֶךְ עוֹזֵר וְסוֹמֵךְ אֶלָּא אָתָּה.<br><br>
+
+      אֱלֹהֵי הָרִאשׁוֹנִים וְהָאַחֲרוֹנִים, אֱלוֹהַּ כָּל בְּרִיּוֹת, אֲדוֹן כָּל תּוֹלָדוֹת, הַמְּהֻלָּל בְּכָל הַתִּשְׁבָּחוֹת, הַמְּנַהֵג עוֹלָמוֹ בְּחֶסֶד וּבְרִיּוֹתָיו בְּרַחֲמִים. וַיְהֹוָה אֱלֹהִים אֱמֶת, לֹא יָנוּם וְלֹא יִישָׁן, הַמְעוֹרֵר יְשֵׁנִים וְהַמֵּקִיץ נִרְדָּמִים, מְחַיֶּה מֵתִים. וְרוֹפֵא חוֹלִים, פּוֹקֵחַ עִוְרִים, וְזוֹקֵף כְּפוּפִים, הַמֵּשִׂיחַ אִלְּמִים, וְהַמְפַעֲנֵחַ נֶעֱלָמִים, וּלְךָ לְבַדְּךָ אֲנַחְנוּ מוֹדִים.<br><br>
+
+      וְאִלּוּ פִינוּ מָלֵא שִׁירָה כַיָּם וּלְשׁוֹנֵנוּ רִנָּה כַּהֲמוֹן גַּלָּיו וְשִׂפְתוֹתֵינוּ שֶׁבַח כְּמֶרְחֲבֵי רָקִיעַ וְעֵינֵינוּ מְאִירוֹת כַּשֶּׁמֶשׁ וְכַיָּרֵחַ וְיָדֵינוּ פְרוּשׂוֹת כְּנִשְׁרֵי שָׁמָיִם וְרַגְלֵינוּ קַלּוֹת כָּאַיָּלוֹת, אֵין אֲנַחְנוּ מַסְפִּיקִין לְהוֹדוֹת לְךָ יְהֹוָה אֱלֹהֵינוּ וּלְבָרֵךְ אֶת שִׁמְךָ מַלְכֵּנוּ עַל אַחַת מֵאֶלֶף אַלְפֵי אֲלָפִים וְרוֹב רִבֵּי רְבָבוֹת פְּעָמִים, הַטּוֹבוֹת נִסִּים וְנִפְלָאוֹת שֶׁעָשִׂיתָ עִמָּנוּ וְעִם אֲבוֹתֵינוּ. מִלְּפָנִים מִמִּצְרַיִם גְּאַלְתָּנוּ יְהֹוָה אֱלֹהֵינוּ, מִבֵּית עֲבָדִים פְּדִיתָנוּ. בְּרָעָב זַנְתָּנוּ, וּבְשָׂבָע כִּלְכַּלְתָּנוּ, מֵחֶרֶב הִצַּלְתָּנוּ, מִדֶּבֶר מִלַּטְתָּנוּ, וּמֵחֳלָאִים רָעִים וְרַבִּים דִּלִּיתָנוּ. עַד הֵנָּה עֲזָרוּנוּ רַחֲמֶיךָ וְלֹא עֲזָבוּנוּ חֲסָדֶיךָ. עַל כֵּן אֵבָרִים שֶׁפִּלַּגְתָּ בָּנוּ, וְרוּחַ וּנְשָׁמָה שֶׁנָּפַחְתָּ בְּאַפֵּינוּ, וְלָשׁוֹן אֲשֶׁר שַׂמְתָּ בְּפִינוּ, הֵן הֵם יוֹדוּ וִיבָרְכוּ, וִישַׁבְּחוּ, וִיפָאֲרוּ, אֶת שִׁמְךָ מַלְכֵּנוּ תָמִיד. כִּי כָל פֶּה לְךָ יוֹדֶה, וְכָל לָשׁוֹן לְךָ תְשַׁבֵּחַ, וְכָל עַיִן לְךָ תְצַפֶּה, וְכָל בֶּרֶךְ לְךָ תִכְרַע, וְכָל קוֹמָה לְפָנֶיךָ תִשְׁתַּחֲוֶה, וְהַלְּבָבוֹת יִירָאוּךָ וְהַקֶּרֶב וְהַכְּלָיוֹת יְזַמְּרוּ לִשְׁמֶךָ, כַּדָּבָר שֶׁנֶּאֱמַר כָּל עַצְמֹתַי תֹּאמַרְנָה יְהֹוָה מִי כָמוֹךָ מַצִּיל עָנִי מֵחָזָק מִמֶּנּוּ, וְעָנִי וְאֶבְיוֹן מִגֹּזְלוֹ, שַׁוְעַת עֲנִיִּים אַתָּה תִּשְׁמַע, צַעֲקַת הַדַּל תַּקְשִׁיב וְתוֹשִׁיעַ. וְכָתוּב רַנְּנוּ צַדִּיקִים בַּיְהֹוָה, לַיְשָׁרִים נָאוָה תְהִלָּה.<br><br>
+
+      בְּפִי יְשָׁרִים תִּתְרוֹמָם, וּבְשִׂפְתֵי צַדִּיקִים תִּתְבָּרַךְ, וּבִלְשׁוֹן חֲסִידִים תִּתְקַדָּשׁ, וּבְקֶרֶב קְדוֹשִׁים תִּתְהַלָּל.<br><br>
+
+      בְּמִקְהֲלוֹת רִבְבוֹת עַמְּךָ בֵּית יִשְׂרָאֵל, שֶׁכֵּן חוֹבַת כָּל הַיְצוּרִים לְפָנֶיךָ יְהֹוָה אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ לְהוֹדוֹת, לְהַלֵּל, לְשַׁבֵּחַ, לְפָאֵר, לְרוֹמֵם, לְהַדֵּר, וּלְנַצֵּחַ, עַל כָּל דִּבְרֵי שִׁירוֹת וְתִשְׁבָּחוֹת דָּוִד בֶּן יִשַׁי עַבְדְּךָ מְשִׁיחֶךָ.<br><br>
+
+      וּבְכֵן, יִשְׁתַּבַּח שִׁמְךָ לָעַד מַלְכֵּנוּ הָאֵל הַמֶּלֶךְ הַגָּדוֹל וְהַקָּדוֹשׁ בַּשָּׁמַיִם וּבָאָרֶץ, כִּי לְךָ נָאֶה יְהֹוָה אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ לְעוֹלָם וָעֶד. שִׁיר וּשְׁבָחָה, הַלֵּל וְזִמְרָה, עֹז, וּמֶמְשָׁלָה, נֶצַח, גְּדוּלָה, גְּבוּרָה, תְּהִלָּה, וְתִפְאֶרֶת, קְדֻשָּׁה, וּמַלְכוּת, בְּרָכוֹת וְהוֹדָאוֹת לְשִׁמְךָ הַגָּדוֹל וְהַקָּדוֹשׁ, וּמֵעוֹלָם וְעַד עוֹלָם אַתָּה אֵל.<br><br>
+
+      <span class="highlight">בָּרוּךְ אַתָּה מֶלֶךְ גָּדוֹל וּמְהֻלָּל בַּתִּשְׁבָּחוֹת. אֵל הַהוֹדָאוֹת, אֲדוֹן הַנִּפְלָאוֹת, בּוֹרֵא כָּל הַנְּשָׁמוֹת, רִבּוֹן כָּל הַמַּעֲשִׂים, הַבּוֹחֵר בְּשִׁירֵי זִמְרָה מֶלֶךְ אֵל חַי הָעוֹלָמִים אָמֵן.</span>
+    `
+  },
+  borei_nefashot: {
+    title: "בורא נפשות",
+    body: `
+      <span class="section-title">✦ בּוֹרֵא נְפָשׁוֹת ✦</span>
+      <span style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:14px;display:block;text-align:center;margin-bottom:16px;">ברכה אחרונה לאחר אכילת פירות, ירקות ושתיית משקים (שאינם יין)</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="highlight" style="font-size:1.15em;">בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,<br>
+      בּוֹרֵא נְפָשׁוֹת רַבּוֹת וְחֶסְרוֹנָן<br>
+      עַל כָּל מַה שֶּׁבָּרָאתָ<br>
+      לְהַחֲיוֹת בָּהֶם נֶפֶשׁ כָּל חָי.<br>
+      בָּרוּךְ חֵי הָעוֹלָמִים.</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;text-align:center;">מברכים ברכה זו לאחר אכילת כזית מפירות, ירקות, בשר, דגים וביצים,<br>ולאחר שתיית רביעית ממים או שאר משקים (מלבד יין)</span>
     `
   },
   chayalim: {
@@ -5294,6 +5362,8 @@ const prayerMeta = {
   derech: { icon: '🗺️', title: 'תפילת הדרך' },
   mazon: { icon: '🤲', title: 'ברכת המזון – נוסח ספרד' },
   mazon_ashkenaz: { icon: '🤲', title: 'ברכת המזון – נוסח אשכנז' },
+  nishmat: { icon: '🌊', title: 'נשמת כל חי' },
+  borei_nefashot: { icon: '🍎', title: 'בורא נפשות' },
   chayalim: { icon: '🪖', title: 'תפילה לחיילים' },
   hilula: { icon: '🕯️', title: 'הדלקת נר בהילולא' },
   roshchodesh: { icon: '🌙', title: 'נר ראש חודש' },
@@ -5820,7 +5890,7 @@ function openPrayer(id) {
     setTimeout(autoSelectHebrewMonth, 50);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun') {
+  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
@@ -6773,7 +6843,8 @@ function _loadSortOrder(page) {
     { keys: ['ברכת המזון', 'מזון'], action: function() { openMazonSelector({ stopPropagation: function(){} }); } },
     { keys: ['רחל אמנו', 'רחל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'rachel', '🕯️'); } },
     { keys: ['איגרת הרמב"ן', 'איגרת', 'רמב"ן', 'רמבן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'igeret_haramban', '✍️'); } },
-    { keys: ['חלה', 'הפרשת חלה', 'הפרשה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🍞'); } },
+    { keys: ['נשמת כל חי', 'נשמת'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'nishmat', '🌊'); } },
+    { keys: ['בורא נפשות'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'borei_nefashot', '🍎'); } },
     { keys: ['פרשת השבוע', 'פרשה', 'השבוע', 'פרשת'], action: function() {
       var todayCard = document.getElementById('todayCardInner');
       if (todayCard) todayCard.click();
