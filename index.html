@@ -162,12 +162,14 @@
     gap: 24px;
   }
   .app-footer a {
-    color: rgba(212,175,55,0.55);
+    color: #ffffff;
     font-family: 'Heebo', sans-serif;
     font-size: 12px;
+    font-weight: 700;
     text-decoration: none;
     cursor: pointer;
     transition: color 0.2s;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
   }
   .app-footer a:hover { color: var(--gold-light); }
 
@@ -175,7 +177,7 @@
   .legal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.5);
     z-index: 500;
     display: flex;
     align-items: flex-end;
@@ -186,7 +188,9 @@
   }
   .legal-overlay.active { opacity: 1; pointer-events: all; }
   .legal-modal {
-    background: linear-gradient(170deg, #0d1033 0%, #050e20 100%);
+    background: rgba(13, 16, 51, 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(212,175,55,0.35);
     border-radius: 24px 24px 0 0;
     width: 100%;
@@ -209,36 +213,43 @@
   .legal-title {
     font-family: 'Frank Ruhl Libre', serif;
     font-size: 20px;
-    color: var(--gold-light);
+    color: #ffffff;
     text-align: center;
     margin-bottom: 16px;
-    text-shadow: 0 0 10px rgba(212,175,55,0.3);
+    font-weight: 700;
+    text-shadow: 0 0 12px rgba(212,175,55,0.6), 0 2px 6px rgba(0,0,0,0.9);
   }
   .legal-body {
     font-family: 'Heebo', sans-serif;
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.8;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 600;
+    line-height: 1.9;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
   }
   .legal-body h3 {
     color: var(--gold-light);
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 700;
     margin: 14px 0 6px;
+    text-shadow: 0 0 8px rgba(212,175,55,0.5), 0 1px 4px rgba(0,0,0,0.9);
   }
   .legal-close {
     display: block;
     margin: 22px auto 0;
-    background: rgba(212,175,55,0.12);
-    border: 1px solid rgba(212,175,55,0.3);
-    color: var(--gold-light);
+    background: rgba(212,175,55,0.25);
+    border: 1.5px solid rgba(212,175,55,0.6);
+    color: #ffffff;
     font-family: 'Heebo', sans-serif;
     font-size: 14px;
+    font-weight: 700;
     padding: 10px 32px;
     border-radius: 20px;
     cursor: pointer;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     transition: background 0.2s;
   }
-  .legal-close:hover { background: rgba(212,175,55,0.22); }
+  .legal-close:hover { background: rgba(212,175,55,0.4); }
 
   .voice-btn {
     position: fixed;
@@ -6637,7 +6648,16 @@ function _loadSortOrder(page) {
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(t._timer);
-    t._timer = setTimeout(function() { t.classList.remove('show'); }, duration || 2500);
+    if (duration) {
+      t._timer = setTimeout(function() { t.classList.remove('show'); }, duration);
+    }
+  }
+
+  function hideVoiceToast() {
+    var t = document.getElementById('voiceToast');
+    if (!t) return;
+    clearTimeout(t._timer);
+    t.classList.remove('show');
   }
 
   function handleVoiceResult(text) {
@@ -6676,7 +6696,7 @@ function _loadSortOrder(page) {
       listening = true;
       btn.classList.add('listening');
       btn.textContent = '🔴';
-      showVoiceToast('מאזין... דבר עכשיו', 5000);
+      showVoiceToast('מאזין...', null);
     };
     recognition.onresult = function(e) {
       var interim = '';
@@ -6688,9 +6708,11 @@ function _loadSortOrder(page) {
           interim += e.results[i][0].transcript;
         }
       }
-      // הצג בזמן אמת בתיבה
-      if (interim) showVoiceToast('🎙️ ' + interim, 8000);
-      if (final) handleVoiceResult(final);
+      if (interim) showVoiceToast('🎙️ ' + interim, null);
+      if (final) {
+        showVoiceToast('🎙️ ' + final, null);
+        setTimeout(function() { handleVoiceResult(final); }, 300);
+      }
     };
     recognition.onerror = function(e) {
       showVoiceToast(e.error === 'not-allowed' ? 'אין הרשאת מיקרופון' : 'שגיאה, נסה שוב', 3000);
@@ -6699,6 +6721,7 @@ function _loadSortOrder(page) {
       listening = false;
       btn.classList.remove('listening');
       btn.textContent = '🗣️';
+      setTimeout(hideVoiceToast, 1500);
     };
     recognition.start();
   };
