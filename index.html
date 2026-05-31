@@ -204,9 +204,7 @@
   }
   .reminder-overlay.active { opacity: 1; pointer-events: all; }
   .reminder-box {
-    background: rgba(13,16,51,0.5);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(13,16,51,0.88);
     border: 2px solid #F5D96B;
     box-shadow: 0 0 30px rgba(212,175,55,0.4);
     border-radius: 20px;
@@ -254,9 +252,7 @@
   }
   .reminder-close:active { background: rgba(212,175,55,0.4); }
   .legal-modal {
-    background: rgba(13, 16, 51, 0.5);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(13, 16, 51, 0.95);
     border: 1px solid rgba(212,175,55,0.35);
     border-radius: 24px 24px 0 0;
     width: 100%;
@@ -2762,8 +2758,8 @@
     </div>
 
     <div class="memorial-name-row">
-      <div class="memorial-name-display" id="refuaNameDisplay" onclick="refuaEditName()">חולה בן/בת אמו</div>
-      <input class="memorial-name-input" id="refuaNameInput" type="text" value="חולה בן/בת אמו"
+      <div class="memorial-name-display" id="refuaBoxNameDisplay" onclick="refuaEditName()">חולה בן/בת אמו</div>
+      <input class="memorial-name-input" id="refuaBoxNameInput" type="text" value="חולה בן/בת אמו"
         onblur="refuaSaveName()" onkeydown="if(event.key==='Enter')refuaSaveName()" style="display:none">
       <div class="memorial-tnzb">רפואה שלמה</div>
     </div>
@@ -5763,7 +5759,21 @@ updateFhbCount();
 (function() {
   const params = new URLSearchParams(window.location.search);
   const pid = params.get('prayer');
+  const name = params.get('name');
   if (pid && prayers[pid]) {
+    // אם זו תפילת רפואה עם שם — מלא את השם אוטומטית
+    if (pid === 'refua' && name) {
+      var decodedName = decodeURIComponent(name);
+      try {
+        var el = document.getElementById('refuaBoxNameDisplay');
+        var inp = document.getElementById('refuaBoxNameInput');
+        if (el) el.textContent = decodedName;
+        if (inp) inp.value = decodedName;
+        localStorage.setItem('orHatfila_refuaName', decodedName);
+        // עדכן גם שדה השם בתפילה
+        if (typeof updateRefuaName === 'function') updateRefuaName(decodedName);
+      } catch(e) {}
+    }
     setTimeout(() => openPrayerWithBurst({ currentTarget: document.body }, pid, prayerMeta[pid]?.icon || '📖'), 400);
   }
 })();
@@ -6605,10 +6615,11 @@ openCategoryPage = function(pageId) {
     try {
       var savedName = localStorage.getItem('orHatfila_refuaName');
       if (savedName) {
-        var el = document.getElementById('refuaNameDisplay');
-        var inp = document.getElementById('refuaNameInput');
+        var el = document.getElementById('refuaBoxNameDisplay');
+        var inp = document.getElementById('refuaBoxNameInput');
         if (el) el.textContent = savedName;
         if (inp) inp.value = savedName;
+        updateRefuaName(savedName);
       }
       var savedPhoto = localStorage.getItem('orHatfila_refuaPhoto');
       if (savedPhoto) {
@@ -6623,8 +6634,8 @@ openCategoryPage = function(pageId) {
   })();
 
   window.refuaEditName = function() {
-    var display = document.getElementById('refuaNameDisplay');
-    var input = document.getElementById('refuaNameInput');
+    var display = document.getElementById('refuaBoxNameDisplay');
+    var input = document.getElementById('refuaBoxNameInput');
     if (!display || !input) return;
     display.style.display = 'none';
     input.style.display = 'block';
@@ -6632,8 +6643,8 @@ openCategoryPage = function(pageId) {
   };
 
   window.refuaSaveName = function() {
-    var display = document.getElementById('refuaNameDisplay');
-    var input = document.getElementById('refuaNameInput');
+    var display = document.getElementById('refuaBoxNameDisplay');
+    var input = document.getElementById('refuaBoxNameInput');
     if (!display || !input) return;
     var name = input.value.trim() || 'חולה בן/בת אמו';
     display.textContent = name;
@@ -6641,6 +6652,8 @@ openCategoryPage = function(pageId) {
     display.style.display = 'block';
     input.style.display = 'none';
     try { localStorage.setItem('orHatfila_refuaName', name); } catch(e) {}
+    // עדכן גם שדה השם בתפילה
+    updateRefuaName(name);
   };
 
   window.refuaLoadPhoto = function(inp) {
@@ -6690,13 +6703,17 @@ openCategoryPage = function(pageId) {
       if (photoActions) photoActions.style.display = '';
       canvas.toBlob(function(blob) {
         if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
-        var nameEl = document.getElementById('refuaNameDisplay');
+        var nameEl = document.getElementById('refuaBoxNameDisplay');
         var nameText = nameEl ? nameEl.textContent.trim() : 'חולה';
         var fileName = 'רפואה_שלמה_' + nameText.replace(/\s+/g, '_') + '.png';
+        var link = 'https://ma303300-blip.github.io/or-hatfila---/?prayer=refua&name=' + encodeURIComponent(nameText);
         var file = new File([blob], fileName, { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({ title: 'רפואה שלמה ל' + nameText, text: 'רפואה שלמה מן השמים', files: [file] })
-            .catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
+          navigator.share({
+            title: 'רפואה שלמה ל' + nameText,
+            text: 'רפואה שלמה מן השמים ל' + nameText + '\n' + link,
+            files: [file]
+          }).catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
         } else { _memShareFallback(blob, fileName); }
       }, 'image/png');
     }).catch(function() {
