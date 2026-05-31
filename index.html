@@ -756,6 +756,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
     background: linear-gradient(180deg, #1a0e05 0%, #2e1a08 100%);
     border-bottom: 3px solid #8B6020;
     box-shadow: 0 2px 12px rgba(0,0,0,0.6);
@@ -1557,7 +1558,7 @@
   /* תיבה רצה אוטומטית - מורדכי */
   .parasha-marquee-container {
     position: fixed;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     left: 0;
     width: 100%;
     height: 0.5cm;
@@ -1588,10 +1589,10 @@
     0% { transform: translateX(0%); }
     100% { transform: translateX(-50%); }
   }
-  .bsd { top: calc(14px + 0.5cm) !important; }
-  .date-display { top: calc(36px + 0.5cm) !important; }
-  .favs-home-btn { top: calc(14px + 0.5cm) !important; }
-  .voice-btn { top: calc(64px + 0.5cm) !important; }
+  .bsd { top: calc(env(safe-area-inset-top, 0px) + 14px + 0.5cm) !important; }
+  .date-display { top: calc(env(safe-area-inset-top, 0px) + 36px + 0.5cm) !important; }
+  .favs-home-btn { top: calc(env(safe-area-inset-top, 0px) + 14px + 0.5cm) !important; }
+  .voice-btn { top: calc(env(safe-area-inset-top, 0px) + 64px + 0.5cm) !important; }
 
   /* תיקון והדגשת תיבת החיפוש - מורדכי */
   .search-input {
@@ -2320,6 +2321,7 @@
     justify-content: center;
     position: relative;
     padding: 18px 0 14px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
     margin-bottom: 8px;
   }
   .category-back-btn {
@@ -6771,6 +6773,7 @@ function _loadSortOrder(page) {
     { keys: ['ברכת המזון', 'מזון'], action: function() { openMazonSelector({ stopPropagation: function(){} }); } },
     { keys: ['רחל אמנו', 'רחל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'rachel', '🕯️'); } },
     { keys: ['איגרת הרמב"ן', 'איגרת', 'רמב"ן', 'רמבן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'igeret_haramban', '✍️'); } },
+    { keys: ['חלה', 'הפרשת חלה', 'הפרשה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🍞'); } },
     { keys: ['פרשת השבוע', 'פרשה', 'השבוע', 'פרשת'], action: function() {
       var todayCard = document.getElementById('todayCardInner');
       if (todayCard) todayCard.click();
@@ -6784,7 +6787,6 @@ function _loadSortOrder(page) {
     { keys: ['נחמן מברסלב', 'נחמן', 'ברסלב'], action: function() { _openHilulaWithTzaddik('רבי נחמן מברסלב'); } },
     { keys: ['אלימלך', 'ליז\'נסק'], action: function() { _openHilulaWithTzaddik('רבי אלימלך מליז\'נסק'); } },
     { keys: ['הדלקת נר', 'הדלקה', 'הילולה'], action: function() { openCategoryPage('hadlaka'); } },
-    { keys: ['חלה', 'הפרשת חלה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🍞'); } },
     { keys: ['קריאת שמע', 'שמע'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shema', '📖'); } },
     { keys: ['רפואה', 'מי שברך', 'חולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'refua', '🩺'); } },
     { keys: ['ברכות', 'ברכת הנהנין'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'brachot', '🫒'); } },
