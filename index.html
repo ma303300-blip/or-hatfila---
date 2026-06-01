@@ -4899,10 +4899,8 @@ function performSearch(query) {
 function pressAndOpen(el, callback) {
   if (el.classList.contains('pressing')) return;
   el.classList.add('pressing');
-  setTimeout(function() {
-    el.classList.remove('pressing');
-    callback();
-  }, 250);
+  setTimeout(function() { callback(); }, 150);
+  setTimeout(function() { el.classList.remove('pressing'); }, 250);
 }
 
 function openPrayerWithBurst(e, id, icon) {
@@ -5472,7 +5470,12 @@ async function openParasha() {
     }
   }
 
-  // שלב 2: fallback hebcal
+  // שלב 2: fallback תאריך מקומי — מיידי, ללא רשת
+  if (!_currentParashaKey) {
+    _currentParashaKey = _getParashaByDate();
+  }
+
+  // שלב 3: אם גם fallback תאריך נכשל — נסה hebcal (חוסם רק במקרה קיצוני)
   if (!_currentParashaKey) {
     try {
       var res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + Date.now());
@@ -5486,11 +5489,6 @@ async function openParasha() {
         }) || null;
       }
     } catch(e) {}
-  }
-
-  // שלב 3: fallback תאריך
-  if (!_currentParashaKey) {
-    _currentParashaKey = _getParashaByDate();
   }
 
   var pData = parashotData[_currentParashaKey];
