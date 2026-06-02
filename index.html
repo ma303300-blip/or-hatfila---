@@ -1997,59 +1997,58 @@
   }
 
   /* לוח שנה עברי */
+  /* לוח שנה עברי חודשי */
   .heb-cal-box {
-    flex: 1;
-    max-width: 190px;
-    border-radius: 16px;
-    background: rgba(128,128,128,0.75);
+    width: 100%; border-radius:16px;
+    background: rgba(20,12,4,0.82);
     border: 2px solid #F5D96B;
     box-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 28px rgba(212,175,55,0.3);
-    padding: 11px 10px 10px;
-    direction: rtl;
-    text-align: center;
-    animation: bubbleFloat 5s ease-in-out infinite, memBorderGlow 2s ease-in-out infinite alternate;
+    padding: 10px; direction:rtl;
+    animation: memBorderGlow 2s ease-in-out infinite alternate;
   }
-  .heb-cal-title {
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: 13px;
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-    letter-spacing: 1px;
-    margin-bottom: 8px;
+  .heb-cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .heb-cal-nav {
+    background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4);
+    color:#F5D96B; width:32px; height:32px; border-radius:50%; font-size:18px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
   }
-  .heb-cal-date {
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--gold-light);
-    text-shadow: 0 0 8px rgba(212,175,55,0.5), 0 1px 4px rgba(0,0,0,0.9);
-    line-height: 1.3;
-    margin-bottom: 4px;
+  .heb-cal-nav:active { background:rgba(212,175,55,0.35); }
+  .heb-cal-month-title {
+    font-family:'Frank Ruhl Libre',serif; font-size:13px; font-weight:900;
+    color:#F5D96B; text-align:center; flex:1; text-shadow:0 0 8px rgba(212,175,55,0.5);
   }
-  .heb-cal-greg {
-    font-family: 'Heebo', sans-serif;
-    font-size: 11px;
-    color: rgba(255,255,255,0.8);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    margin-bottom: 6px;
+  .heb-cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:4px; }
+  .heb-cal-wd { font-family:'Heebo',sans-serif; font-size:11px; font-weight:700; color:rgba(212,175,55,0.9); text-align:center; padding:3px 0; }
+  .heb-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+  .heb-cal-cell {
+    border-radius:6px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; cursor:pointer; position:relative;
+    height:28px; -webkit-tap-highlight-color:transparent;
   }
-  .heb-cal-parasha {
-    font-family: 'Heebo', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-    margin-bottom: 4px;
-    min-height: 16px;
+  .heb-cal-cell:active { background:rgba(212,175,55,0.2); }
+  .heb-cal-cell.empty { cursor:default; pointer-events:none; }
+  .heb-cal-cell.today { background:rgba(212,175,55,0.25); border:1.5px solid #F5D96B; }
+  .heb-cal-cell.shabbat .heb-cal-day-num { color:#F5D96B; }
+  .heb-cal-cell.rosh-chodesh {
+    background: rgba(180,30,30,0.15);
+    border: 2px solid #e53935;
+    animation: roshChodeshFlash 1.4s ease-in-out infinite;
   }
-  .heb-cal-zmanim {
-    font-family: 'Heebo', sans-serif;
-    font-size: 11px;
-    color: rgba(255,255,255,0.85);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    line-height: 1.6;
+  @keyframes roshChodeshFlash {
+    0%, 100% { border-color: #e53935; box-shadow: 0 0 6px rgba(229,57,53,0.8); }
+    50%       { border-color: rgba(229,57,53,0.2); box-shadow: none; }
   }
+  .heb-cal-cell.has-hilula::after { content:'🕯'; font-size:8px; position:absolute; bottom:1px; right:1px; }
+  .heb-cal-day-num { font-family:'Frank Ruhl Libre',serif; font-size:13px; font-weight:900; color:#fff; line-height:1; text-shadow:0 0 6px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1); }
+  .heb-cal-day-greg { font-family:'Heebo',sans-serif; font-size:8px; color:rgba(255,255,255,0.8); line-height:1; margin-top:1px; font-weight:600; }
+  .heb-cal-day-panel {
+    margin-top:8px; background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.3);
+    border-radius:10px; padding:8px 10px; direction:rtl; display:none;
+  }
+  .heb-cal-day-panel.visible { display:block; }
+  .heb-cal-panel-date { font-family:'Frank Ruhl Libre',serif; font-size:12px; font-weight:700; color:#F5D96B; margin-bottom:5px; }
+  .heb-cal-panel-row { font-family:'Heebo',sans-serif; font-size:11px; color:rgba(255,255,255,0.85); line-height:1.8; }
 
   .memorial-box {
     position: relative;
@@ -2713,23 +2712,35 @@
   <div class="shabbat-times-location" id="shabbatTimesLocation"></div>
 </div>
 
-<!-- שתי תיבות תחתון: עילוי נשמת + לוח שנה -->
+<!-- לוח שנה — שורה מלאה -->
+<div style="position:relative;z-index:10;margin:0 16px 16px;">
+  <div class="heb-cal-box" id="hebCalBox">
+    <div class="heb-cal-header">
+      <button class="heb-cal-nav" id="hebCalNext" onclick="hebCalMove(1)">&#8249;</button>
+      <div class="heb-cal-month-title" id="hebCalMonthTitle">...</div>
+      <button class="heb-cal-nav" id="hebCalPrev" onclick="hebCalMove(-1)">&#8250;</button>
+    </div>
+    <div class="heb-cal-weekdays">
+      <div class="heb-cal-wd">א'</div><div class="heb-cal-wd">ב'</div>
+      <div class="heb-cal-wd">ג'</div><div class="heb-cal-wd">ד'</div>
+      <div class="heb-cal-wd">ה'</div>
+      <div class="heb-cal-wd" style="color:rgba(245,217,107,0.95)">ו'</div>
+      <div class="heb-cal-wd" style="color:rgba(245,217,107,0.95)">ש'</div>
+    </div>
+    <div class="heb-cal-grid" id="hebCalGrid"></div>
+    <div class="heb-cal-day-panel" id="hebCalPanel">
+      <div class="heb-cal-panel-date" id="hebCalPanelDate"></div>
+      <div class="heb-cal-panel-row" id="hebCalPanelInfo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- עילוי נשמת + רפואה — שורה אחת -->
 <div class="bottom-boxes-row">
 
-  <!-- לוח שנה עברי — ימין -->
-  <div class="heb-cal-box" id="hebCalBox">
-    <div class="heb-cal-title">לוח שנה עברי</div>
-    <div class="heb-cal-date" id="hebCalDate">...</div>
-    <div class="heb-cal-greg" id="hebCalGreg"></div>
-    <div class="heb-cal-parasha" id="hebCalParasha"></div>
-    <div class="heb-cal-zmanim" id="hebCalZmanim"></div>
-  </div>
-
-  <!-- נר זיכרון מעוצב — שמאל -->
+  <!-- נר זיכרון -->
   <div class="memorial-box" id="memorialBox">
-
   <div class="memorial-title-top">לעילוי נשמת</div>
-
   <div class="memorial-main-row">
     <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
       <div class="memorial-photo-wrap" onclick="document.getElementById('memPhotoInput').click()">
@@ -2751,29 +2762,21 @@
       <div class="memorial-flame-big">🕯️</div>
     </div>
   </div>
-
   <div class="memorial-name-row">
     <div class="memorial-name-display" id="memNameDisplay" onclick="memEditName()">עובד עטריה בן שרה</div>
     <input class="memorial-name-input" id="memNameInput" type="text" value="עובד עטריה בן שרה"
       onblur="memSaveName()" onkeydown="if(event.key==='Enter')memSaveName()" style="display:none">
     <div class="memorial-tnzb">ת.נ.צ.ב.ה</div>
   </div>
-
   <div class="memorial-btns-row">
     <button class="memorial-btn memorial-btn-share" onclick="memShare()">שתף זיכרון</button>
     <button class="memorial-btn memorial-btn-edit" onclick="memEditName()">שנה שם</button>
   </div>
+  </div>
 
-</div>
-
-</div><!-- סוף bottom-boxes-row -->
-
-<!-- שורה שנייה — רפואה -->
-<div class="bottom-boxes-row" style="margin-top:0;">
+  <!-- רפואה שלמה -->
   <div class="memorial-box" id="refuaBox" style="max-width:200px;width:100%;padding:8px;">
-
     <div class="memorial-title-top">🩺 רפואה שלמה</div>
-
     <div class="memorial-main-row">
       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
         <div class="memorial-photo-wrap" onclick="document.getElementById('refuaPhotoInput').click()">
@@ -2795,21 +2798,20 @@
         <div class="memorial-flame-big">🙏</div>
       </div>
     </div>
-
     <div class="memorial-name-row">
       <div class="memorial-name-display" id="refuaBoxNameDisplay" onclick="refuaEditName()">חולה בן/בת אמו</div>
       <input class="memorial-name-input" id="refuaBoxNameInput" type="text" value="חולה בן/בת אמו"
         onblur="refuaSaveName()" onkeydown="if(event.key==='Enter')refuaSaveName()" style="display:none">
       <div class="memorial-tnzb">רפואה שלמה</div>
     </div>
-
     <div class="memorial-btns-row">
       <button class="memorial-btn memorial-btn-share" onclick="refuaShare()">שתף תפילה</button>
       <button class="memorial-btn memorial-btn-edit" onclick="refuaEditName()">שנה שם</button>
     </div>
-
   </div>
+
 </div>
+
 <div class="category-page" id="categoryTefilot">
   <div class="category-page-inner">
     <div class="category-header">
@@ -6281,9 +6283,6 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
           ? pItem.title.replace('Parashat ','').replace('Shabbat ','').trim()
           : '';
 
-        // עדכן לוח שנה עברי
-        var hebCalParasha = document.getElementById('hebCalParasha');
-        if (hebCalParasha) hebCalParasha.textContent = '📖 ' + pName;
       }
     } catch(e) {
       console.error("שגיאה בטעינת פרשת השבוע:", e);
@@ -6323,82 +6322,114 @@ function resumePage() {
   }
 }
 
-// לוח שנה עברי
-(function initHebCal() {
-  var now = new Date();
+// לוח שנה עברי חודשי
+(function() {
+  var _off = 0, _zc = {};
 
-  // המרת מספר לאותיות גימטריה
-  function toGematria(n) {
-    var ones  = ['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
-    var tens  = ['','י','כ','ל'];
-    var special = { 15: 'ט״ו', 16: 'ט״ז' };
-    if (special[n]) return special[n];
-    var t = Math.floor(n / 10);
-    var o = n % 10;
-    var s = tens[t] + ones[o];
-    if (s.length > 1) s = s.slice(0, -1) + '״' + s.slice(-1);
-    else s = s + '׳';
-    return s;
+  function gem(n) {
+    var o=['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
+    var t=['','י','כ','ל'];
+    if(n===15) return 'ט"ו';
+    if(n===16) return 'ט"ז';
+    var r=t[Math.floor(n/10)]+o[n%10];
+    return r.length>1 ? r.slice(0,-1)+'"'+r.slice(-1) : r+"'";
   }
 
-  // תאריך עברי — חודש ושנה מ-Intl, יום מגימטריה
-  var hebDayNum = parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(now));
-  var hebMonth  = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(now);
-  var hebYear   = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { year: 'numeric' }).format(now);
-  var hebDate   = toGematria(hebDayNum) + ' ' + hebMonth + ' ' + hebYear;
+  function getHeb(d) {
+    try {
+      return {
+        day:   parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric'}).format(d)),
+        month: new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{month:'long'}).format(d),
+        year:  new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{year:'numeric'}).format(d)
+      };
+    } catch(e){ return null; }
+  }
 
-  // יום בשבוע
-  var days = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
-  var dayName = 'יום ' + days[now.getDay()];
+  function build() {
+    var now=new Date(), tgt=new Date(now.getFullYear(), now.getMonth()+_off, 1);
+    var yr=tgt.getFullYear(), mo=tgt.getMonth();
+    var dim=new Date(yr,mo+1,0).getDate(), days=[];
+    for(var d=1;d<=dim;d++){var dt=new Date(yr,mo,d);days.push({g:dt,h:getHeb(dt),n:d});}
 
-  document.getElementById('hebCalDate').textContent = hebDate;
-  document.getElementById('hebCalGreg').textContent = dayName + ' | ' + now.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
+    var fh=days[0].h, lh=days[days.length-1].h;
+    var title=fh&&lh?(fh.month===lh.month?fh.month+' '+fh.year:fh.month+' – '+lh.month+' '+lh.year):'';
+    title+=' | '+tgt.toLocaleDateString('he-IL',{month:'long',year:'numeric'});
+    document.getElementById('hebCalMonthTitle').textContent=title;
+    document.getElementById('hebCalPrev').style.opacity=_off<=-12?'0.3':'1';
+    document.getElementById('hebCalNext').style.opacity=_off>=12?'0.3':'1';
 
-  // פרשת השבוע — מ-_hebcalParashaHebrew אם כבר נטען, אחרת ה-Hebcal יעדכן
-  var hebCalParasha = document.getElementById('hebCalParasha');
-  if (hebCalParasha) {
-    if (window._hebcalParashaHebrew) {
-      hebCalParasha.textContent = '📖 ' + window._hebcalParashaHebrew;
+    var grid=document.getElementById('hebCalGrid');
+    grid.innerHTML='';
+    for(var i=0;i<days[0].g.getDay();i++){var e=document.createElement('div');e.className='heb-cal-cell empty';grid.appendChild(e);}
+
+    var ts=now.toDateString();
+    days.forEach(function(item){
+      var cell=document.createElement('div'), cls=['heb-cal-cell'];
+      if(item.g.toDateString()===ts) cls.push('today');
+      if(item.g.getDay()===6) cls.push('shabbat');
+      var nextDay = new Date(item.g.getFullYear(), item.g.getMonth(), item.g.getDate()+1);
+      var nextHeb = getHeb(nextDay);
+      var isRoshChodesh = item.h && (item.h.day===1 || (item.h.day===30 && nextHeb && nextHeb.day===1));
+      if(isRoshChodesh) cls.push('rosh-chodesh');
+      var hil=(item.h&&typeof hilulaCalendar!=='undefined')
+        ?hilulaCalendar.find(function(x){return x.month===item.h.month&&x.day===item.h.day;})
+        :null;
+      if(hil) cls.push('has-hilula');
+      cell.className=cls.join(' ');
+      cell.innerHTML='<div class="heb-cal-day-num">'+(item.h?gem(item.h.day):'')+'</div>'
+                    +'<div class="heb-cal-day-greg">'+item.n+'</div>';
+      cell.addEventListener('click',(function(it,hl){return function(){showPanel(it,hl);};})(item,hil));
+      grid.appendChild(cell);
+    });
+    document.getElementById('hebCalPanel').classList.remove('visible');
+  }
+
+  function addZ(rows,z,dow){
+    if(z.sr) rows.push('🌅 זריחה: '+z.sr);
+    if(z.ss) rows.push('🌇 שקיעה: '+z.ss);
+    if(dow===5&&z.ss) rows.push('🕯 כניסת שבת: '+z.ss);
+    if(dow===6&&z.tz) rows.push('✡ יציאת שבת: '+z.tz);
+  }
+
+  function showPanel(item,hil) {
+    var h=item.h; if(!h) return;
+    var dn=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+    document.getElementById('hebCalPanelDate').textContent=
+      'יום '+dn[item.g.getDay()]+' | '+gem(h.day)+' '+h.month+' '+h.year+' | '+
+      item.g.toLocaleDateString('he-IL',{day:'numeric',month:'long'});
+    var rows=[], dow=item.g.getDay();
+    var nextD = new Date(item.g.getFullYear(), item.g.getMonth(), item.g.getDate()+1);
+    var nextH = getHeb(nextD);
+    if(h.day===1||(h.day===30&&nextH&&nextH.day===1)) rows.push('🌙 ראש חודש '+h.month);
+    if(dow===6&&window._hebcalParashaHebrew) rows.push('📖 פרשת '+window._hebcalParashaHebrew);
+    if(hil) rows.push('🕯️ הילולת '+hil.name);
+    var dk=item.g.getFullYear()+'-'+String(item.g.getMonth()+1).padStart(2,'0')+'-'+String(item.g.getDate()).padStart(2,'0');
+    if(_zc[dk]){
+      addZ(rows,_zc[dk],dow);
+      document.getElementById('hebCalPanelInfo').innerHTML=rows.join('<br>');
     } else {
-      hebCalParasha.textContent = '';
+      rows.push('🌅 טוען זמנים...');
+      document.getElementById('hebCalPanelInfo').innerHTML=rows.join('<br>');
+      try{
+        navigator.geolocation.getCurrentPosition(function(p){
+          fetch('https://www.hebcal.com/zmanim?cfg=json&latitude='+p.coords.latitude.toFixed(4)
+            +'&longitude='+p.coords.longitude.toFixed(4)+'&tzid=Asia/Jerusalem&date='+dk)
+          .then(function(r){return r.json();}).then(function(d){
+            if(!d.times)return;
+            var f=function(t){if(!t)return'';var x=new Date(t);return(x.getHours()<10?'0':'')+x.getHours()+':'+(x.getMinutes()<10?'0':'')+x.getMinutes();};
+            _zc[dk]={sr:f(d.times.sunrise),ss:f(d.times.sunset),tz:f(d.times.tzeit_hakochavim)};
+            var rr=rows.filter(function(r){return r.indexOf('טוען')===-1;});
+            addZ(rr,_zc[dk],dow);
+            document.getElementById('hebCalPanelInfo').innerHTML=rr.join('<br>');
+          }).catch(function(){});
+        },function(){},{timeout:5000});
+      }catch(e){}
     }
+    document.getElementById('hebCalPanel').classList.add('visible');
   }
 
-  // זמני היום — שחרית ומנחה משוערים
-  var sunrise = new Date(now); sunrise.setHours(6, 30, 0);
-  var sunset  = new Date(now); sunset.setHours(18, 0, 0);
-  var zmanim  = document.getElementById('hebCalZmanim');
-  if (zmanim) {
-    zmanim.innerHTML =
-      '🌅 שחרית: 06:30<br>' +
-      '🌇 שקיעה: 18:00';
-  }
-
-  // עדכון שעות מ-Hebcal אם זמין
-  try {
-    var loc = navigator.geolocation;
-    if (loc) {
-      loc.getCurrentPosition(function(pos) {
-        var url = 'https://www.hebcal.com/zmanim?cfg=json&latitude=' +
-          pos.coords.latitude.toFixed(4) + '&longitude=' + pos.coords.longitude.toFixed(4) +
-          '&tzid=Asia/Jerusalem&date=' + now.toISOString().split('T')[0];
-        fetch(url).then(function(r) { return r.json(); }).then(function(d) {
-          if (!d.times) return;
-          var fmt = function(t) {
-            if (!t) return '';
-            var d = new Date(t);
-            return (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-          };
-          var z = d.times;
-          var lines = [];
-          if (z.sunrise)  lines.push('🌅 זריחה: '  + fmt(z.sunrise));
-          if (z.sunset)   lines.push('🌇 שקיעה: '  + fmt(z.sunset));
-          if (z.tzeit_hakochavim) lines.push('✡ צאת כוכבים: ' + fmt(z.tzeit_hakochavim));
-          if (zmanim) zmanim.innerHTML = lines.join('<br>');
-        }).catch(function() {});
-      }, function() {}, { timeout: 5000 });
-    }
-  } catch(e) {}
+  window.hebCalMove=function(d){if(_off+d>=-12&&_off+d<=12){_off+=d;build();}};
+  build();
 })();
 
 // ══════════════════════════════════════════
