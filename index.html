@@ -7217,10 +7217,8 @@ function _loadSortOrder(page) {
     { keys: ['איגרת הרמב"ן', 'איגרת', 'רמב"ן', 'רמבן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'igeret_haramban', '✍️'); } },
     { keys: ['נשמת כל חי', 'נשמת'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'nishmat', '🌊'); } },
     { keys: ['בורא נפשות'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'borei_nefashot', '🍎'); } },
-    { keys: ['פרשת השבוע', 'פרשה', 'השבוע', 'פרשת'], action: function() {
-      var todayCard = document.getElementById('todayCardInner');
-      if (todayCard) todayCard.click();
-    }},
+    { keys: ['הפרשת חלה', 'חלה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'challah', '🥖'); } },
+    { keys: ['פרשת השבוע', 'פרשה', 'השבוע', 'פרשת'], action: function() { openParasha(); } },
     { keys: ['בבא סאלי', 'אבוחצירא', 'ישראל אבוחצירא'], action: function() { _openHilulaWithTzaddik('הבבא סאלי רבי ישראל אבוחצירא'); } },
     { keys: ['שמעון בר יוחאי', 'רשבי', 'בר יוחאי', 'לג בעומר'], action: function() { _openHilulaWithTzaddik('התנא הקדוש רבי שמעון בר יוחאי'); } },
     { keys: ['מאיר בעל הנס', 'רבי מאיר'], action: function() { _openHilulaWithTzaddik('התנא הקדוש רבי מאיר בעל הנס'); } },
