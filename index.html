@@ -833,10 +833,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
-    padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
     background: linear-gradient(180deg, #1a0e05 0%, #2e1a08 100%);
     border-bottom: 3px solid #8B6020;
     box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    margin-top: 4px;
   }
 
   .prayer-header::after {
@@ -1485,9 +1486,9 @@
     align-items: center;
   }
   .header-share-btn {
-    background: rgba(139,96,32,0.2);
-    border: 1px solid rgba(240,200,74,0.35);
-    color: #f0c84a;
+    background: #f5efe0;
+    border: 1px solid rgba(139,96,32,0.3);
+    color: #7a4e1a;
     width: 34px; height: 34px;
     border-radius: 50%;
     font-size: 15px;
@@ -1495,8 +1496,20 @@
     display: flex; align-items: center; justify-content: center;
     transition: background 0.2s;
     flex-shrink: 0;
+    animation: btnFloat 3s ease-in-out infinite;
   }
-  .header-share-btn:hover { background: rgba(139,96,32,0.4); }
+  .header-share-btn:nth-child(2) {
+    animation-delay: 0.6s;
+  }
+  .header-share-btn:hover { background: #ede3cc; }
+  @keyframes btnFloat {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-4px); }
+  }
+  #headerFavBtn {
+    color: #f5c800;
+    text-shadow: 0 0 4px rgba(180,120,0,0.6);
+  }
 
   .favs-section {
     position: relative;
@@ -3060,8 +3073,8 @@
   <div class="prayer-bg"></div>
   <div class="prayer-header">
     <div class="prayer-header-btns">
-      <button class="header-share-btn" onclick="sharePrayer()" title="שתף">⬆</button>
-      <button class="header-share-btn" id="headerFavBtn" onclick="toggleFavFromHeader()" title="מועדפים">☆</button>
+      <button class="header-share-btn" onclick="sharePrayer()" title="שתף">⬆️</button>
+      <button class="header-share-btn" id="headerFavBtn" onclick="toggleFavFromHeader()" title="מועדפים" style="font-size:18px;">☆</button>
     </div>
     <div class="prayer-header-title" id="prayerTitle"></div>
     <button class="close-btn" onclick="closePrayer()">✕</button>
@@ -5571,22 +5584,24 @@ function _getParashaByDate() {
 }
 
 const prayerMeta = {
-  tehilim_yomi: { icon: '📖', title: 'תהילים יומי' },
-  derech: { icon: '🗺️', title: 'תפילת הדרך' },
-  mazon: { icon: '🤲', title: 'ברכת המזון – נוסח ספרד' },
-  mazon_ashkenaz: { icon: '🤲', title: 'ברכת המזון – נוסח אשכנז' },
-  nishmat: { icon: '🌊', title: 'נשמת כל חי' },
-  borei_nefashot: { icon: '🍎', title: 'בורא נפשות' },
-  chayalim: { icon: '🪖', title: 'תפילה לחיילים' },
-  hilula: { icon: '🕯️', title: 'הדלקת נר בהילולא' },
-  roshchodesh: { icon: '🌙', title: 'נר ראש חודש' },
-  challah: { icon: '🥖', title: 'הפרשת חלה' },
-  shema: { icon: '📖', title: 'קריאת שמע' },
-  refua: { icon: '🩺', title: 'תפילה לרפואה' },
-  brachot: { icon: '🫒', title: 'ברכות הנהנין' },
-  modeh: { icon: '☀️', title: 'תפילת הבוקר' },
-  rachel: { icon: '🕯️', title: 'תפילת רחל אימנו' },
-  tikun: { icon: '📖', title: 'התיקון הכללי' }
+  tehilim_yomi:    { icon: '📖', title: 'תהילים יומי' },
+  derech:          { icon: '🗺️', title: 'תפילת הדרך' },
+  mazon:           { icon: '🤲', title: 'ברכת המזון – נוסח ספרד' },
+  mazon_ashkenaz:  { icon: '🤲', title: 'ברכת המזון – נוסח אשכנז' },
+  nishmat:         { icon: '🌊', title: 'נשמת כל חי' },
+  borei_nefashot:  { icon: '🍎', title: 'בורא נפשות' },
+  chayalim:        { icon: '🪖', title: 'תפילה לחיילים' },
+  hilula:          { icon: '🕯️', title: 'הדלקת נר בהילולא' },
+  roshchodesh:     { icon: '🌙', title: 'נר ראש חודש' },
+  challah:         { icon: '🥖', title: 'הפרשת חלה' },
+  shema:           { icon: '📖', title: 'קריאת שמע' },
+  refua:           { icon: '🩺', title: 'תפילה לרפואה' },
+  shabbat:         { icon: '🕯️', title: 'זמני שבת' },
+  brachot:         { icon: '🫒', title: 'ברכות הנהנין' },
+  modeh:           { icon: '☀️', title: 'תפילת הבוקר' },
+  rachel:          { icon: '🕯️', title: 'תפילת רחל אימנו' },
+  tikun:           { icon: '📖', title: 'התיקון הכללי' },
+  igeret_haramban: { icon: '✍️', title: 'איגרת הרמב"ן' },
 };
 
 // מטא לפרשות — נוצר דינמית
@@ -5621,8 +5636,10 @@ function updateFavBtn() {
   const btn = document.getElementById('headerFavBtn');
   if (!btn || !currentPrayerId) return;
   const isFav = favorites.includes(currentPrayerId);
-  btn.textContent = isFav ? '★' : '☆';
-  btn.style.color = isFav ? '#FFD700' : '';
+  btn.textContent = isFav ? '⭐' : '☆';
+  btn.style.fontSize = '18px';
+  btn.style.color = '#f5c800';
+  btn.style.textShadow = isFav ? '0 0 6px rgba(200,140,0,0.8)' : '0 0 4px rgba(180,120,0,0.6)';
 }
 
 function toggleFavFromHeader() {
@@ -5632,7 +5649,7 @@ function toggleFavFromHeader() {
 function openFavsModal() {
   const grid = document.getElementById('favsModalGrid');
   if (favorites.length === 0) {
-    grid.innerHTML = '<div class="favs-modal-empty">עדיין אין מועדפים<br><span style="font-size:12px;opacity:0.6">פתח תפילה ולחץ על ★ להוספה</span></div>';
+    grid.innerHTML = '<div class="favs-modal-empty">עדיין אין מועדפים<br><span style="font-size:12px;opacity:0.6">פתח תפילה ולחץ על ⭐ להוספה</span></div>';
   } else {
     grid.innerHTML = favorites.map(id => {
       const m = prayerMeta[id] || { icon: '📖', title: id };
