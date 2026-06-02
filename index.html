@@ -7433,11 +7433,21 @@ var _tehilimHebNums = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י',
   'קמא','קמב','קמג','קמד','קמה','קמו','קמז','קמח','קמט','קנ'];
 
 async function openTehilimYomi() {
-  var day     = new Date().getDate();
-  var idx     = Math.min(day, 30) - 1;
+  // תאריך עברי
+  var hDate  = getHebrewDayMonth();
+  var hebDay = hDate ? hDate.day : new Date().getDate();
+  var idx     = Math.min(hebDay, 30) - 1;
   var chapters = tehilimYomi[idx] || tehilimYomi[0];
-  var dayNum  = idx + 1;
-  var title   = 'תהילים יומי — יום ' + dayNum;
+  var dayNum  = hebDay;
+
+  // המרה לאותיות עבריות
+  var _hebLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+    'י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ',
+    'כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  var dayHeb = _hebLetters[dayNum - 1] || String(dayNum);
+
+  var dateStr = hDate ? dayHeb + ' ' + hDate.month : 'יום ' + dayHeb;
+  var title   = 'תהילים יומי — ' + dateStr;
 
   // פתח overlay עם ספינר
   if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'tehilim_yomi';
@@ -7486,7 +7496,7 @@ async function openTehilimYomi() {
 
   var html =
     '<span class="section-title">✦ תהילים יומי ✦</span>' +
-    '<span class="highlight" style="font-size:1.1em;">יום ' + dayNum + ' בחודש</span>' +
+    '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>' +
     '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">' +
     'פרקים ' + firstHeb + ' – ' + lastHeb + '</div>' +
     '<div class="ornament">✦ ✦ ✦</div>';
