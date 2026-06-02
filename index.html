@@ -1055,11 +1055,15 @@
     animation: heartbeat 1.2s ease-in-out infinite;
   }
   .month-btn.active {
-    background: rgba(100,20,10,0.28);
-    border: 2px solid #c0392b;
+    background: rgba(100,20,10,0.15);
+    border: 2px solid #e53935;
     color: #1a0000;
-    box-shadow: 0 0 10px rgba(192,57,43,0.35);
     font-weight: 700;
+    animation: monthFlash 1.3s ease-in-out infinite;
+  }
+  @keyframes monthFlash {
+    0%, 100% { border-color: #e53935; box-shadow: 0 0 8px rgba(229,57,53,0.8); }
+    50%       { border-color: rgba(229,57,53,0.2); box-shadow: none; }
   }
 
   @keyframes soldierPulse {
@@ -6313,7 +6317,7 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
   if ("serviceWorker" in navigator) {
     // iOS Safari 11.3+ supports service workers
     // Use a try-catch to handle any registration errors gracefully
-    navigator.serviceWorker.register("/service-worker.js").then(reg => {
+    navigator.serviceWorker.register("/or-hatfila---/service-worker.js").then(reg => {
       // בדיקה יזומה מול השרת בכל כניסה כדי למנוע הצגת קוד ישן מה-Cache
       reg.update();
       reg.addEventListener('updatefound', () => {
@@ -7718,6 +7722,101 @@ async function openTehilimYomi() {
   }
   if (typeof updateFavBtn === 'function') updateFavBtn();
 }
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+// PWA Install Prompt — אנדרואיד + iOS
+// ═══════════════════════════════════════════
+(function() {
+  // אל תציג אם כבר מותקן כ-PWA
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  // אל תציג אם כבר נדחה היום
+  try {
+    var dismissed = localStorage.getItem('pwa_dismissed');
+    if (dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 3600 * 1000) return;
+  } catch(e) {}
+
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var deferredPrompt = null;
+
+  // תפוס את אירוע ההתקנה של אנדרואיד
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  function showInstallModal() {
+    var modal = document.createElement('div');
+    modal.id = 'pwaModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;justify-content:center;direction:rtl;';
+
+    var iosInstructions = isIOS ? (
+      '<div style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:14px;margin-top:12px;font-size:13px;line-height:2;">' +
+      '<div style="font-weight:700;margin-bottom:6px;color:#F5D96B;">הוספה למסך הבית:</div>' +
+      '1. לחץ על כפתור השיתוף <span style="font-size:16px;">⬆️</span> בתחתית הדפדפן<br>' +
+      '2. גלול למטה ובחר <strong>"הוסף למסך הבית"</strong><br>' +
+      '3. לחץ <strong>"הוסף"</strong>' +
+      '</div>'
+    ) : '';
+
+    var installBtn = isAndroid ? (
+      '<button onclick="installPWA()" style="' +
+      'width:100%;padding:14px;background:linear-gradient(135deg,#c8941a,#F5D96B);' +
+      'border:none;border-radius:14px;font-family:\'Frank Ruhl Libre\',serif;' +
+      'font-size:17px;font-weight:700;color:#1a0e05;cursor:pointer;margin-top:12px;">'+
+      '📲 התקן עכשיו' +
+      '</button>'
+    ) : '';
+
+    modal.innerHTML =
+      '<div style="background:linear-gradient(170deg,#0d0a1e,#1a0e05);border:2px solid #F5D96B;' +
+      'border-radius:24px 24px 0 0;width:100%;max-width:500px;padding:24px 20px 36px;">' +
+      '<div style="width:40px;height:4px;background:rgba(212,175,55,0.3);border-radius:2px;margin:0 auto 20px;"></div>' +
+      '<div style="text-align:center;margin-bottom:16px;">' +
+      '<div style="font-size:48px;margin-bottom:8px;">🕍</div>' +
+      '<div style="font-family:\'Frank Ruhl Libre\',serif;font-size:22px;font-weight:900;color:#F5D96B;">אור התפילה</div>' +
+      '<div style="font-family:\'Heebo\',sans-serif;font-size:14px;color:rgba(255,255,255,0.7);margin-top:4px;">הוסף למסך הבית לגישה מהירה</div>' +
+      '</div>' +
+      iosInstructions +
+      installBtn +
+      '<button onclick="dismissPWA()" style="display:block;width:100%;margin-top:12px;padding:12px;' +
+      'background:transparent;border:1px solid rgba(212,175,55,0.25);border-radius:14px;' +
+      'color:rgba(212,175,55,0.6);font-family:\'Heebo\',sans-serif;font-size:14px;cursor:pointer;">' +
+      'לא עכשיו' +
+      '</button>' +
+      '</div>';
+
+    modal.addEventListener('click', function(e) { if (e.target === modal) dismissPWA(); });
+    document.body.appendChild(modal);
+  }
+
+  window.installPWA = function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function() {
+        deferredPrompt = null;
+        var m = document.getElementById('pwaModal');
+        if (m) m.remove();
+      });
+    } else {
+      // fallback — הצג הוראות ידניות
+      alert('לחץ על תפריט Chrome (3 נקודות) → "הוסף למסך הבית"');
+    }
+  };
+
+  window.dismissPWA = function() {
+    try { localStorage.setItem('pwa_dismissed', Date.now()); } catch(e) {}
+    var m = document.getElementById('pwaModal');
+    if (m) m.remove();
+  };
+
+  // הצג אחרי 3 שניות
+  if (isIOS || isAndroid) {
+    setTimeout(showInstallModal, 3000);
+  }
+})();
 </script>
 
 </body>
