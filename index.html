@@ -7307,6 +7307,10 @@ function _loadSortOrder(page) {
       btn.textContent = '🔴';
       showVoiceToast('מאזין...', null);
     };
+
+    var _autoTimer = null;
+    var _lastInterim = '';
+
     recognition.onresult = function(e) {
       var interim = '';
       var final = '';
@@ -7317,8 +7321,24 @@ function _loadSortOrder(page) {
           interim += e.results[i][0].transcript;
         }
       }
-      if (interim) showVoiceToast('🎙️ ' + interim, null);
+
+      if (interim) {
+        _lastInterim = interim;
+        showVoiceToast('🎙️ ' + interim, null);
+        // אפס טיימר — 1.5 שניות אחרי שמפסיקים לדבר
+        clearTimeout(_autoTimer);
+        _autoTimer = setTimeout(function() {
+          if (_lastInterim) {
+            recognition.stop();
+            handleVoiceResult(_lastInterim);
+            _lastInterim = '';
+          }
+        }, 1500);
+      }
+
       if (final) {
+        clearTimeout(_autoTimer);
+        _lastInterim = '';
         showVoiceToast('🎙️ ' + final, null);
         setTimeout(function() { handleVoiceResult(final); }, 300);
       }
