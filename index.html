@@ -496,6 +496,9 @@
     letter-spacing: 1px;
   }
 
+  @keyframes tehilimSpin {
+    to { transform: rotate(360deg); }
+  }
   @keyframes spin-slow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -2279,6 +2282,7 @@
     align-items: center;
     gap: 14px;
     padding: 10px 0 24px;
+    overflow: visible;
   }
   .bubble {
     width: 130px;
@@ -2303,6 +2307,19 @@
   .bubble-1 { animation: bubbleFloat 3.2s ease-in-out infinite; }
   .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
   .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
+  .bubble-4 {
+    animation: bubbleFloat 4.1s ease-in-out infinite 1.8s;
+    width: 65px;
+    height: 65px;
+    position: absolute;
+    right: -82px;
+    top: calc(50% - 32px);
+    font-size: 0.55em;
+  }
+  .bubble-2-wrapper {
+    position: relative;
+    margin-right: 75px;
+  }
   @keyframes bubbleFloat {
     0%, 100% { transform: translateY(0px); }
     50%       { transform: translateY(-10px); }
@@ -2645,9 +2662,15 @@
     <div class="bubble-icon">📜</div>
     <div class="bubble-label">תמצית<br>פרשת השבוע</div>
   </div>
-  <div class="bubble bubble-2" onclick="pressAndOpen(this, function(){ openCategoryPage('tefilot'); })">
-    <div class="bubble-icon">🙏</div>
-    <div class="bubble-label">תפילות</div>
+  <div class="bubble-2-wrapper">
+    <div class="bubble bubble-2" onclick="pressAndOpen(this, function(){ openCategoryPage('tefilot'); })">
+      <div class="bubble-icon">🙏</div>
+      <div class="bubble-label">תפילות</div>
+    </div>
+    <div class="bubble bubble-4" onclick="pressAndOpen(this, openTehilimYomi)">
+      <div class="bubble-icon">📖</div>
+      <div class="bubble-label">תהילים<br>יומי</div>
+    </div>
   </div>
   <div class="bubble bubble-3" onclick="pressAndOpen(this, function(){ openCategoryPage('hadlaka'); })">
     <div class="bubble-icon">🕯️</div>
@@ -7355,6 +7378,156 @@ function _loadSortOrder(page) {
     recognition.start();
   };
 })();
+
+// ═══════════════════════════════════════════════════
+// תהילים יומי — חלוקה ל-30 יום + fetch מ-Sefaria
+// ═══════════════════════════════════════════════════
+var tehilimYomi = [
+  /* יום  1 */ [1,2,3,4,5,6,7,8,9],
+  /* יום  2 */ [10,11,12,13,14,15,16,17],
+  /* יום  3 */ [18,19,20,21,22,23],
+  /* יום  4 */ [24,25,26,27,28,29,30],
+  /* יום  5 */ [31,32,33,34,35],
+  /* יום  6 */ [36,37,38,39,40,41],
+  /* יום  7 */ [42,43,44,45,46,47,48,49,50],
+  /* יום  8 */ [51,52,53,54,55,56,57,58,59,60],
+  /* יום  9 */ [61,62,63,64,65,66,67,68],
+  /* יום 10 */ [69,70,71],
+  /* יום 11 */ [72,73,74,75,76,77],
+  /* יום 12 */ [78,79,80,81,82],
+  /* יום 13 */ [83,84,85,86,87,88],
+  /* יום 14 */ [89,90,91],
+  /* יום 15 */ [92,93,94,95,96,97,98,99,100],
+  /* יום 16 */ [101,102,103],
+  /* יום 17 */ [104,105],
+  /* יום 18 */ [106,107],
+  /* יום 19 */ [108,109,110,111,112,113,114,115,116,117,118],
+  /* יום 20 */ [119],
+  /* יום 21 */ [120,121,122,123,124,125,126,127,128,129,130,131,132,133,134],
+  /* יום 22 */ [135,136,137,138,139,140,141,142],
+  /* יום 23 */ [143,144,145,146,147,148,149,150],
+  /* יום 24 */ [1,2,3,4,5,6,7,8,9],
+  /* יום 25 */ [10,11,12,13,14,15,16,17],
+  /* יום 26 */ [18,19,20,21,22,23],
+  /* יום 27 */ [24,25,26,27,28,29,30],
+  /* יום 28 */ [31,32,33,34,35],
+  /* יום 29 */ [36,37,38,39,40,41],
+  /* יום 30 */ [42,43,44,45,46,47,48,49,50],
+];
+
+var _tehilimCache = {};
+var _tehilimHebNums = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+  'יא','יב','יג','יד','טו','טז','יז','יח','יט','כ',
+  'כא','כב','כג','כד','כה','כו','כז','כח','כט','ל',
+  'לא','לב','לג','לד','לה','לו','לז','לח','לט','מ',
+  'מא','מב','מג','מד','מה','מו','מז','מח','מט','נ',
+  'נא','נב','נג','נד','נה','נו','נז','נח','נט','ס',
+  'סא','סב','סג','סד','סה','סו','סז','סח','סט','ע',
+  'עא','עב','עג','עד','עה','עו','עז','עח','עט','פ',
+  'פא','פב','פג','פד','פה','פו','פז','פח','פט','צ',
+  'צא','צב','צג','צד','צה','צו','צז','צח','צט','ק',
+  'קא','קב','קג','קד','קה','קו','קז','קח','קט','קי',
+  'קיא','קיב','קיג','קיד','קטו','קטז','קיז','קיח','קיט','קכ',
+  'קכא','קכב','קכג','קכד','קכה','קכו','קכז','קכח','קכט','קל',
+  'קלא','קלב','קלג','קלד','קלה','קלו','קלז','קלח','קלט','קמ',
+  'קמא','קמב','קמג','קמד','קמה','קמו','קמז','קמח','קמט','קנ'];
+
+async function openTehilimYomi() {
+  var day     = new Date().getDate();
+  var idx     = Math.min(day, 30) - 1;
+  var chapters = tehilimYomi[idx] || tehilimYomi[0];
+  var dayNum  = idx + 1;
+  var title   = 'תהילים יומי — יום ' + dayNum;
+
+  // פתח overlay עם ספינר
+  if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'tehilim_yomi';
+  history.pushState({ prayer: 'tehilim_yomi' }, '');
+  document.getElementById('prayerTitle').textContent = title;
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(212,175,55,0.2);' +
+    'border-top-color:rgba(212,175,55,0.9);border-radius:50%;' +
+    'animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(212,175,55,0.85);' +
+    'font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען תהילים...</div>' +
+    '</div>';
+
+  var overlay = document.getElementById('prayerOverlay');
+  var vh = window.innerHeight;
+  overlay.style.height = vh + 'px';
+  overlay.style.top = overlay.style.left = overlay.style.right = '0';
+  overlay.style.width = '100%';
+  overlay.classList.add('active');
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+
+  var scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
+  document.body.dataset.prayerScrollY = scrollY;
+
+  // fetch מקביל מ-Sefaria לכל פרקי היום
+  var results = await Promise.all(chapters.map(async function(n) {
+    if (_tehilimCache[n]) return { n: n, verses: _tehilimCache[n] };
+    try {
+      var r = await fetch('https://www.sefaria.org/api/texts/Psalms.' + n + '?lang=he&stripItags=1');
+      var d = await r.json();
+      var verses = Array.isArray(d.he) ? d.he : [];
+      _tehilimCache[n] = verses;
+      return { n: n, verses: verses };
+    } catch(e) {
+      return { n: n, verses: null };
+    }
+  }));
+
+  // בנה HTML בסגנון האפליקציה
+  var firstHeb = _tehilimHebNums[chapters[0]] || chapters[0];
+  var lastHeb  = _tehilimHebNums[chapters[chapters.length - 1]] || chapters[chapters.length - 1];
+
+  var html =
+    '<span class="section-title">✦ תהילים יומי ✦</span>' +
+    '<span class="highlight" style="font-size:1.1em;">יום ' + dayNum + ' בחודש</span>' +
+    '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">' +
+    'פרקים ' + firstHeb + ' – ' + lastHeb + '</div>' +
+    '<div class="ornament">✦ ✦ ✦</div>';
+
+  results.forEach(function(res, i) {
+    var hebNum = _tehilimHebNums[res.n] || res.n;
+    html += '<div style="margin:0 0 20px 0;direction:rtl;">';
+    html += '<div style="text-align:center;font-family:\'Frank Ruhl Libre\',serif;' +
+            'font-size:1.05em;font-weight:700;color:#7a3e10;margin-bottom:10px;">פרק ' + hebNum + '</div>';
+    if (res.verses && res.verses.length > 0) {
+      html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;' +
+              'text-align:right;direction:rtl;">';
+      res.verses.forEach(function(v) { html += v + ' '; });
+      html += '</div>';
+    } else {
+      html += '<div style="text-align:center;color:rgba(212,175,55,0.5);font-size:0.9em;">' +
+              'לא ניתן לטעון פרק זה</div>';
+    }
+    html += '</div>';
+    if (i < results.length - 1) {
+      html += '<div class="ornament" style="margin:4px 0 20px 0;">✦ ✦ ✦</div>';
+    }
+  });
+
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+
+  setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
+  setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
+
+  var controls = document.getElementById('scrollControls');
+  if (controls) {
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
+    if (typeof stopAutoScroll === 'function') stopAutoScroll();
+  }
+  if (typeof updateFavBtn === 'function') updateFavBtn();
+}
 </script>
 
 </body>
