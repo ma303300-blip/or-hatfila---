@@ -260,7 +260,6 @@
     padding: 24px 22px calc(40px + env(safe-area-inset-bottom, 0px));
     max-height: 80vh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
     direction: rtl;
@@ -401,7 +400,6 @@
     direction: rtl;
     max-height: 70vh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
   .favs-modal-overlay.active .favs-modal {
@@ -813,6 +811,8 @@
     /* Force full coverage on iOS */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    overscroll-behavior: none;
+    background: #1a0e05;
   }
 
   .prayer-overlay.active {
@@ -883,8 +883,7 @@
     overflow-x: hidden;
     padding: 16px 16px 50px;
     padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    overscroll-behavior: none;
     background: #1a0e05;
   }
 
@@ -901,6 +900,7 @@
       0 0 0 8px rgba(180,130,20,0.3);
     padding: 44px 28px 50px;
     min-height: 100%;
+    box-sizing: border-box;
   }
 
   /* Outer decorative border line */
@@ -2330,7 +2330,10 @@
     right: -82px;
     top: calc(50% - 32px);
     font-size: 0.55em;
+    overflow: visible;
   }
+  .bubble-4 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
+  .bubble-4 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-2-wrapper {
     position: relative;
     margin-right: 75px;
@@ -2433,7 +2436,6 @@
     z-index: 50;
     overflow-y: auto;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     will-change: transform;
@@ -4486,7 +4488,7 @@ const prayers = {
 
       קוּמִי אִמִּי רָחֵל וּמְסָרִי תְּפִלָּתִי לְאֵל חַי,<br>
       אֲדוֹן הָאֲדוֹנִים, מֶלֶךְ הַמְּלָכִים,<br>
-      וּתְשַׂמְּחִינִי נָא וְתָאִירִי לִי אוֹר תִּפְקִדְּתִי,<br>
+      וּתְשַׂמְּחִינִי נָא וְתָאִירִי לִי אוֹר תְּפִלָּתִי,<br>
       יְשׁוּעָתִי וְשׁוּעָתִי אֵלָיו יִתְבָּרַךְ, אֵל מֶלֶךְ חַי,<br><br>
 
       <span class="highlight">בָּאָמְרִי: שְׁמַע יִשְׂרָאֵל ה' אֱלֹהֵינוּ ה' אֶחָד,<br>אָמֵן וְאָמֵן!</span>
@@ -5482,6 +5484,7 @@ const parashaNameMap = {
 var _currentParashaKey = null;
 
 async function openParasha() {
+  pausePage();
   _currentParashaKey = null;
 
   function stripNik(s) {
@@ -6304,6 +6307,7 @@ function pausePage() {
   clearInterval(_hilulaInterval);
   clearInterval(_roshChodeshInterval);
   clearInterval(_dateInterval);
+  if (window._shabbatCheckIntervalRef) clearInterval(window._shabbatCheckIntervalRef);
 }
 
 // חידוש כל הפונקציות בחזרה לדף
@@ -6312,6 +6316,11 @@ function resumePage() {
   _roshChodeshInterval = setInterval(checkRoshChodesh, 3600000);
   _dateInterval = setInterval(updateDateDisplay, 60000);
   updateDateDisplay();
+  if (window._shabbatCheckIntervalRef) {
+    window._shabbatCheckIntervalRef = setInterval(function() {
+      if (typeof updateShabbatScreen === 'function') updateShabbatScreen();
+    }, 60000);
+  }
 }
 
 // לוח שנה עברי
@@ -7231,7 +7240,7 @@ function _loadSortOrder(page) {
   initShabbatCheck();
 
   // בדיקה חוזרת כל דקה (לעדכון ה-countdown ולסגירה בצאת שבת)
-  _shabbatCheckInterval = setInterval(function() {
+  window._shabbatCheckIntervalRef = setInterval(function() {
     if (_shabbatTimes) {
       updateShabbatScreen();
     } else {
@@ -7457,6 +7466,7 @@ var _tehilimHebNums = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י',
   'קמא','קמב','קמג','קמד','קמה','קמו','קמז','קמח','קמט','קנ'];
 
 async function openTehilimYomi() {
+  pausePage();
   // תאריך עברי
   var hDate  = getHebrewDayMonth();
   var hebDay = hDate ? hDate.day : new Date().getDate();
