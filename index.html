@@ -2900,7 +2900,6 @@
         </div>
       </div>
     </div>
-    </div>
   </div>
 </div>
 
@@ -5572,6 +5571,7 @@ function _getParashaByDate() {
 }
 
 const prayerMeta = {
+  tehilim_yomi: { icon: '📖', title: 'תהילים יומי' },
   derech: { icon: '🗺️', title: 'תפילת הדרך' },
   mazon: { icon: '🤲', title: 'ברכת המזון – נוסח ספרד' },
   mazon_ashkenaz: { icon: '🤲', title: 'ברכת המזון – נוסח אשכנז' },
@@ -5841,6 +5841,10 @@ updateFhbCount();
       } catch(e) {}
     }
     setTimeout(() => openPrayerWithBurst({ currentTarget: document.body }, pid, prayerMeta[pid]?.icon || '📖'), 400);
+  }
+  // deep link לתהילים יומי
+  if (pid === 'tehilim_yomi') {
+    setTimeout(() => openTehilimYomi(), 400);
   }
 })();
 
@@ -7232,6 +7236,7 @@ function _loadSortOrder(page) {
   var listening = false;
 
   var voiceMap = [
+    { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
     { keys: ['חיילים', 'חייל', 'צבא', 'צה"ל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'chayalim', '🪖'); } },
     { keys: ['אשכנז', 'אשכנזי'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon_ashkenaz', '🤲'); }, 600); } },
     { keys: ['עדות המזרח', 'ספרד', 'מזרח'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon', '🤲'); }, 600); } },
