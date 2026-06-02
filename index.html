@@ -1509,6 +1509,8 @@
   #headerFavBtn {
     color: #f5c800;
     text-shadow: 0 0 4px rgba(180,120,0,0.6);
+    border: 1px solid rgba(139,96,32,0.3) !important;
+    -webkit-text-stroke: 1.5px #7a3e10;
   }
 
   .favs-section {
@@ -5573,9 +5575,9 @@ function _getParashaByDate() {
   const nextSat = new Date(now);
   nextSat.setDate(now.getDate() + daysToSat);
 
-  // תחילת מחזור תשפ"ו — שבת בראשית: 4 אוקטובר 2025
+  // תחילת מחזור תשפ"ו — שמחת תורה: 27 ספטמבר 2025
   // T12:00:00 מונע בעיות timezone (UTC vs ישראל)
-  const cycleStart = new Date('2025-10-04T12:00:00');
+  const cycleStart = new Date('2025-09-27T12:00:00');
   nextSat.setHours(12, 0, 0, 0); // אחיד
 
   const weeksSince = Math.floor((nextSat - cycleStart) / (7 * 24 * 3600 * 1000));
