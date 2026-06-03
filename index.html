@@ -5288,7 +5288,7 @@ window.addEventListener('popstate', function(e) {
   }
   
   var prayerOverlay = document.getElementById('prayerOverlay');
-  if (prayerOverlay && (prayerOverlay.classList.contains('active') || prayerOverlay.dataset.zoomActive === '1')) {
+  if (prayerOverlay && (prayerOverlay.classList.contains('active') || prayerOverlay.classList.contains('zoom-in'))) {
     closePrayer();
     history.pushState({ page: 'main' }, '');
     return;
@@ -5327,7 +5327,7 @@ document.addEventListener('backbutton', function(e) {
   const tefilotPage = document.getElementById('categoryTefilot');
   const hadlakaPage = document.getElementById('categoryHadlaka');
 
-  if (overlay && (overlay.classList.contains('active') || overlay.dataset.zoomActive === '1')) {
+  if (overlay && (overlay.classList.contains('active') || overlay.classList.contains('zoom-in'))) {
     closePrayer();
   } else if (mazonPage && mazonPage.classList.contains('active')) {
     closeMazonSelector();
@@ -6339,14 +6339,12 @@ function openPrayer(id) {
   var useZoom = zoomPrayers.indexOf(id) !== -1;
 
   if (useZoom) {
-    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;transform:scale(0);opacity:0;transform-origin:center center;pointer-events:all;';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
     overlay.style.height = vh + 'px';
-    overlay.dataset.zoomActive = '1';
+    overlay.classList.remove('active');
+    overlay.classList.add('zoom-in');
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
-        overlay.style.transition = 'transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease';
-        overlay.style.transform = 'scale(1)';
-        overlay.style.opacity = '1';
         overlay.classList.add('active');
       });
     });
@@ -7803,15 +7801,14 @@ async function openTehilimYomi() {
 
   var overlay = document.getElementById('prayerOverlay');
   var vh = window.innerHeight;
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;transform:scale(0);opacity:0;transform-origin:center center;';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
   overlay.style.height = vh + 'px';
-  overlay.classList.add('active');
+  overlay.classList.remove('active');
+  overlay.classList.add('zoom-in');
   overlay.querySelector('.prayer-content').scrollTop = 0;
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      overlay.style.transition = 'transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease';
-      overlay.style.transform = 'scale(1)';
-      overlay.style.opacity = '1';
+      overlay.classList.add('active');
     });
   });
 
