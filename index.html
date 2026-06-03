@@ -621,6 +621,9 @@
   .banner:nth-child(4) { animation-delay: 0.4s; }
   .banner:nth-child(5) { animation-delay: 0.2s; }
 
+  /* בתוך דפי קטגוריה — בלי אנימציית כניסה חוזרת */
+  .category-page .banner { animation: none; }
+
   @keyframes iconBurst {
     0%   { transform: scale(1);    opacity: 1; }
     40%  { transform: scale(3.5);  opacity: 0.7; }
@@ -2533,7 +2536,9 @@
   /* ═══════════════════════════════════
   ═══════════════════════════════════ */
   .category-page {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
     position: fixed;
     inset: 0;
     z-index: 50;
@@ -2551,9 +2556,12 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: scroll;
+    transition: opacity 0.25s ease;
   }
   .category-page.active {
-    display: block;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
   }
   .category-page::before { display: none; }
   .category-page::after  { display: none; }
@@ -3073,7 +3081,8 @@
       <div class="category-title">🤲 ברכת המזון</div>
     </div>
     <div class="banners" id="bannersMazon">
-      <div class="banner banner-2" onclick="openPrayerWithBurst(event, 'mazon', '🤲')">
+      <div class="banner banner-2" data-prayer-id="mazon" data-page="mazon" onclick="openPrayerWithBurst(event, 'mazon', '🤲')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
@@ -3081,7 +3090,8 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-14" onclick="openPrayerWithBurst(event, 'mazon_ashkenaz', '🤲')">
+      <div class="banner banner-14" data-prayer-id="mazon_ashkenaz" data-page="mazon" onclick="openPrayerWithBurst(event, 'mazon_ashkenaz', '🤲')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
@@ -3089,11 +3099,21 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-16" onclick="openPrayerWithBurst(event, 'borei_nefashot', '🍎')">
+      <div class="banner banner-16" data-prayer-id="borei_nefashot" data-page="mazon" onclick="openPrayerWithBurst(event, 'borei_nefashot', '🍎')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🍎</span>
           <div class="banner-title">בורא נפשות</div>
           <div class="banner-subtitle">ברכה אחרונה על פירות ושתייה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-9" data-prayer-id="brachot" data-page="mazon" onclick="openPrayerWithBurst(event, 'brachot', '🫒')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🫒</span>
+          <div class="banner-title">ברכות הנהנין</div>
+          <div class="banner-subtitle">ברכות ראשונות ואחרונות על כל מאכל</div>
           <span class="banner-arrow">◀</span>
         </div>
       </div>
@@ -5376,6 +5396,8 @@ function pressAndOpen(el, callback) {
 }
 
 function openPrayerWithBurst(e, id, icon) {
+  // אל תפתח תפילה אם הקליק בא מעיגול מיון
+  if (e && e.target && e.target.classList.contains('banner-sort-circle')) return;
   
   const burst = document.createElement('div');
   burst.className = 'icon-burst';
@@ -6641,7 +6663,6 @@ function closePrayer() {
   var overlay = document.getElementById('prayerOverlay');
   overlay.classList.remove('active');
   overlay.classList.remove('zoom-in');
-  overlay.dataset.zoomActive = '';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
   resumePage();
   stopAutoScroll();
@@ -7403,7 +7424,7 @@ window.addEventListener('resize', function() {
 // דפי קטגוריה + מספור באנרים
 // ═══════════════════════════════════════════════════════
 
-var _currentSortPage = null;   // 'tefilot' | 'hadlaka'
+var _currentSortPage = null;   // 'tefilot' | 'hadlaka' | 'mazon'
 var _sortCounter = {};         // { pageId: currentNumber }
 var _sortMap = {};             // { pageId: { prayerId: number } }
 
@@ -7436,6 +7457,11 @@ function openMazonSelector(e) {
   if (e) e.stopPropagation();
   var pageEl = document.getElementById('categoryMazon');
   if (!pageEl) return;
+  // סגור דף תפילות אם פתוח
+  var tefilotPage = document.getElementById('categoryTefilot');
+  if (tefilotPage && tefilotPage.classList.contains('active')) {
+    tefilotPage.classList.remove('active');
+  }
   pausePage();
   history.pushState({ page: 'mazon' }, '');
   var vh = window.innerHeight;
@@ -7569,6 +7595,7 @@ function closeCategoryPage(pageId) {
 // לחיצה על עיגול המספור
 function handleSortClick(e, circleEl) {
   e.stopPropagation();
+  e.preventDefault();
   var bannerEl = circleEl.closest('.banner');
   if (!bannerEl) return;
   var page = bannerEl.getAttribute('data-page');
@@ -7614,7 +7641,7 @@ function applySortOrder() {
   var page = btn ? btn.getAttribute('data-sort-page') : _currentSortPage;
   if (!page || !_sortMap[page]) return;
 
-  var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+  var containerId = page === 'tefilot' ? 'bannersTefilot' : page === 'mazon' ? 'bannersMazon' : 'bannersHadlaka';
   var container = document.getElementById(containerId);
   if (!container) return;
 
@@ -7651,7 +7678,7 @@ function _cancelSort(page) {
   _sortCounter[page] = 0;
   _sortMap[page] = {};
   _currentSortPage = null;
-  var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+  var containerId = page === 'tefilot' ? 'bannersTefilot' : page === 'mazon' ? 'bannersMazon' : 'bannersHadlaka';
   var container = document.getElementById(containerId);
   if (container) {
     container.querySelectorAll('.banner-sort-circle').forEach(function(c) {
@@ -7669,7 +7696,7 @@ function _loadSortOrder(page) {
     var saved = localStorage.getItem('orHatfila_sort_' + page);
     if (!saved) return;
     var order = JSON.parse(saved);
-    var containerId = page === 'tefilot' ? 'bannersTefilot' : 'bannersHadlaka';
+    var containerId = page === 'tefilot' ? 'bannersTefilot' : page === 'mazon' ? 'bannersMazon' : 'bannersHadlaka';
     var container = document.getElementById(containerId);
     if (!container) return;
     order.forEach(function(pid) {
