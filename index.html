@@ -177,7 +177,7 @@
   .legal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(128,128,128,0.75);
     z-index: 500;
     display: flex;
     align-items: flex-end;
@@ -252,9 +252,9 @@
   }
   .reminder-close:active { background: rgba(212,175,55,0.4); }
   .legal-modal {
-    background: rgba(13, 16, 51, 0.95);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 24px 24px 0 0;
+    background: rgba(128,128,128,0.5);
+    border: 2px solid #B8860B;
+    box-shadow: 0 0 20px rgba(184,134,11,0.5), inset 0 0 0 1px rgba(212,175,55,0.15);
     width: 100%;
     max-width: 600px;
     padding: 24px 22px calc(40px + env(safe-area-inset-bottom, 0px));
@@ -6286,7 +6286,7 @@ function getHebrewMonth() {
       { keys: ['אייר','באייר'], name: 'אִיָּר', label: 'אִיָּר' },
       { keys: ['סיון','בסיון','סיוון','בסיוון'], name: 'סִיוָן', label: 'סִיוָן' },
       { keys: ['תמוז','בתמוז'], name: 'תַּמּוּז', label: 'תַּמּוּז' },
-      { keys: ['באב',' אב ','באב'], name: 'אָב', label: 'אָב' },
+      { keys: ['באב',' אב '], name: 'אָב', label: 'אָב' },
       { keys: ['אלול','באלול'], name: 'אֱלוּל', label: 'אֱלוּל' }
     ];
 
@@ -7591,7 +7591,7 @@ function _loadSortOrder(page) {
     { keys: ['רפואה', 'מי שברך', 'חולה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'refua', '🩺'); } },
     { keys: ['ברכות', 'ברכת הנהנין'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'brachot', '🫒'); } },
     { keys: ['מודה אני', 'מודה', 'בוקר'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'modeh', '☀️'); } },
-    { keys: ['תיקון כללי', 'תיקון', 'נחמן'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'tikun', '📖'); } },
+    { keys: ['תיקון כללי', 'תיקון'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'tikun', '📖'); } },
     { keys: ['ראש חודש'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'roshchodesh', '🌙'); } },
     { keys: ['תפילת הדרך', 'הדרך', 'נסיעה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'derech', '🗺️'); } },
     { keys: ['תפילות'], action: function() { openCategoryPage('tefilot'); } },
@@ -7698,7 +7698,7 @@ function _loadSortOrder(page) {
       if (final) {
         clearTimeout(_autoTimer);
         _lastInterim = '';
-        showVoiceToast('🎙️ ' + final, null);
+        recognition.stop();
         setTimeout(function() { handleVoiceResult(final); }, 300);
       }
     };
