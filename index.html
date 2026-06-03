@@ -777,6 +777,18 @@
   }
   .banner-16:hover { box-shadow: 0 20px 60px rgba(160,30,80,0.55); }
 
+  .banner-17 .banner-inner {
+    background: linear-gradient(135deg, rgba(10,50,40,0.42) 0%, rgba(20,90,70,0.38) 40%, rgba(5,35,28,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(20,120,90,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-17:hover { box-shadow: 0 20px 60px rgba(20,120,90,0.55); }
+
+  .banner-18 .banner-inner {
+    background: linear-gradient(135deg, rgba(50,10,50,0.42) 0%, rgba(90,20,90,0.38) 40%, rgba(35,5,35,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(120,20,120,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-18:hover { box-shadow: 0 20px 60px rgba(120,20,120,0.55); }
+
   .banner-arrow {
     position: absolute;
     left: 20px;
@@ -3016,6 +3028,24 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
+      <div class="banner banner-17" data-prayer-id="shalom_bayit" data-page="tefilot" onclick="openPrayerWithBurst(event, 'shalom_bayit', '🕊️')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">🕊️</span>
+          <div class="banner-title">תפילה לשלום בית</div>
+          <div class="banner-subtitle">תפילה לאהבה ואחווה בין בני הזוג</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
+      <div class="banner banner-18" data-prayer-id="zivug" data-page="tefilot" onclick="openPrayerWithBurst(event, 'zivug', '💍')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">💍</span>
+          <div class="banner-title">תפילה למציאת זיווג</div>
+          <div class="banner-subtitle">תפילה לזכות בבן/בת זוג הגון</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -4889,6 +4919,138 @@ const prayers = {
       <span class="highlight">אָמֵן נֶצַח סֶלָה וָעֶד:</span>
     `
   },
+  zivug: {
+    title: "תפילה למציאת זיווג",
+    body: `
+      <div class="candle-container"><span class="flame">💍</span></div>
+
+      <span class="section-title">✦ תפילה למציאת זיווג ✦</span>
+
+      יְהִי רָצוֹן מִלְּפָנֶיךָ, יְיָ אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי,<br>
+      שֶׁתַּמְצִיא לִי בְּרַחֲמֶיךָ הָרַבִּים<br>
+      וּבַחֲסָדֶיךָ הַגְּדוֹלִים<br>
+      אֶת זִוּוּגִי הָרָאוּי לִי בִּזְמַנּוֹ.<br><br>
+
+      זִוּוּג הָגוּן הָרָאוּי לְהוֹלִיד תַּלְמִיד חָכָם,<br>
+      גָּדוֹל בְּתוֹרָה וּבְיִרְאָה,<br>
+      מִזֶּרַע צַדִּיקִים וְאַנְשֵׁי אֱמֶת וִירְאֵי חֵטְא,<br>
+      כְּמוֹ שֶׁהִמְצֵאתָ זִוּוּגוֹ שֶׁל אָדָם הָרִאשׁוֹן,<br>
+      לְאַבְרָהָם וְיִצְחָק וְיַעֲקֹב וּמֹשֶׁה,<br>
+      כָּל אֶחָד וְאֶחָד זִוּוּגוֹ בְּעִתּוֹ וּבִזְמַנּוֹ.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וְאוֹתוֹ אִישׁ שֶׁתַּמְצִיא לִי לְזִוּוּגִי יְהֵא:<br>
+      אִישׁ טוֹב, אִישׁ נָאֶה בְּמַעֲשָׂיו וְנָאֶה בְּמַרְאֵהוּ,<br>
+      בַּעַל מַעֲשִׂים טוֹבִים, בַּעַל חֵן,<br>
+      אִישׁ מַשְׂכִּיל וִירֵא אֱלֹהִים,<br>
+      רוֹדֵף צְדָקָה וְגוֹמֵל חֶסֶד.<br><br>
+
+      וְלֹא יְהֵא בּוֹ שׁוּם שֶׁמֶץ פְּסוּל וּמוּם וּפְגָם.<br>
+      וְלֹא יְהֵא כַּעֲסָן וְרַגְזָן,<br>
+      רַק יְהֵא בַּעַל עֲנָוָה וּנְמִיכוּת רוּחַ, בָּרִיא וּבַעַל כֹּחַ.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וְאַל יְעַכֵּב אַכְזָרִיּוּת הַבְּרִיּוֹת<br>
+      וְשׂוֹנְאִים וּמַחְשְׁבוֹתֵיהֶם וְתַחְבּוּלוֹתֵיהֶם וּמוֹעֲצוֹתֵיהֶם,<br>
+      לְעַכֵּב אֶת בֶּן זוּגִי הַהוּכַן לִי.<br><br>
+
+      וִיקֻיָּם בִּי מִקְרָא שֶׁכָּתוּב:<br>
+      לֹא יָנוּחַ שֵׁבֶט הָרֶשַׁע עַל גּוֹרַל הַצַּדִּיקִים,<br>
+      וּמִקְרָא שֶׁכָּתוּב:<br>
+      אֶשְׁתְּךָ כְּגֶפֶן פֹּרִיָּה בְּיַרְכְּתֵי בֵּיתֶךָ,<br>
+      בָּנֶיךָ כִּשְׁתִּילֵי זֵיתִים סָבִיב לְשֻׁלְחָנֶךָ.<br><br>
+
+      כִּי אַתָּה הוּא הַמּוֹשִׁיב יְחִידִים בַּיְתָה<br>
+      מוֹצִיא אֲסִירִים בַּכּוֹשָׁרוֹת.<br>
+      <span class="highlight">יִהְיוּ לְרָצוֹן אִמְרֵי פִי<br>
+      וְהֶגְיוֹן לִבִּי לְפָנֶיךָ,<br>
+      יְיָ צוּרִי וְגוֹאֲלִי.<br>
+      אָמֵן.</span>
+    `
+  },
+  shalom_bayit: {
+    title: "תפילה לשלום בית",
+    body: `
+      <div class="candle-container"><span class="flame">🕊️</span></div>
+
+      <span class="section-title">✦ שמות בני הזוג ✦</span>
+      <label style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;margin-bottom:4px;direction:rtl;">שם האישה בת שם האם</label>
+      <input type="text" class="refua-name-input" id="shalomWifeInput"
+        placeholder="למשל: שרה בת רבקה"
+        oninput="updateShalomBayit()" />
+      <label style="color:#7a3e10;font-family:'Heebo',sans-serif;font-size:13px;display:block;margin:8px 0 4px;direction:rtl;">שם הבעל בן שם האם</label>
+      <input type="text" class="refua-name-input" id="shalomHusbandInput"
+        placeholder="למשל: יעקב בן לאה"
+        oninput="updateShalomBayit()" />
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <span class="section-title">✦ תפילה לשלום בית ✦</span>
+
+      יְהִי רָצוֹן מִלְּפָנֶיךָ יְיָ אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ אֲדוֹן הַשָּׁלוֹם מֶלֶךְ שֶׁהַשָּׁלוֹם שֶׁלּוֹ,<br>
+      שֶׁתַּשְׁרֶה אַהֲבָה וְאַחְוָה, שָׁלוֹם וְרֵעוּת<br>
+      בֵּינִי (<span class="highlight" id="shalomWifeDisplay">______</span>)<br>
+      לְבֵין בַּעְלִי (<span class="highlight" id="shalomHusbandDisplay">______</span>)<br>
+      מֵעַתָּה וְעַד עוֹלָם.<br><br>
+
+      וְהוֹשִׁיעֵנוּ מְהֵרָה לְמַעַן שְׁמֶךָ<br>
+      וְהָגֵּן בַּעֲדֵנוּ וְתַצִּילֵנוּ מִכָּל אָדָם רַע וּמִכָּל צַר וּמַזִּיק,<br>
+      וְכָל הַיּוֹעֵץ עָלֵינוּ וְעַל עַמְּךָ בֵּית יִשְׂרָאֵל<br>
+      עֵצָה שֶׁאֵינָהּ טוֹבָה וּמַחְשָׁבָה שֶׁאֵינָהּ טוֹבָה<br>
+      הָפֵר וּבַטֵּל עֲצָתוֹ<br>
+      כַּדִּכְתִּיב: עֻצוּ עֵצָה וְתֻפָר, דַּבְּרוּ דָבָר וְלֹא יָקוּם, כִּי עִמָּנוּ אֵל.<br><br>
+
+      וְהָסֵר מֵאִתָּנוּ כָּל מַחְלֹקֶת, קִנְאָה, שִׂנְאָה וְתַחֲרוּת<br>
+      וּבַעֲבוּר שִׁמְךָ אֵל שַׁדַּי<br>
+      בַּטֵּל מֵעָלֵינוּ כָּל מַשְׂטִינִים וּמְקַטְרְגִים,<br>
+      בֵּין לְמַעְלָה בֵּין לְמַטָּה,<br>
+      וְלֹא יִהְיֶה בָּהֶם כֹּחַ לְהַשְׂטִין וּלְקַטְרֵג עָלֵינוּ.<br>
+      וּתְצַוֶּה לְמַלְאָכֶיךָ לַעְזֹר לָנוּ וּלְסַיְּעֵנוּ<br>
+      כַּדִּכְתִּיב: לֹא תְאֻנֶּה אֵלֶיךָ רָעָה<br>
+      וְנֶגַע לֹא יִקְרַב בְּאָהֳלֶךָ,<br>
+      כִּי מַלְאָכָיו יְצַוֶּה לָּךְ לִשְׁמָרְךָ בְּכָל דְּרָכֶיךָ.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      אָנָּא יְיָ אֵל רַחוּם וְחַנּוּן<br>
+      אֶרֶךְ אַפַּיִם וְרַב חֶסֶד וֶאֱמֶת<br>
+      יוֹצֵר אוֹר וּבוֹרֵא חֹשֶׁךְ, עֹשֶׂה שָׁלוֹם וּבוֹרֵא אֶת הַכֹּל,<br>
+      אַל יִהְיוּ עֲוֹנוֹתֵינוּ מוֹנְעִים הַטּוֹב מֵאִתָּנוּ,<br>
+      וְתַטֶּה אֶת לִבּוֹתֵנוּ שֶׁנְּכַבֵּד אֶחָד אֶת הַשֵּׁנִי,<br>
+      וְתַשְׁרֶה אֶת שְׁכִינָתֶךָ בֵּינֵינוּ,<br>
+      וְיִהְיוּ בֵּינֵינוּ אַהֲבָה וְאַחְוָה, שָׁלוֹם וְרֵעוּת וְאוֹרָה וְשִׂמְחָה<br>
+      מֵעַתָּה וְעַד עוֹלָם.<br><br>
+
+      וְקַיֵּם בָּנוּ אֶת הַכָּתוּב:<br>
+      הַשָּׂם גְּבוּלֵךְ שָׁלוֹם, חֵלֶב חִטִּים יַשְׂבִּיעֵךְ<br>
+      וְאֵת הַכָּתוּב: יְהִי שָׁלוֹם בְּחֵילֵךְ, שַׁלְוָה בְּאַרְמְנוֹתָיִךְ.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וּבָרְכֵנִי נָא בִּבְרָכָה הַכְּתוּבָה בְּתוֹרָתֶךָ:<br>
+      יְבָרֶכְךָ יְיָ וְיִשְׁמְרֶךָ,<br>
+      יָאֵר יְיָ פָּנָיו אֵלֶיךָ וִיחֻנֶּךָּ,<br>
+      יִשָּׂא יְיָ פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם.<br><br>
+
+      וְהִתְמַלֵּא בְּרַחֲמִים גְּדוֹלִים עָלֵינוּ<br>
+      וּמַלֵּא כָּל מִשְׁאֲלוֹת לִבֵּנוּ לְטוֹבָה וְלִבְרָכָה<br>
+      וְקַיֵּם בְּבַעְלִי אֶת הַכָּתוּב:<br>
+      וְאַתָּה שָׁלוֹם וּבֵיתְךָ שָׁלוֹם וְכֹל אֲשֶׁר לְךָ שָׁלוֹם<br>
+      וְאֵת הַכָּתוּב: וְנָחָה עָלָיו רוּחַ יְיָ,<br>
+      רוּחַ חָכְמָה וּבִינָה, רוּחַ עֵצָה וּגְבוּרָה, רוּחַ דַּעַת וְיִרְאַת יְיָ.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      יְיָ עֹז לְעַמּוֹ יִתֵּן יְיָ יְבָרֵךְ אֶת עַמּוֹ בַשָּׁלוֹם.<br>
+      יִהְיוּ לְרָצוֹן אִמְרֵי פִי וְהֶגְיוֹן לִבִּי לְפָנֶיךָ, יְיָ צוּרִי וְגֹאֲלִי.<br>
+      יְיָ צְבָאוֹת עִמָּנוּ, מִשְׂגָּב לָנוּ אֱלֹהֵי יַעֲקֹב סֶלָה.<br>
+      יְיָ צְבָאוֹת אַשְׁרֵי אָדָם בֹּטֵחַ בָּךְ.<br>
+      <span class="highlight">יְיָ הוֹשִׁיעָה, הַמֶּלֶךְ יַעֲנֵנוּ בְיוֹם קָרְאֵנוּ.<br>
+      אָמֵן כֵּן יְהִי רָצוֹן נֶצַח סֶלָה וָעֶד.</span>
+    `
+  },
   hodaya: {
     title: "תפילת הודיה",
     body: `
@@ -5371,6 +5533,19 @@ function updateRefuaName(val) {
   });
 }
 
+function updateShalomBayit() {
+  var wife = document.getElementById('shalomWifeInput');
+  var husband = document.getElementById('shalomHusbandInput');
+  var wifeDisp = document.getElementById('shalomWifeDisplay');
+  var husbandDisp = document.getElementById('shalomHusbandDisplay');
+  if (wife && wifeDisp) wifeDisp.textContent = wife.value.trim() || '______';
+  if (husband && husbandDisp) husbandDisp.textContent = husband.value.trim() || '______';
+  try {
+    if (wife) localStorage.setItem('orHatfila_shalomWife', wife.value);
+    if (husband) localStorage.setItem('orHatfila_shalomHusband', husband.value);
+  } catch(e) {}
+}
+
 let favorites = JSON.parse(_store.get('orHatfila_favs') || '[]');
 
 // ═══════════════════════════════════════════════════════
@@ -5815,6 +5990,8 @@ const prayerMeta = {
   tikun:           { icon: '📖', title: 'התיקון הכללי' },
   igeret_haramban: { icon: '✍️', title: 'איגרת הרמב"ן' },
   hodaya:          { icon: '🙏', title: 'תפילת הודיה' },
+  shalom_bayit:    { icon: '🕊️', title: 'תפילה לשלום בית' },
+  zivug:           { icon: '💍', title: 'תפילה למציאת זיווג' },
 };
 
 // מטא לפרשות — נוצר דינמית
@@ -6368,8 +6545,21 @@ function openPrayer(id) {
   if (id === 'roshchodesh') {
     setTimeout(autoSelectHebrewMonth, 50);
   }
+  if (id === 'shalom_bayit') {
+    setTimeout(function() {
+      try {
+        var w = localStorage.getItem('orHatfila_shalomWife') || '';
+        var h = localStorage.getItem('orHatfila_shalomHusband') || '';
+        var wi = document.getElementById('shalomWifeInput');
+        var hi = document.getElementById('shalomHusbandInput');
+        if (wi) wi.value = w;
+        if (hi) hi.value = h;
+        updateShalomBayit();
+      } catch(e) {}
+    }, 100);
+  }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban') {
+  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban' || id === 'shalom_bayit' || id === 'zivug') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
@@ -7565,6 +7755,8 @@ function _loadSortOrder(page) {
   var listening = false;
 
   var voiceMap = [
+    { keys: ['זיווג', 'תפילה לזיווג', 'למציאת זיווג'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'zivug', '💍'); } },
+    { keys: ['שלום בית', 'תפילה לשלום בית'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shalom_bayit', '🕊️'); } },
     { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
     { keys: ['הודיה', 'תפילת הודיה', 'תודה לה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hodaya', '🙏'); } },
     { keys: ['לוח שנה', 'לוח'], action: function() { toggleHebCal(); } },
