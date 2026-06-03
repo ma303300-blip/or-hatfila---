@@ -2338,6 +2338,16 @@
   }
   .bubble-4 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
   .bubble-4 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
+  .bubble-5 {
+    animation: bubbleFloat 3.9s ease-in-out infinite 1.5s;
+    width: 65px; height: 65px;
+    position: absolute;
+    left: 7px;
+    top: 331px;
+    font-size: 0.55em; overflow: visible;
+  }
+  .bubble-5 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
+  .bubble-5 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
 
 
   /* בועת לוח שנה */
@@ -2760,6 +2770,10 @@
   <div class="bubble bubble-4" onclick="pressAndOpen(this, openTehilimYomi)">
     <div class="bubble-icon">📖</div>
     <div class="bubble-label">תהילים<br>יומי</div>
+  </div>
+  <div class="bubble bubble-5" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:document.body}, 'hodaya', '🙏'); })">
+    <div class="bubble-icon">🙏</div>
+    <div class="bubble-label">תפילת<br>הודיה</div>
   </div>
 </div>
 
@@ -4864,6 +4878,80 @@ const prayers = {
       <span class="highlight">אָמֵן נֶצַח סֶלָה וָעֶד:</span>
     `
   },
+  hodaya: {
+    title: "תפילת הודיה",
+    body: `
+      <span class="section-title">✦ תפילת הודיה ✦</span>
+
+      מֶלֶךְ מַלְכֵי הַמְּלָכִים הַקָּדוֹשׁ בָּרוּךְ הוּא,<br>
+      אֲדוֹן עוֹלָם, רִבּוֹנוֹ שֶׁל עוֹלָם, <span class="highlight">תּוֹדָה.</span><br><br>
+
+      תּוֹדָה שֶׁאֲנִי עוֹמֵד כָּאן לְפָנֶיךָ וּמוֹדֶה לָךְ.<br><br>
+
+      כָּל מַה שֶּׁאֲנִי אוֹמֵר יִהְיֶה כְּאַיִן וּכְאֶפֶס<br>
+      לְעֻמַּת כַּמָּה שֶׁאֲנִי בֶּאֱמֶת צָרִיךְ לְהוֹדוֹת לָךְ.<br><br>
+
+      הֲרֵי הַכֹּל מִמְּךָ,<br>
+      הַכֹּל נָתַתָּ לִי בְּחֵן, בְּחֶסֶד וּבְרַחֲמִים.<br>
+      תּוֹדָה עַל כָּל הַדְּבָרִים בָּעוֹלָם.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      תּוֹדָה עַל רֹב רִבֵּי רְבָבוֹת פְּעָמִים<br>
+      שֶׁעָזַרְתָּ לִי, תָּמַכְתָּ בִּי, הוֹשַׁעְתָּ אוֹתִי,<br>
+      הִצַּלְתָּ אוֹתִי, שִׂמַּחְתָּ אוֹתִי, רִפֵּאתָ אוֹתִי,<br>
+      שָׁמַרְתָּ עָלַי, עוֹדַדְתָּ אוֹתִי.<br>
+      תּוֹדָה שֶׁאַתָּה אִתִּי תָּמִיד.<br><br>
+
+      תּוֹדָה שֶׁאַתָּה נוֹתֵן בִּי כֹּחַ לַעֲשׂוֹת מִצְווֹת,<br>
+      כֹּחַ לַעֲשׂוֹת מַעֲשִׂים טוֹבִים וְכֹחַ לְהִתְפַּלֵּל.<br><br>
+
+      תּוֹדָה עַל כָּל הַפְּעָמִים שֶׁעָזַרְתָּ לִי<br>
+      וְלֹא יָדַעְתִּי לוֹמַר לְךָ תּוֹדָה.<br><br>
+
+      תּוֹדָה עַל כָּל הַחֲסָדִים שֶׁאַתָּה עוֹשֶׂה עִמִּי<br>
+      בְּכָל רֶגַע וָרֶגַע.<br><br>
+
+      תּוֹדָה עַל כָּל נְשִׁימָה וּנְשִׁימָה שֶׁאֲנִי נוֹשֵׁם.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      תּוֹדָה לְךָ מֶלֶךְ מַלְכֵי הַמְּלָכִים,<br>
+      גַּם עַל כָּל הַדְּבָרִים שֶׁאֵין לִי.<br>
+      תּוֹדָה שֶׁקָּשֶׁה לִי לִפְעָמִים,<br>
+      כִּי הַכֹּל לְטוֹבָתִי אֲפִילּוּ אִם לֹא תָּמִיד רָאִיתִי שֶׁזֶּה לְטוֹבָתִי.<br><br>
+
+      עָמֹק בַּלֵּב אֲנִי יוֹדֵעַ שֶׁכָּל מַה שֶּׁמַּגִּיעַ מִמְּךָ<br>
+      הוּא הַדָּבָר הַטּוֹב בְּיוֹתֵר עֲבוּרִי,<br>
+      וְהוּא נַעֲשָׂה בְּמְיֻחָד בִּשְׁבִילִי,<br>
+      בְּהַשְׁגָּחָה פְּרָטִית מְדֻיֶּקֶת וּמֻשְׁלֶמֶת,<br>
+      כְּמוֹ שֶׁרַק מֶלֶךְ מַלְכֵי הַמְּלָכִים יָכוֹל לַעֲשׂוֹת.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      תּוֹדָה שֶׁלִּפְעָמִים קָשֶׁה לִי,<br>
+      כִּי רַק כָּךְ אֲנִי יָכוֹל לְהַעֲרִיךְ אֶת הַטּוֹב,<br>
+      כִּי רַק כְּשֶׁנִּמְצָאִים בַּחֹשֶׁךְ אֶפְשָׁר לְהַעֲרִיךְ אֶת הָאוֹר.<br><br>
+
+      תּוֹדָה עַל הַחַיִּים הַנִּפְלָאִים שֶׁאַתָּה נוֹתֵן לִי.<br>
+      תּוֹדָה עַל הַדָּבָר הַכִּי קָטָן שֶׁיֵּשׁ לִי,<br>
+      כִּי אֶת הַכֹּל אַתָּה נָתַתָּ לִי וְלֹא אַף אֶחָד אַחֵר.<br>
+      תּוֹדָה שֶׁאַתָּה שׁוֹמֵעַ אֶת הַתְּפִלּוֹת שֶׁלִּי.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      בּוֹרֵא עוֹלָם!<br><br>
+
+      אֲנִי מְבַקֵּשׁ מִמְּךָ סְלִיחָה מִמַּעֲמַקֵּי לִבִּי<br>
+      אִם הָיוּ פְּעָמִים שֶׁלֹּא הֶעֱרַכְתִּי אֶת מַה שֶּׁנָּתַתָּ לִי<br>
+      וּבִמְקוֹם לוֹמַר לְךָ תּוֹדָה, רַק הִתְלוֹנַנְתִּי.<br><br>
+
+      אָנָּא אַל תַּרְחֵק מִמֶּנִּי לְעוֹלָם,<br>
+      אֲנִי עָפָר וָאֵפֶר<br>
+      וְאַתָּה אֲדוֹן כָּל הָעוֹלָם.<br>
+      <span class="highlight">אָמֵן.</span>
+    `
+  },
   igeret_haramban: {
     title: "איגרת הרמב\"ן",
     body: `
@@ -5715,6 +5803,7 @@ const prayerMeta = {
   rachel:          { icon: '🕯️', title: 'תפילת רחל אימנו' },
   tikun:           { icon: '📖', title: 'התיקון הכללי' },
   igeret_haramban: { icon: '✍️', title: 'איגרת הרמב"ן' },
+  hodaya:          { icon: '🙏', title: 'תפילת הודיה' },
 };
 
 // מטא לפרשות — נוצר דינמית
@@ -7446,7 +7535,7 @@ function _loadSortOrder(page) {
   var listening = false;
 
   var voiceMap = [
-    { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
+    { keys: ['הודיה', 'תפילת הודיה', 'תודה לה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hodaya', '🙏'); } },
     { keys: ['לוח שנה', 'לוח'], action: function() { toggleHebCal(); } },
     { keys: ['חיילים', 'חייל', 'צבא', 'צה"ל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'chayalim', '🪖'); } },
     { keys: ['אשכנז', 'אשכנזי'], action: function() { openMazonSelector({ stopPropagation: function(){} }); setTimeout(function() { openPrayerWithBurst({ currentTarget: document.body }, 'mazon_ashkenaz', '🤲'); }, 600); } },
