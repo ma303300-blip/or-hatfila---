@@ -820,6 +820,17 @@
     pointer-events: all;
   }
 
+  /* זום-אאוט — לתהילים יומי ותפילת הודיה */
+  .prayer-overlay.zoom-in {
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease;
+  }
+  .prayer-overlay.zoom-in.active {
+    transform: scale(1);
+    opacity: 1;
+  }
+
   .prayer-bg {
     position: absolute;
     inset: 0;
@@ -2375,7 +2386,7 @@
     max-width: 480px;
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.7s cubic-bezier(0.34,1.1,0.64,1), opacity 0.5s ease;
+    transition: transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease;
   }
   .heb-cal-wrapper.open {
     transform: translate(-50%, -50%) scale(1);
@@ -6320,13 +6331,29 @@ function openPrayer(id) {
   document.getElementById('prayerBody').innerHTML = p.body;
   const overlay = document.getElementById('prayerOverlay');
 
-  // iOS Safari fix — כוחות את ה-overlay למלא את כל המסך
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;';
   // טריק ל-iOS: קבל את גובה המסך האמיתי
   var vh = window.innerHeight;
-  overlay.style.height = vh + 'px';
 
-  overlay.classList.add('active');
+  // זום-אאוט לתהילים יומי ותפילת הודיה
+  var zoomPrayers = ['tehilim_yomi', 'hodaya'];
+  var useZoom = zoomPrayers.indexOf(id) !== -1;
+
+  if (useZoom) {
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;transform:scale(0);opacity:0;transform-origin:center center;';
+    overlay.style.height = vh + 'px';
+    overlay.classList.add('active');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        overlay.style.transition = 'transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease';
+        overlay.style.transform = 'scale(1)';
+        overlay.style.opacity = '1';
+      });
+    });
+  } else {
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
+    overlay.style.height = vh + 'px';
+    overlay.classList.add('active');
+  }
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
   // נועל גלילה בלי קפיצה
@@ -6343,7 +6370,7 @@ function openPrayer(id) {
     setTimeout(autoSelectHebrewMonth, 50);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun') {
+  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
@@ -6357,7 +6384,10 @@ function openPrayer(id) {
 }
 
 function closePrayer() {
-  document.getElementById('prayerOverlay').classList.remove('active');
+  var overlay = document.getElementById('prayerOverlay');
+  overlay.classList.remove('active');
+  overlay.classList.remove('zoom-in');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
   resumePage();
   stopAutoScroll();
   hidePrayerFontCtrl();
@@ -7535,6 +7565,7 @@ function _loadSortOrder(page) {
   var listening = false;
 
   var voiceMap = [
+    { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
     { keys: ['הודיה', 'תפילת הודיה', 'תודה לה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hodaya', '🙏'); } },
     { keys: ['לוח שנה', 'לוח'], action: function() { toggleHebCal(); } },
     { keys: ['חיילים', 'חייל', 'צבא', 'צה"ל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'chayalim', '🪖'); } },
@@ -7770,11 +7801,17 @@ async function openTehilimYomi() {
 
   var overlay = document.getElementById('prayerOverlay');
   var vh = window.innerHeight;
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;transform:scale(0);opacity:0;transform-origin:center center;';
   overlay.style.height = vh + 'px';
-  overlay.style.top = overlay.style.left = overlay.style.right = '0';
-  overlay.style.width = '100%';
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      overlay.style.transition = 'transform 1.2s cubic-bezier(0.34,1.05,0.64,1), opacity 0.8s ease';
+      overlay.style.transform = 'scale(1)';
+      overlay.style.opacity = '1';
+    });
+  });
 
   var scrollY = window.scrollY;
   document.body.style.position = 'fixed';
