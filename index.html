@@ -789,6 +789,12 @@
   }
   .banner-18:hover { box-shadow: 0 20px 60px rgba(120,20,120,0.55); }
 
+  .banner-19 .banner-inner {
+    background: linear-gradient(135deg, rgba(40,30,5,0.42) 0%, rgba(80,60,10,0.38) 40%, rgba(30,22,3,0.42) 100%);
+    box-shadow: 0 10px 40px rgba(180,140,20,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
+  }
+  .banner-19:hover { box-shadow: 0 20px 60px rgba(180,140,20,0.55); }
+
   .banner-arrow {
     position: absolute;
     left: 20px;
@@ -3046,6 +3052,15 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
+      <div class="banner banner-19" data-prayer-id="parnasa" data-page="tefilot" onclick="openPrayerWithBurst(event, 'parnasa', '💰')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">💰</span>
+          <div class="banner-title">תפילה על פרנסה</div>
+          <div class="banner-subtitle">מספר שערי דמעה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -4919,6 +4934,55 @@ const prayers = {
       <span class="highlight">אָמֵן נֶצַח סֶלָה וָעֶד:</span>
     `
   },
+  parnasa: {
+    title: "תפילה על פרנסה",
+    body: `
+      <div class="candle-container"><span class="flame">💰</span></div>
+
+      <span class="section-title">✦ תפילה על פרנסה ✦</span>
+      <span style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(122,62,16,0.8);">מספר שערי דמעה</span>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      יְהִי רָצוֹן מִלְּפָנֶיךָ יְיָ אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ,<br>
+      שֶׁיִּהְיוּ מְזוֹנוֹתַי וּפַרְנָסָתִי<br>
+      וּמְזוֹנוֹת וּפַרְנָסַת בְּנֵי בֵיתִי<br>
+      עִם מְזוֹנוֹת וּפַרְנָסַת כָּל עַמְּךָ בֵּית יִשְׂרָאֵל,<br>
+      מֻכְתָּרִים וּמְאֻמָּתִים וּמֻצְדָּקִים בְּיָדְךָ,<br>
+      וְאַל תַּצְרִיכֵנִי לִידֵי מַתְּנַת בָּשָׂר וָדָם<br>
+      וְלֹא לִידֵי הַלְוָאָתָם,<br>
+      כִּי אִם לְיָדְךָ הַמְּלֵאָה הַפְּתוּחָה,<br>
+      הַקְּדוֹשָׁה וְהָרְחָבָה.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      וּתְהֵא מְלַאכְתִּי וְכֹל עֲסָקַי לִבְרָכָה וְלֹא לַעֲנִיּוּת,<br>
+      לְחַיִּים וְלֹא לְמָוֶת,<br>
+      וּתְזַכֵּנִי שֶׁלֹּא יִתְחַלֵּל שֵׁם שָׁמַיִם עַל יָדִי.<br>
+      וְאֶהְיֶה מִן הַמּוֹעִילִים וּמַשְׁפִּיעִים טוֹב לְכֹל אָדָם תָּמִיד,<br>
+      וּתְמַלֵּא יָדִי מִבִּרְכוֹתֶיךָ<br>
+      וְשַׂבְּעֵנוּ מִטּוּבֶךָ,<br>
+      כְּמוֹ שֶׁעָשִׂיתָ לְיוֹצְאֵי מִצְרַיִם,<br>
+      כִּי אַתָּה יְיָ בֵּרַכְתָּ וּמְבָרֵךְ לְעוֹלָם.<br>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      עֵינֵי כֹּל אֵלֶיךָ יְשַׂבֵּרוּ,<br>
+      וְאַתָּה נוֹתֵן לָהֶם אֶת אָכְלָם בְּעִתּוֹ,<br>
+      פּוֹתֵחַ אֶת יָדֶךָ,<br>
+      וּמַשְׂבִּיעַ לְכָל חַי רָצוֹן.<br><br>
+
+      הַשְׁלֵךְ עַל יְיָ יְהָבְךָ וְהוּא יְכַלְכְּלֶךָ,<br>
+      לֹא יִתֵּן לְעוֹלָם מוֹט לַצַּדִּיק.<br><br>
+
+      וְאַתֶּן נְשָׁמוֹת הַקְּדוֹשׁוֹת וְהַטְּהוֹרוֹת,<br>
+      הַעֲתִירוּ אֶל יְיָ בַּעֲדִי וּבִגְלָלִי,<br>
+      יָרִים קַרְנִי וְיַגְבִּיהַּ מַזָּלִי,<br>
+      לְמַעַן אוּכַל לְעָבְדוֹ בְּלֵבָב שָׁלֵם<br>
+      כָּל יְמֵי עוֹלָם.<br>
+      <span class="highlight">אָמֵן.</span>
+    `
+  },
   zivug: {
     title: "תפילה למציאת זיווג",
     body: `
@@ -5992,6 +6056,7 @@ const prayerMeta = {
   hodaya:          { icon: '🙏', title: 'תפילת הודיה' },
   shalom_bayit:    { icon: '🕊️', title: 'תפילה לשלום בית' },
   zivug:           { icon: '💍', title: 'תפילה למציאת זיווג' },
+  parnasa:         { icon: '💰', title: 'תפילה על פרנסה' },
 };
 
 // מטא לפרשות — נוצר דינמית
@@ -6559,7 +6624,7 @@ function openPrayer(id) {
     }, 100);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban' || id === 'shalom_bayit' || id === 'zivug') {
+  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban' || id === 'shalom_bayit' || id === 'zivug' || id === 'parnasa') {
     controls.classList.add('visible');
     document.getElementById('btnManual').classList.add('active');
     document.getElementById('btnAuto').classList.remove('active');
@@ -7755,6 +7820,7 @@ function _loadSortOrder(page) {
   var listening = false;
 
   var voiceMap = [
+    { keys: ['פרנסה', 'תפילה לפרנסה', 'שערי דמעה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'parnasa', '💰'); } },
     { keys: ['זיווג', 'תפילה לזיווג', 'למציאת זיווג'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'zivug', '💍'); } },
     { keys: ['שלום בית', 'תפילה לשלום בית'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shalom_bayit', '🕊️'); } },
     { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
