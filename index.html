@@ -2887,8 +2887,8 @@
     </div>
   </div>
   <div class="memorial-name-row">
-    <div class="memorial-name-display" id="memNameDisplay" onclick="memEditName()">עובד עטריה בן שרה</div>
-    <input class="memorial-name-input" id="memNameInput" type="text" value="עובד עטריה בן שרה"
+    <div class="memorial-name-display" id="memNameDisplay" onclick="memEditName()">שם הנפטר</div>
+    <input class="memorial-name-input" id="memNameInput" type="text" value="שם הנפטר"
       onblur="memSaveName()" onkeydown="if(event.key==='Enter')memSaveName()" style="display:none">
     <div class="memorial-tnzb">ת.נ.צ.ב.ה</div>
   </div>
@@ -7162,7 +7162,7 @@ openCategoryPage = function(pageId) {
     var display = document.getElementById('memNameDisplay');
     var input = document.getElementById('memNameInput');
     if (!display || !input) return;
-    var name = input.value.trim() || 'עובד עטריה בן שרה';
+    var name = input.value.trim() || 'שם הנפטר';
     display.textContent = name;
     input.value = name;
     display.style.display = 'block';
