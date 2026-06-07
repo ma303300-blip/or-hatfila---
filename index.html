@@ -324,16 +324,17 @@
     height: 40px;
     border-radius: 50%;
     background: rgba(10, 14, 46, 0.85);
-    border: 2px solid var(--gold);
-    box-shadow: 0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2), inset 0 1px 0 rgba(212,175,55,0.3);
+    border: 2px solid #22c55e;
+    box-shadow: 0 0 12px rgba(34,197,94,0.5), 0 0 24px rgba(34,197,94,0.2), inset 0 1px 0 rgba(34,197,94,0.3);
     cursor: pointer;
     transition: box-shadow 0.25s, transform 0.2s;
     font-size: 18px;
+    color: #22c55e;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
   .voice-btn:hover, .voice-btn:active {
-    box-shadow: 0 0 28px rgba(212,175,55,0.45);
+    box-shadow: 0 0 28px rgba(34,197,94,0.45);
     transform: scale(1.08);
   }
   .voice-btn.listening {
@@ -2725,7 +2726,7 @@
   <span class="fhb-label">מועדפים</span>
 </button>
 
-<button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית">🗣️</button>
+<button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית">🎙️</button>
 <div class="voice-toast" id="voiceToast"></div>
 
 <!-- Favs Modal -->
@@ -7984,7 +7985,7 @@ function _loadSortOrder(page) {
     recognition.onend = function() {
       listening = false;
       btn.classList.remove('listening');
-      btn.textContent = '🗣️';
+      btn.textContent = '🎙️';
       setTimeout(hideVoiceToast, 1500);
     };
     recognition.start();
