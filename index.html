@@ -3028,7 +3028,7 @@
       <div class="category-title">🙏 תפילות</div>
     </div>
     <div class="banners" id="bannersTefilot">
-      <div class="banner banner-20" data-prayer-id="tefilot_hayom" data-page="tefilot" onclick="document.getElementById('categoryTefilot').classList.remove('active'); pressAndOpen(this, function(){ openCategoryPageTefilotHayom(); })">
+      <div class="banner banner-20" data-prayer-id="tefilot_hayom" data-page="tefilot" onclick="pressAndOpen(this, function(){ openCategoryPageTefilotHayom(); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕍</span>
@@ -6283,11 +6283,12 @@ function openPrayerWithBurst(e, id, icon) {
   }
   document.body.appendChild(burst);
 
-  // סמן אם נכנסים מתוך דף בחירת נוסח מזון וסגור אותו ברקע
+  // סמן אם נכנסים מתוך דף בחירת נוסח מזון
   var mazonPage = document.getElementById('categoryMazon');
-  if (mazonPage && mazonPage.classList.contains('active')) {
+  var fromMazon = mazonPage && mazonPage.classList.contains('active');
+  if (fromMazon) {
     document.body.dataset.prayerFromMazon = '1';
-    mazonPage.classList.remove('active');
+    mazonPage.style.pointerEvents = 'none';
   } else {
     document.body.dataset.prayerFromMazon = '';
   }
@@ -6303,6 +6304,10 @@ function openPrayerWithBurst(e, id, icon) {
   }
 
   setTimeout(() => {
+    if (fromMazon) {
+      mazonPage.classList.remove('active');
+      mazonPage.style.pointerEvents = '';
+    }
     if (fromTefilotHayom) {
       tefilotHayomPage.classList.remove('active');
       tefilotHayomPage.style.pointerEvents = '';
@@ -6437,7 +6442,11 @@ window.addEventListener('popstate', function(e) {
   var mazonPage = document.getElementById('categoryMazon');
   if (mazonPage && mazonPage.classList.contains('active')) {
     closeMazonSelector();
-    history.pushState({ page: 'main' }, '');
+    if (document.getElementById('categoryTefilot') && document.getElementById('categoryTefilot').classList.contains('active')) {
+      history.pushState({ page: 'tefilot' }, '');
+    } else {
+      history.pushState({ page: 'main' }, '');
+    }
     return;
   }
   var hadlaka = document.getElementById('categoryHadlaka');
@@ -6449,7 +6458,11 @@ window.addEventListener('popstate', function(e) {
   var tefilotHayom = document.getElementById('categoryTefilotHayom');
   if (tefilotHayom && tefilotHayom.classList.contains('active')) {
     closeCategoryPageTefilotHayom();
-    history.pushState({ page: 'main' }, '');
+    if (document.getElementById('categoryTefilot') && document.getElementById('categoryTefilot').classList.contains('active')) {
+      history.pushState({ page: 'tefilot' }, '');
+    } else {
+      history.pushState({ page: 'main' }, '');
+    }
     return;
   }
   var tefilot = document.getElementById('categoryTefilot');
@@ -7577,6 +7590,7 @@ function openPrayer(id) {
 
 function closePrayer() {
   var overlay = document.getElementById('prayerOverlay');
+  var returningToCategory = false;
 
   // אם הגענו מתוך דף בחירת נוסח מזון — החזר אותו לפני שסוגרים
   if (document.body.dataset.prayerFromMazon === '1') {
@@ -7587,6 +7601,7 @@ function closePrayer() {
       mazonPage.classList.add('active');
     }
     overlay.style.transition = 'none';
+    returningToCategory = true;
   }
   // אם הגענו מתוך דף תפילות היום — החזר אותו לפני שסוגרים
   if (document.body.dataset.prayerFromTefilotHayom === '1') {
@@ -7599,6 +7614,7 @@ function closePrayer() {
       setTimeout(function() { tefilotHayomPage.style.transition = ''; }, 50);
     }
     overlay.style.transition = 'none';
+    returningToCategory = true;
   }
 
   overlay.classList.remove('active');
@@ -7607,9 +7623,14 @@ function closePrayer() {
   stopAutoScroll();
   hidePrayerFontCtrl();
   document.querySelectorAll('.category-page').forEach(resumeCategoryPage);
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.width = '';
+
+  // אם חוזרים לדף קטגוריה — לא משחררים את ה-body position
+  // (הדף הפתוח מנהל את ה-scroll בעצמו ומונע חשיפת מסך הבית)
+  if (!returningToCategory) {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+  }
 }
 
 document.getElementById('prayerOverlay').addEventListener('click', function(e) {
@@ -8376,11 +8397,10 @@ function openMazonSelector(e) {
   if (e) e.stopPropagation();
   var pageEl = document.getElementById('categoryMazon');
   if (!pageEl) return;
-  // סגור דף תפילות אם פתוח
   var tefilotPage = document.getElementById('categoryTefilot');
-  if (tefilotPage && tefilotPage.classList.contains('active')) {
-    tefilotPage.classList.remove('active');
-  }
+  var fromTefilot = tefilotPage && tefilotPage.classList.contains('active');
+  document.body.dataset.mazonFromTefilot = fromTefilot ? '1' : '';
+
   pausePage();
   history.pushState({ page: 'mazon' }, '');
   var vh = window.innerHeight;
@@ -8398,13 +8418,35 @@ function openMazonSelector(e) {
     document.body.style.width = '100%';
     document.body.dataset.scrollY = scrollY;
   }
+  // סגור את categoryTefilot ללא transition כדי למנוע פלאש
+  if (fromTefilot) {
+    tefilotPage.style.transition = 'none';
+    tefilotPage.classList.remove('active');
+    setTimeout(function() { tefilotPage.style.transition = ''; }, 50);
+  }
 }
 
 // סגירת דף בחירת נוסח ברכת המזון
 function closeMazonSelector() {
   var pageEl = document.getElementById('categoryMazon');
   if (!pageEl) return;
+  // אם הגענו מדף תפילות — פתח אותו קודם, סגור ללא transition
+  if (document.body.dataset.mazonFromTefilot === '1') {
+    document.body.dataset.mazonFromTefilot = '';
+    var tefilotPage = document.getElementById('categoryTefilot');
+    if (tefilotPage) {
+      tefilotPage.style.height = window.innerHeight + 'px';
+      tefilotPage.classList.add('active');
+    }
+    pageEl.style.transition = 'none';
+    pageEl.classList.remove('active');
+    setTimeout(function() { pageEl.style.transition = ''; }, 50);
+    resumePage();
+    return;
+  }
+  pageEl.style.transition = 'none';
   pageEl.classList.remove('active');
+  setTimeout(function() { pageEl.style.transition = ''; }, 50);
   resumePage();
   if (document.body.style.position === 'fixed') {
     var scrollY = parseInt(document.body.dataset.scrollY || '0');
@@ -8504,9 +8546,9 @@ function selectYaalehAshkenaz(name, btn) {
 // פתיחת/סגירת דף תפילות היום
 function openCategoryPageTefilotHayom() {
   var tefilotPage = document.getElementById('categoryTefilot');
-  if (tefilotPage && tefilotPage.classList.contains('active')) {
-    tefilotPage.classList.remove('active');
-  }
+  var fromTefilot = tefilotPage && tefilotPage.classList.contains('active');
+  document.body.dataset.tefilotHayomFromTefilot = fromTefilot ? '1' : '';
+
   pausePage();
   history.pushState({ page: 'tefilot_hayom' }, '');
   var pageEl = document.getElementById('categoryTefilotHayom');
@@ -8521,12 +8563,34 @@ function openCategoryPageTefilotHayom() {
     document.body.style.width = '100%';
     document.body.dataset.scrollY = scrollY;
   }
+  // סגור את categoryTefilot ללא transition כדי למנוע פלאש
+  if (fromTefilot) {
+    tefilotPage.style.transition = 'none';
+    tefilotPage.classList.remove('active');
+    setTimeout(function() { tefilotPage.style.transition = ''; }, 50);
+  }
 }
 
 function closeCategoryPageTefilotHayom() {
   var pageEl = document.getElementById('categoryTefilotHayom');
   if (!pageEl) return;
+  // אם הגענו מדף תפילות — פתח אותו קודם, סגור ללא transition
+  if (document.body.dataset.tefilotHayomFromTefilot === '1') {
+    document.body.dataset.tefilotHayomFromTefilot = '';
+    var tefilotPage = document.getElementById('categoryTefilot');
+    if (tefilotPage) {
+      tefilotPage.style.height = window.innerHeight + 'px';
+      tefilotPage.classList.add('active');
+    }
+    pageEl.style.transition = 'none';
+    pageEl.classList.remove('active');
+    setTimeout(function() { pageEl.style.transition = ''; }, 50);
+    resumePage();
+    return;
+  }
+  pageEl.style.transition = 'none';
   pageEl.classList.remove('active');
+  setTimeout(function() { pageEl.style.transition = ''; }, 50);
   resumePage();
   if (document.body.style.position === 'fixed') {
     var scrollY = parseInt(document.body.dataset.scrollY || '0');
