@@ -2376,6 +2376,17 @@
   }
   .bubble:active { transform: scale(0.93); }
   .bubble-1 { animation: bubbleFloat 3.2s ease-in-out infinite; }
+  .bubble-7 {
+    animation: bubbleFloat 4.5s ease-in-out infinite 2.4s;
+    width: 65px; height: 65px;
+    position: absolute;
+    right: 7px;
+    top: 43px;
+    font-size: 0.55em; overflow: visible;
+    z-index: 50;
+  }
+  .bubble-7 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
+  .bubble-7 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
   .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
   .bubble-4 {
@@ -2819,6 +2830,10 @@
   <div class="bubble bubble-1" onclick="pressAndOpen(this, openParasha)">
     <div class="bubble-icon">📜</div>
     <div class="bubble-label">תמצית<br>פרשת השבוע</div>
+  </div>
+  <div class="bubble bubble-7" onclick="pressAndOpen(this, openTanyaYomi)">
+    <div class="bubble-icon">📕</div>
+    <div class="bubble-label">תניא<br>יומי</div>
   </div>
   <div class="bubble bubble-cal" id="bubbleCal" onclick="toggleHebCal(this)">
     <div class="bubble-icon">🗓️</div>
@@ -8651,6 +8666,7 @@ function _loadSortOrder(page) {
     { keys: ['שלום בית', 'תפילה לשלום בית'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shalom_bayit', '🕊️'); } },
     { keys: ['תהילים יומי', 'תהילים'], action: function() { openTehilimYomi(); } },
     { keys: ['הלכה יומית', 'הלכה'], action: function() { openHalachaYomit(); } },
+    { keys: ['תניא יומי', 'תניא'], action: function() { openTanyaYomi(); } },
     { keys: ['הודיה', 'תפילת הודיה', 'תודה לה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'hodaya', '🙏'); } },
     { keys: ['לוח שנה', 'לוח'], action: function() { toggleHebCal(); } },
     { keys: ['חיילים', 'חייל', 'צבא', 'צה"ל'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'chayalim', '🪖'); } },
@@ -9036,6 +9052,105 @@ async function openHalachaYomit() {
         html += '</div>';
       }
       _halachaCache[simanNum] = { html: html };
+    }
+  } catch(e) {
+    html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
+  }
+
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+  setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
+  setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
+  var controls = document.getElementById('scrollControls');
+  if (controls) {
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
+    if (typeof stopAutoScroll === 'function') stopAutoScroll();
+  }
+  if (typeof updateFavBtn === 'function') updateFavBtn();
+}
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════
+// תניא יומי — מ-Sefaria
+// ═══════════════════════════════════════════════════
+var _tanyaCache = {};
+async function openTanyaYomi() {
+  pausePage();
+
+  // חישוב קטע תניא לפי יום השנה (365 ÷ 53 פרקים)
+  var now = new Date();
+  var start = new Date(now.getFullYear(), 0, 0);
+  var dayOfYear = Math.floor((now - start) / 86400000);
+  var perekNum = (dayOfYear % 53) + 1;
+
+  var hDate = getHebrewDayMonth();
+  var _hebLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ','כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  var hebDay = hDate ? hDate.day : now.getDate();
+  var dayHeb = _hebLetters[Math.min(hebDay,30)-1] || String(hebDay);
+  var dateStr = hDate ? dayHeb + ' ' + hDate.month : 'יום ' + dayHeb;
+
+  if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'tanya_yomi';
+  history.pushState({ prayer: 'tanya_yomi' }, '');
+  document.getElementById('prayerTitle').textContent = 'תניא יומי — ' + dateStr;
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(212,175,55,0.2);border-top-color:rgba(212,175,55,0.9);border-radius:50%;animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען תניא יומי...</div>' +
+    '</div>';
+
+  var overlay = document.getElementById('prayerOverlay');
+  var vh = window.innerHeight;
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
+  overlay.style.height = vh + 'px';
+  overlay.classList.remove('active');
+  overlay.classList.add('zoom-in');
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+  requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
+
+  var scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
+  document.body.dataset.prayerScrollY = scrollY;
+
+  var html = '';
+  try {
+    if (_tanyaCache[perekNum]) {
+      html = _tanyaCache[perekNum];
+    } else {
+      var urls = [
+        'https://www.sefaria.org/api/texts/Tanya,_Part_I;_Likkutei_Amarim.' + perekNum + '?lang=he&stripItags=1',
+      ];
+      var d = null;
+      for (var u of urls) {
+        try {
+          var r = await fetch(u);
+          var tmp = await r.json();
+          if (tmp && Array.isArray(tmp.he) && tmp.he.length > 0) { d = tmp; break; }
+        } catch(e2) {}
+      }
+      if (!d) throw new Error('not found');
+      var verses = Array.isArray(d.he) ? d.he : [];
+      var perekTitle = d.heTitle || ('פרק ' + perekNum);
+
+      html = '<span class="section-title">✦ תניא יומי ✦</span>' +
+        '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>' +
+        '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">ליקוטי אמרים — פרק ' + perekNum + '</div>';
+      if (perekTitle) html += '<div style="text-align:center;font-size:0.95em;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;margin-bottom:8px;">' + perekTitle + '</div>';
+      html += '<div class="ornament">✦ ✦ ✦</div>';
+      if (verses.length > 0) {
+        html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;text-align:right;direction:rtl;">';
+        verses.forEach(function(v) { html += v + '<br><br>'; });
+        html += '</div>';
+      } else {
+        html += '<div style="text-align:center;color:rgba(212,175,55,0.5);">לא ניתן לטעון</div>';
+      }
+      _tanyaCache[perekNum] = html;
     }
   } catch(e) {
     html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
