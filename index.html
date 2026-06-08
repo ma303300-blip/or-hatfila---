@@ -624,6 +624,11 @@
 
   /* בתוך דפי קטגוריה — בלי אנימציית כניסה חוזרת */
   .category-page .banner { animation: none; }
+  .category-page .banner.pressing {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
   .category-page.paused,
   .category-page.paused * {
     pointer-events: none !important;
@@ -3023,7 +3028,7 @@
       <div class="category-title">🙏 תפילות</div>
     </div>
     <div class="banners" id="bannersTefilot">
-      <div class="banner banner-20" data-prayer-id="tefilot_hayom" data-page="tefilot" onclick="openCategoryPageTefilotHayom()">
+      <div class="banner banner-20" data-prayer-id="tefilot_hayom" data-page="tefilot" onclick="document.getElementById('categoryTefilot').classList.remove('active'); pressAndOpen(this, function(){ openCategoryPageTefilotHayom(); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕍</span>
@@ -3041,7 +3046,7 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="openMazonSelector(event)">
+      <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="pressAndOpen(this, function(){ openMazonSelector(null); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
@@ -3179,7 +3184,8 @@
       <div class="category-title">🕍 תפילות היום</div>
     </div>
     <div class="banners" id="bannersTefilotHayom">
-      <div class="banner banner-10" data-prayer-id="shacharit_hayom" data-page="tefilot_hayom" onclick="openPrayerWithBurst(event, 'shacharit_hayom', '🌅')">
+      <div class="banner banner-10" data-prayer-id="shacharit_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'shacharit_hayom', '🌅'); })">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌅</span>
           <div class="banner-title">תפילת שחרית</div>
@@ -3187,7 +3193,8 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-19" data-prayer-id="mincha_hayom" data-page="tefilot_hayom" onclick="openPrayerWithBurst(event, 'mincha_hayom', '🕯️')">
+      <div class="banner banner-19" data-prayer-id="mincha_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mincha_hayom', '🕯️'); })">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕯️</span>
           <div class="banner-title">תפילת מנחה</div>
@@ -3195,7 +3202,8 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-7" data-prayer-id="arvit_hayom" data-page="tefilot_hayom" onclick="openPrayerWithBurst(event, 'arvit_hayom', '🌙')">
+      <div class="banner banner-7" data-prayer-id="arvit_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'arvit_hayom', '🌙'); })">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌙</span>
           <div class="banner-title">תפילת ערבית</div>
@@ -3215,7 +3223,7 @@
       <div class="category-title">🤲 ברכת המזון</div>
     </div>
     <div class="banners" id="bannersMazon">
-      <div class="banner banner-2" data-prayer-id="mazon" data-page="mazon" onclick="openPrayerWithBurst(event, 'mazon', '🤲')">
+      <div class="banner banner-2" data-prayer-id="mazon" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mazon', '🤲'); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
@@ -3224,7 +3232,7 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-14" data-prayer-id="mazon_ashkenaz" data-page="mazon" onclick="openPrayerWithBurst(event, 'mazon_ashkenaz', '🤲')">
+      <div class="banner banner-14" data-prayer-id="mazon_ashkenaz" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mazon_ashkenaz', '🤲'); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
@@ -3233,7 +3241,7 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-16" data-prayer-id="borei_nefashot" data-page="mazon" onclick="openPrayerWithBurst(event, 'borei_nefashot', '🍎')">
+      <div class="banner banner-16" data-prayer-id="borei_nefashot" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'borei_nefashot', '🍎'); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🍎</span>
@@ -3242,7 +3250,7 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
-      <div class="banner banner-9" data-prayer-id="brachot" data-page="mazon" onclick="openPrayerWithBurst(event, 'brachot', '🫒')">
+      <div class="banner banner-9" data-prayer-id="brachot" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'brachot', '🫒'); })">
         <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
         <div class="banner-inner">
           <span class="banner-icon">🫒</span>
@@ -6415,9 +6423,12 @@ window.addEventListener('popstate', function(e) {
   var prayerOverlay = document.getElementById('prayerOverlay');
   if (prayerOverlay && (prayerOverlay.classList.contains('active') || prayerOverlay.classList.contains('zoom-in'))) {
     var fromTefilotHayom = document.body.dataset.prayerFromTefilotHayom === '1';
+    var fromMazon = document.body.dataset.prayerFromMazon === '1';
     closePrayer();
     if (fromTefilotHayom) {
       history.pushState({ page: 'tefilot_hayom' }, '');
+    } else if (fromMazon) {
+      history.pushState({ page: 'mazon' }, '');
     } else {
       history.pushState({ page: 'main' }, '');
     }
@@ -7566,58 +7577,39 @@ function openPrayer(id) {
 
 function closePrayer() {
   var overlay = document.getElementById('prayerOverlay');
+
+  // אם הגענו מתוך דף בחירת נוסח מזון — החזר אותו לפני שסוגרים
+  if (document.body.dataset.prayerFromMazon === '1') {
+    document.body.dataset.prayerFromMazon = '';
+    var mazonPage = document.getElementById('categoryMazon');
+    if (mazonPage) {
+      mazonPage.style.height = window.innerHeight + 'px';
+      mazonPage.classList.add('active');
+    }
+    overlay.style.transition = 'none';
+  }
+  // אם הגענו מתוך דף תפילות היום — החזר אותו לפני שסוגרים
+  if (document.body.dataset.prayerFromTefilotHayom === '1') {
+    document.body.dataset.prayerFromTefilotHayom = '';
+    var tefilotHayomPage = document.getElementById('categoryTefilotHayom');
+    if (tefilotHayomPage) {
+      tefilotHayomPage.style.height = window.innerHeight + 'px';
+      tefilotHayomPage.style.transition = 'none';
+      tefilotHayomPage.classList.add('active');
+      setTimeout(function() { tefilotHayomPage.style.transition = ''; }, 50);
+    }
+    overlay.style.transition = 'none';
+  }
+
   overlay.classList.remove('active');
   overlay.classList.remove('zoom-in');
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
   resumePage();
   stopAutoScroll();
   hidePrayerFontCtrl();
-  // הסר paused מכל דפי הקטגוריה
   document.querySelectorAll('.category-page').forEach(resumeCategoryPage);
-  // אם הגענו מתוך דף תפילות היום — החזר אותו
-  if (document.body.dataset.prayerFromTefilotHayom === '1') {
-    document.body.dataset.prayerFromTefilotHayom = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    var tefilotHayomPage = document.getElementById('categoryTefilotHayom');
-    if (tefilotHayomPage) {
-      var vh = window.innerHeight;
-      tefilotHayomPage.style.height = vh + 'px';
-      tefilotHayomPage.style.transition = 'none';
-      tefilotHayomPage.classList.add('active');
-      var s = parseInt(document.body.dataset.scrollY || '0');
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + s + 'px';
-      document.body.style.width = '100%';
-      setTimeout(function() { tefilotHayomPage.style.transition = ''; }, 50);
-    }
-    return;
-  }
-  // אם הגענו מתוך דף בחירת נוסח מזון — החזר אותו בלי scrollTo
-  if (document.body.dataset.prayerFromMazon === '1') {
-    document.body.dataset.prayerFromMazon = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    var mazonPage = document.getElementById('categoryMazon');
-    if (mazonPage) {
-      var vh = window.innerHeight;
-      mazonPage.style.height = vh + 'px';
-      mazonPage.classList.add('active');
-      var s = parseInt(document.body.dataset.scrollY || '0');
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + s + 'px';
-      document.body.style.width = '100%';
-    }
-    return;
-  }
-  // מקרה רגיל — שחרר גלילה ושחזר מיקום
-  const scrollY = parseInt(document.body.dataset.prayerScrollY || '0');
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.width = '';
-  window.scrollTo(0, scrollY);
 }
 
 document.getElementById('prayerOverlay').addEventListener('click', function(e) {
@@ -8399,11 +8391,13 @@ function openMazonSelector(e) {
   pageEl.style.width = '100%';
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
-  document.body.dataset.scrollY = scrollY;
+  if (document.body.style.position !== 'fixed') {
+    var scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + scrollY + 'px';
+    document.body.style.width = '100%';
+    document.body.dataset.scrollY = scrollY;
+  }
 }
 
 // סגירת דף בחירת נוסח ברכת המזון
@@ -8412,11 +8406,13 @@ function closeMazonSelector() {
   if (!pageEl) return;
   pageEl.classList.remove('active');
   resumePage();
-  var scrollY = parseInt(document.body.dataset.scrollY || '0');
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  if (document.body.style.position === 'fixed') {
+    var scrollY = parseInt(document.body.dataset.scrollY || '0');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollY);
+  }
 }
 
 // על הניסים לנוסח אשכנז
@@ -8507,23 +8503,24 @@ function selectYaalehAshkenaz(name, btn) {
 
 // פתיחת/סגירת דף תפילות היום
 function openCategoryPageTefilotHayom() {
+  var tefilotPage = document.getElementById('categoryTefilot');
+  if (tefilotPage && tefilotPage.classList.contains('active')) {
+    tefilotPage.classList.remove('active');
+  }
   pausePage();
   history.pushState({ page: 'tefilot_hayom' }, '');
   var pageEl = document.getElementById('categoryTefilotHayom');
   if (!pageEl) return;
-  var vh = window.innerHeight;
-  pageEl.style.height = vh + 'px';
-  pageEl.style.top = '0';
-  pageEl.style.left = '0';
-  pageEl.style.right = '0';
-  pageEl.style.width = '100%';
+  pageEl.style.height = window.innerHeight + 'px';
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
-  document.body.dataset.scrollY = scrollY;
+  if (document.body.style.position !== 'fixed') {
+    var scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + scrollY + 'px';
+    document.body.style.width = '100%';
+    document.body.dataset.scrollY = scrollY;
+  }
 }
 
 function closeCategoryPageTefilotHayom() {
@@ -8531,11 +8528,14 @@ function closeCategoryPageTefilotHayom() {
   if (!pageEl) return;
   pageEl.classList.remove('active');
   resumePage();
-  var scrollY = parseInt(document.body.dataset.scrollY || '0');
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  if (document.body.style.position === 'fixed') {
+    var scrollY = parseInt(document.body.dataset.scrollY || '0');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.documentElement.scrollTop = scrollY;
+    document.body.scrollTop = scrollY;
+  }
 }
 
 // סגירת דף קטגוריה
