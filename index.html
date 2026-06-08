@@ -699,11 +699,11 @@
     background: linear-gradient(135deg, rgba(20,5,50,0.42) 0%, rgba(40,10,90,0.38) 40%, rgba(10,5,35,0.42) 100%);
     box-shadow: 0 10px 40px rgba(60,0,150,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
   }
+  .banner-1 .banner-inner {
     background: linear-gradient(135deg, rgba(26,10,62,0.42) 0%, rgba(45,16,96,0.38) 40%, rgba(10,26,78,0.42) 100%);
     box-shadow: 0 10px 40px rgba(80,20,160,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
   }
   .banner-1:hover { box-shadow: 0 20px 60px rgba(80,20,160,0.55); }
-
   .banner-2 .banner-inner {
     background: linear-gradient(135deg, rgba(42,10,10,0.42) 0%, rgba(92,16,16,0.38) 40%, rgba(26,10,32,0.42) 100%);
     box-shadow: 0 10px 40px rgba(139,0,0,0.4), inset 0 1px 0 rgba(212,175,55,0.25);
@@ -8663,6 +8663,10 @@ function _loadSortOrder(page) {
     { keys: ['תיקון כללי', 'תיקון'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'tikun', '📖'); } },
     { keys: ['ראש חודש'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'roshchodesh', '🌙'); } },
     { keys: ['תפילת הדרך', 'הדרך', 'נסיעה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'derech', '🗺️'); } },
+    { keys: ['תפילות היום', 'תפילה יומית'], action: function() { openCategoryPageTefilotHayom(); } },
+    { keys: ['שחרית', 'תפילת שחרית'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'shacharit_hayom', '🌅'); } },
+    { keys: ['מנחה', 'תפילת מנחה'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'mincha_hayom', '🕯️'); } },
+    { keys: ['ערבית', 'תפילת ערבית', 'מעריב'], action: function() { openPrayerWithBurst({ currentTarget: document.body }, 'arvit_hayom', '🌙'); } },
     { keys: ['תפילות'], action: function() { openCategoryPage('tefilot'); } },
   ];
 
