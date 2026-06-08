@@ -624,6 +624,12 @@
 
   /* בתוך דפי קטגוריה — בלי אנימציית כניסה חוזרת */
   .category-page .banner { animation: none; }
+  .category-page.paused,
+  .category-page.paused * {
+    pointer-events: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
 
   @keyframes iconBurst {
     0%   { transform: scale(1);    opacity: 1; }
@@ -6194,9 +6200,15 @@ function pressAndOpen(el, callback) {
   setTimeout(function() { el.classList.remove('pressing'); }, 250);
 }
 
+function pauseCategoryPage(el) { if (el) el.classList.add('paused'); }
+function resumeCategoryPage(el) { if (el) el.classList.remove('paused'); }
+
 function openPrayerWithBurst(e, id, icon) {
   // אל תפתח תפילה אם הקליק בא מעיגול מיון
   if (e && e.target && e.target.classList.contains('banner-sort-circle')) return;
+
+  // עצור מיד את כל דפי הקטגוריה הפתוחים
+  document.querySelectorAll('.category-page.active').forEach(pauseCategoryPage);
   
   const burst = document.createElement('div');
   burst.className = 'icon-burst';
@@ -7507,6 +7519,8 @@ function closePrayer() {
   resumePage();
   stopAutoScroll();
   hidePrayerFontCtrl();
+  // הסר paused מכל דפי הקטגוריה
+  document.querySelectorAll('.category-page').forEach(resumeCategoryPage);
   // אם הגענו מתוך דף תפילות היום — החזר אותו
   if (document.body.dataset.prayerFromTefilotHayom === '1') {
     document.body.dataset.prayerFromTefilotHayom = '';
