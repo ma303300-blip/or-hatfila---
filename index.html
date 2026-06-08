@@ -2389,6 +2389,17 @@
   .bubble-7 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
   .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
+  .bubble-8 {
+    animation: bubbleFloat 4.7s ease-in-out infinite 2.7s;
+    width: 65px; height: 65px;
+    position: absolute;
+    right: 7px;
+    top: 331px;
+    font-size: 0.55em; overflow: visible;
+    z-index: 50;
+  }
+  .bubble-8 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
+  .bubble-8 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-4 {
     animation: bubbleFloat 4.1s ease-in-out infinite 1.8s;
     width: 65px; height: 65px;
@@ -2847,6 +2858,10 @@
   <div class="bubble bubble-3" onclick="pressAndOpen(this, function(){ openCategoryPage('hadlaka'); })">
     <div class="bubble-icon">🕯️</div>
     <div class="bubble-label">הדלקת נר</div>
+  </div>
+  <div class="bubble bubble-8" onclick="pressAndOpen(this, function(){ window.open('https://forms.gle/CKaqzVdLSkDBKPJu9','_blank'); })">
+    <div class="bubble-icon">📬</div>
+    <div class="bubble-label">בקשות<br>והערות</div>
   </div>
   <!-- תהילים יומי — fixed מתחת לבועת לוח שנה -->
   <div class="bubble bubble-4" onclick="pressAndOpen(this, openTehilimYomi)">
