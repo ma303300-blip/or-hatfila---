@@ -2117,6 +2117,9 @@
     50%       { border-color: rgba(255,255,255,0.2); box-shadow: none; }
   }
   .heb-cal-cell.has-hilula::after { content:'🕯'; font-size:8px; position:absolute; bottom:1px; right:1px; }
+  .heb-cal-cell.has-chag { background:rgba(0,80,200,0.15); border:2px solid #4a90e2; animation:chagFlash 1.4s ease-in-out infinite; }
+  @keyframes chagFlash { 0%,100%{border-color:#4a90e2;box-shadow:0 0 6px rgba(74,144,226,0.8);}50%{border-color:rgba(74,144,226,0.2);box-shadow:none;} }
+  .heb-cal-chag-name { font-size:7px; color:#90c8ff; text-align:center; line-height:1; margin-top:1px; font-family:'Heebo',sans-serif; }
   .heb-cal-day-num { font-family:'Frank Ruhl Libre',serif; font-size:13px; font-weight:900; color:#fff; line-height:1; text-shadow:0 0 6px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1); }
   .heb-cal-day-greg { font-family:'Heebo',sans-serif; font-size:8px; color:rgba(255,255,255,0.8); line-height:1; margin-top:1px; font-weight:600; }
   .heb-cal-day-panel {
@@ -7765,7 +7768,7 @@ function resumePage() {
 
 // לוח שנה עברי חודשי
 (function() {
-  var _off = 0, _zc = {};
+  var _off = 0, _zc = {}, _chagCache = {};
 
   function gem(n) {
     var o=['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
@@ -7792,6 +7795,26 @@ function resumePage() {
     var dim=new Date(yr,mo+1,0).getDate(), days=[];
     for(var d=1;d<=dim;d++){var dt=new Date(yr,mo,d);days.push({g:dt,h:getHeb(dt),n:d});}
 
+    // טעינת חגים מ-Hebcal אם עוד לא נטענו לחודש זה
+    var cacheKey = yr+'-'+mo;
+    if (!_chagCache[cacheKey]) {
+      _chagCache[cacheKey] = {};
+      var y1=yr, m1=mo+1, y2=yr, m2=mo+2;
+      if(m2>12){m2=1;y2++;}
+      fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=off&nx=off&ss=off&mf=off&c=off&s=off&year='+yr+'&month='+(mo+1)+'&geo=none')
+        .then(function(r){return r.json();})
+        .then(function(data){
+          if(!data.items) return;
+          data.items.forEach(function(item){
+            if(item.category==='holiday' && item.date && item.hebrew) {
+              var dk = item.date.substring(0,10);
+              _chagCache[cacheKey][dk] = item.hebrew;
+            }
+          });
+          build();
+        }).catch(function(){});
+    }
+
     var fh=days[0].h, lh=days[days.length-1].h;
     var title=fh&&lh?(fh.month===lh.month?fh.month+' '+fh.year:fh.month+' – '+lh.month+' '+lh.year):'';
     title+=' | '+tgt.toLocaleDateString('he-IL',{month:'long',year:'numeric'});
@@ -7816,9 +7839,13 @@ function resumePage() {
         ?hilulaCalendar.find(function(x){return x.month===item.h.month&&x.day===item.h.day;})
         :null;
       if(hil) cls.push('has-hilula');
+      var dk2=item.g.getFullYear()+'-'+String(item.g.getMonth()+1).padStart(2,'0')+'-'+String(item.g.getDate()).padStart(2,'0');
+      var chagName = _chagCache[cacheKey] ? _chagCache[cacheKey][dk2] : null;
+      if(chagName) cls.push('has-chag');
       cell.className=cls.join(' ');
       cell.innerHTML='<div class="heb-cal-day-num">'+(item.h?gem(item.h.day):'')+'</div>'
-                    +'<div class="heb-cal-day-greg">'+item.n+'</div>';
+                    +'<div class="heb-cal-day-greg">'+item.n+'</div>'
+                    +(chagName?'<div class="heb-cal-chag-name">'+chagName+'</div>':'');
       cell.addEventListener('click',(function(it,hl,c){return function(){
         var wasSelected = c.classList.contains('selected');
         // הסר selected מכל התאים
