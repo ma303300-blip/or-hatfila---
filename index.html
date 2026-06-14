@@ -7323,7 +7323,16 @@ function checkTodayEvents() {
     card.style.display = 'block';
   } else if (isRoshChodesh) {
     document.getElementById('todayIcon').textContent = '🌙';
-    document.getElementById('todayEvent').textContent = 'ראש חודש ' + (hDate.month || '');
+    var rcMonthName = hDate.month || '';
+    if (hDate.day === 30) {
+      // ל' בחודש = ראש חודש החודש הבא — חשב את מחר
+      try {
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        rcMonthName = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(tomorrow);
+      } catch(e) {}
+    }
+    document.getElementById('todayEvent').textContent = 'ראש חודש ' + rcMonthName;
     document.getElementById('todayAction').textContent = 'פתח תפילת הדלקת נר';
     document.getElementById('todayCardInner').onclick = () => openPrayerWithBurst({ currentTarget: document.getElementById('todayCardInner') }, 'roshchodesh', '🌙');
     card.style.display = 'block';
@@ -7573,10 +7582,14 @@ var _dateInterval = setInterval(updateDateDisplay, 60000);
 function getHebrewMonth() {
   try {
     const now = new Date();
-    
+
+    // כשהיום ל' בחודש — ראש חודש של החודש הבא
+    const hebrewDay = parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(now));
+    const targetDate = (hebrewDay === 30) ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) : now;
+
     const fullDate = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', {
       day: 'numeric', month: 'long', year: 'numeric'
-    }).format(now);
+    }).format(targetDate);
 
     const monthMap = [
       { keys: ['תשרי','בתשרי'], name: 'תִּשְׁרֵי', label: 'תִּשְׁרֵי' },
