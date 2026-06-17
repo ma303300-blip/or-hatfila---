@@ -1845,8 +1845,7 @@
       </div>
     </div>
     <div class="welcome-modal-btns">
-      <button class="welcome-btn-got" onclick="closeWelcome(true)">✅ הבנתי</button>
-      <button class="welcome-btn-later" onclick="closeWelcome(false)">🔔 הזכר לי מאוחר יותר</button>
+      <button class="welcome-btn-got" onclick="closeWelcome()">✅ הבנתי</button>
     </div>
   </div>
 </div>
@@ -8484,22 +8483,18 @@ window.addEventListener('resize', function() {
   function showWelcome() {
     try {
       var seen = localStorage.getItem('orHatfila_welcome_done');
-      if (seen === 'true') return; // "הבנתי" — לא מציג יותר
+      if (seen === 'true') return;
     } catch(e) {}
-    // מציג אחרי שה-splash נעלם (2.7 שניות)
     setTimeout(function() {
       var el = document.getElementById('welcomeOverlay');
       if (el) el.classList.add('visible');
+      try { localStorage.setItem('orHatfila_welcome_done', 'true'); } catch(e) {}
     }, 2700);
   }
 
-  window.closeWelcome = function(permanent) {
+  window.closeWelcome = function() {
     var el = document.getElementById('welcomeOverlay');
     if (el) el.classList.remove('visible');
-    if (permanent) {
-      try { localStorage.setItem('orHatfila_welcome_done', 'true'); } catch(e) {}
-    }
-    // אם "מאוחר יותר" — יופיע שוב בכניסה הבאה (לא שומר כלום)
   };
 
   if (document.readyState === 'loading') {
