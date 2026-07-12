@@ -6262,6 +6262,26 @@ function closeSearch() {
   document.querySelector('.divider').style.opacity = '1';
 }
 
+// בונה גרסה מנוקדת-מנוטרלת של הטקסט + מיפוי אינדקסים חזרה לטקסט המקורי.
+// כך חיפוש בלי ניקוד ("נשמת") מוצא טקסט עם ניקוד ("נִשְׁמַת"),
+// וההדגשה עדיין נעשית על הטקסט המקורי.
+function buildNormalized(text) {
+  let norm = '';
+  const map = [];
+  for (let i = 0; i < text.length; i++) {
+    if (!/[֑-ׇ]/.test(text[i])) {
+      map.push(i);
+      norm += text[i];
+    }
+  }
+  map.push(text.length); // סנטינל לסוף
+  return { norm, map };
+}
+
+function stripNikud(str) {
+  return str.replace(/[֑-ׇ]/g, '');
+}
+
 function performSearch(query) {
   const resultsEl = document.getElementById('searchResults');
   if (!query.trim()) {
@@ -6272,14 +6292,31 @@ function performSearch(query) {
   resultsEl.classList.add('visible');
   const results = [];
 
+  const qNorm = stripNikud(query).trim();
+  if (!qNorm) {
+    resultsEl.classList.remove('visible');
+    return;
+  }
+
   for (const [id, prayer] of Object.entries(prayers)) {
     const plainText = prayer.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-    const idx = plainText.indexOf(query);
+    const { norm, map } = buildNormalized(plainText);
+    const idx = norm.indexOf(qNorm);
+
     if (idx !== -1) {
-      const start = Math.max(0, idx - 30);
-      const end = Math.min(plainText.length, idx + query.length + 30);
-      const excerpt = plainText.substring(start, end)
-        .replace(query, `<mark>${query}</mark>`);
+      // התאמה בגוף התפילה — בונים תקציר עם הדגשה על הטקסט המקורי
+      const matchStart = map[idx];
+      const matchEnd = map[idx + qNorm.length];
+      const start = Math.max(0, matchStart - 30);
+      const end = Math.min(plainText.length, matchEnd + 30);
+      const excerpt =
+        plainText.substring(start, matchStart) +
+        '<mark>' + plainText.substring(matchStart, matchEnd) + '</mark>' +
+        plainText.substring(matchEnd, end);
+      results.push({ id, title: prayer.title, excerpt });
+    } else if (stripNikud(prayer.title).indexOf(qNorm) !== -1) {
+      // התאמה בכותרת בלבד — מציגים תחילת גוף התפילה כתצוגה מקדימה
+      const excerpt = plainText.substring(0, 60);
       results.push({ id, title: prayer.title, excerpt });
     }
   }
