@@ -68,6 +68,32 @@
     overscroll-behavior-y: none;
   }
 
+  /* אינדיקטור משיכה-לרענון */
+  #ptrIndicator {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-52px);
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    padding: 8px;
+  }
+  #ptrIndicator .ptr-spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(212,175,55,0.25);
+    border-top-color: rgba(212,175,55,0.95);
+    border-radius: 50%;
+    background: rgba(10,14,46,0.85);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  #ptrIndicator.spinning .ptr-spinner {
+    animation: ptrSpin 0.8s linear infinite;
+  }
+  @keyframes ptrSpin { to { transform: rotate(360deg); } }
+
   /* Temple background - full visible */
   body::before {
     content: '';
@@ -665,8 +691,8 @@
 
   /* הקפאה גורפת של אנימציות מסך הבית כשפתוחה תפילה או קטגוריה —
      מקפיא את כל הרקע (בועות, מרקיזה, זוהר, פעימות) ומשאיר את התפילה/הקטגוריה הפעילה חיים */
-  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst),
-  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst) * {
+  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst):not(#ptrIndicator),
+  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst):not(#ptrIndicator) * {
     animation-play-state: paused !important;
   }
 
@@ -8052,6 +8078,112 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 
 </script>
 <script>
+// ═══════════════════════════════════════════════════════
+// משיכה-לרענון + שמירת מיקום (נשאר באותו דף אחרי רענון)
+// ═══════════════════════════════════════════════════════
+(function() {
+  var VKEY = 'orHatfila_lastView';
+
+  // שומר את הדף הנוכחי (תפילה/פרשה/יומי/קטגוריה) לפני רענון
+  window._saveViewForReload = function() {
+    try {
+      var view = 'home';
+      var ov = document.getElementById('prayerOverlay');
+      if (ov && (ov.classList.contains('active') || ov.classList.contains('zoom-in')) &&
+          typeof currentPrayerId !== 'undefined' && currentPrayerId) {
+        view = 'prayer:' + currentPrayerId;
+      } else {
+        var cat = document.querySelector('.category-page.active');
+        if (cat && cat.id) view = 'cat:' + cat.id;
+      }
+      sessionStorage.setItem(VKEY, view);
+    } catch(e) {}
+  };
+
+  // מחזיר את המשתמש לאותו דף אחרי טעינה מחדש
+  function restoreView() {
+    var view = null;
+    try { view = sessionStorage.getItem(VKEY); sessionStorage.removeItem(VKEY); } catch(e) {}
+    if (!view || view === 'home') return;
+    try {
+      if (view.indexOf('prayer:') === 0) {
+        var id = view.slice(7);
+        if (id.indexOf('parasha_') === 0) { if (typeof openParasha === 'function') openParasha(); }
+        else if (id === 'tehilim_yomi') { if (typeof openTehilimYomi === 'function') openTehilimYomi(); }
+        else if (id === 'halacha_yomit') { if (typeof openHalachaYomit === 'function') openHalachaYomit(); }
+        else if (id === 'tanya_yomi') { if (typeof openTanyaYomi === 'function') openTanyaYomi(); }
+        else if (typeof prayers !== 'undefined' && prayers[id] && typeof openPrayer === 'function') { openPrayer(id); }
+      } else if (view.indexOf('cat:') === 0) {
+        var cid = view.slice(4);
+        if (cid === 'categoryHadlaka') { if (typeof openCategoryPage === 'function') openCategoryPage('hadlaka'); }
+        else if (cid === 'categoryTefilotHayom') {
+          if (typeof openCategoryPage === 'function') openCategoryPage('tefilot');
+          if (typeof openCategoryPageTefilotHayom === 'function') openCategoryPageTefilotHayom();
+        }
+        else { if (typeof openCategoryPage === 'function') openCategoryPage('tefilot'); }
+      }
+    } catch(e) {}
+  }
+
+  // שמירה גורפת בכל טעינה-מחדש (גיבוי — תופס גם רענון אוטומטי)
+  window.addEventListener('beforeunload', function() { try { window._saveViewForReload(); } catch(e) {} });
+
+  function runRestore() { setTimeout(restoreView, 250); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runRestore);
+  else runRestore();
+
+  // ═══ מחוות משיכה-לרענון על #appScroll ═══
+  function initPTR() {
+    var sc = document.getElementById('appScroll');
+    if (!sc) return;
+    var ind = document.getElementById('ptrIndicator');
+    if (!ind) {
+      ind = document.createElement('div');
+      ind.id = 'ptrIndicator';
+      ind.innerHTML = '<div class="ptr-spinner"></div>';
+      document.body.appendChild(ind);
+    }
+    var startY = 0, pulling = false, dist = 0;
+    var THRESH = 70, MAX = 110;
+
+    sc.addEventListener('touchstart', function(e) {
+      if (sc.scrollTop <= 0) { startY = e.touches[0].clientY; pulling = true; dist = 0; }
+      else { pulling = false; }
+    }, { passive: true });
+
+    sc.addEventListener('touchmove', function(e) {
+      if (!pulling) return;
+      dist = e.touches[0].clientY - startY;
+      if (dist > 0 && sc.scrollTop <= 0) {
+        var pull = Math.min(dist, MAX);
+        ind.style.transform = 'translateX(-50%) translateY(' + (pull - 52) + 'px)';
+        ind.style.opacity = String(Math.min(pull / THRESH, 1));
+      } else {
+        dist = 0; ind.style.opacity = '0';
+      }
+    }, { passive: true });
+
+    sc.addEventListener('touchend', function() {
+      if (!pulling) return;
+      pulling = false;
+      if (dist > THRESH) {
+        ind.classList.add('spinning');
+        ind.style.transform = 'translateX(-50%) translateY(16px)';
+        ind.style.opacity = '1';
+        try { window._saveViewForReload(); } catch(e) {}
+        setTimeout(function() { window.location.reload(); }, 200);
+      } else {
+        ind.style.opacity = '0';
+        ind.style.transform = 'translateX(-50%) translateY(-52px)';
+      }
+      dist = 0;
+    }, { passive: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPTR);
+  else initPTR();
+})();
+</script>
+<script>
   if ("serviceWorker" in navigator) {
     // iOS Safari 11.3+ supports service workers
     // Use a try-catch to handle any registration errors gracefully
@@ -8062,6 +8194,7 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
         const newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            try { if (window._saveViewForReload) window._saveViewForReload(); } catch(e) {}
             window.location.reload();
           }
         });
