@@ -693,8 +693,8 @@
 
   /* הקפאה גורפת של אנימציות מסך הבית כשפתוחה תפילה או קטגוריה —
      מקפיא את כל הרקע (בועות, מרקיזה, זוהר, פעימות) ומשאיר את התפילה/הקטגוריה הפעילה חיים */
-  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst):not(#ptrIndicator),
-  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst):not(#ptrIndicator) * {
+  body.bg-frozen #appScroll > *:not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst),
+  body.bg-frozen #appScroll > *:not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst) * {
     animation-play-state: paused !important;
   }
 
