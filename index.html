@@ -43,14 +43,29 @@
     cursor: pointer;
   }
 
+  /* App-shell: המסמך עצמו לא נגלל — הגלילה עוברת ל-#appScroll.
+     כך סרגל הכתובת של הדפדפן לא מתכווץ בגלילה, והרקע ה-fixed נשאר יציב (בלי ריצודים). */
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
   html { background: #0A0E2E; }
 
   body {
     background: #0A0E2E;
     font-family: 'Frank Ruhl Libre', serif;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
     overflow-x: hidden;
+  }
+
+  /* מיכל הגלילה היחיד של האפליקציה */
+  #appScroll {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
   }
 
   /* Temple background - full visible */
@@ -1850,6 +1865,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+<div id="appScroll">
 
 <!-- ═══════════════════════════════════════ -->
 <!-- חלון ברוכים הבאים                      -->
@@ -7215,8 +7231,8 @@ async function openParasha() {
   overlay.classList.add('active');
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
@@ -7402,8 +7418,8 @@ function openFavsModal() {
     }).join('');
   }
   document.getElementById('favsModalOverlay').classList.add('active');
-  const scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  const scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.favsScrollY = scrollY;
@@ -7414,10 +7430,10 @@ function closeFavsModal(e) {
 function closeFavsModalDirect() {
   document.getElementById('favsModalOverlay').classList.remove('active');
   const scrollY = parseInt(document.body.dataset.favsScrollY || '0');
-  document.body.style.position = '';
+  _unlockAppScroll();
   document.body.style.top = '';
   document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  _appScrollTo(scrollY);
 }
 function updateFhbCount() {
   const el = document.getElementById('fhbCount');
@@ -7905,8 +7921,8 @@ function openPrayer(id) {
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
   // נועל גלילה בלי קפיצה
-  const scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  const scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
@@ -7984,7 +8000,7 @@ function closePrayer() {
   // אם חוזרים לדף קטגוריה — לא משחררים את ה-body position
   // (הדף הפתוח מנהל את ה-scroll בעצמו ומונע חשיפת מסך הבית)
   if (!returningToCategory) {
-    document.body.style.position = '';
+    _unlockAppScroll();
     document.body.style.top = '';
     document.body.style.width = '';
   }
@@ -8101,6 +8117,12 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 // הקפאת כל הפונקציות הרצות ברקע
 // מקפיא/משחרר את אנימציות מסך הבית לפי מצב אמיתי: אם פתוחה תפילה או קטגוריה — קופא.
 // בודק DOM בפועל (לא מונה) כדי שיהיה נכון בכל מסלול מעבר, כולל חזרה מתפילה לקטגוריה.
+// עזרי app-shell — גלובליים כדי שיהיו זמינים בכל בלוקי הסקריפט
+window._appScrollTop = function () { var a = document.getElementById('appScroll'); return a ? a.scrollTop : 0; };
+window._appScrollTo  = function (y) { var a = document.getElementById('appScroll'); if (a) a.scrollTop = y; };
+window._lockAppScroll = function () { var a = document.getElementById('appScroll'); if (a) a.style.overflow = 'hidden'; };
+window._unlockAppScroll = function () { var a = document.getElementById('appScroll'); if (a) a.style.overflow = ''; };
+
 function updateBgFreeze() {
   var open = document.querySelector('.prayer-overlay.active, .category-page.active');
   document.body.classList.toggle('bg-frozen', !!open);
@@ -8770,8 +8792,8 @@ function openCategoryPage(pageId) {
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
 
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.scrollY = scrollY;
@@ -8798,8 +8820,8 @@ function openMazonSelector(e) {
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
   if (document.body.style.position !== 'fixed') {
-    var scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    var scrollY = _appScrollTop();
+    _lockAppScroll();
     document.body.style.top = '-' + scrollY + 'px';
     document.body.style.width = '100%';
     document.body.dataset.scrollY = scrollY;
@@ -8836,10 +8858,10 @@ function closeMazonSelector() {
   resumePage();
   if (document.body.style.position === 'fixed') {
     var scrollY = parseInt(document.body.dataset.scrollY || '0');
-    document.body.style.position = '';
+    _unlockAppScroll();
     document.body.style.top = '';
     document.body.style.width = '';
-    window.scrollTo(0, scrollY);
+    _appScrollTo(scrollY);
   }
 }
 
@@ -8951,8 +8973,8 @@ function openCategoryPageTefilotHayom() {
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
   if (document.body.style.position !== 'fixed') {
-    var scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    var scrollY = _appScrollTop();
+    _lockAppScroll();
     document.body.style.top = '-' + scrollY + 'px';
     document.body.style.width = '100%';
     document.body.dataset.scrollY = scrollY;
@@ -8988,7 +9010,7 @@ function closeCategoryPageTefilotHayom() {
   resumePage();
   if (document.body.style.position === 'fixed') {
     var scrollY = parseInt(document.body.dataset.scrollY || '0');
-    document.body.style.position = '';
+    _unlockAppScroll();
     document.body.style.top = '';
     document.body.style.width = '';
     document.documentElement.scrollTop = scrollY;
@@ -9003,10 +9025,10 @@ function closeCategoryPage(pageId) {
   pageEl.classList.remove('active');
   resumePage();
   var scrollY = parseInt(document.body.dataset.scrollY || '0');
-  document.body.style.position = '';
+  _unlockAppScroll();
   document.body.style.top = '';
   document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  _appScrollTo(scrollY);
   if (_currentSortPage === pageId) _cancelSort(pageId);
 }
 
@@ -9524,8 +9546,8 @@ async function openTehilimYomi() {
     });
   });
 
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
@@ -9630,8 +9652,8 @@ async function openHalachaYomit() {
   overlay.querySelector('.prayer-content').scrollTop = 0;
   requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
 
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
@@ -9719,8 +9741,8 @@ async function openTanyaYomi() {
   overlay.querySelector('.prayer-content').scrollTop = 0;
   requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
 
-  var scrollY = window.scrollY;
-  document.body.style.position = 'fixed';
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
   document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
@@ -9915,5 +9937,6 @@ function initAmidaDefaults() {
 }
 document.addEventListener('DOMContentLoaded', initAmidaDefaults);
 </script>
+</div><!-- /#appScroll -->
 </body>
 </html>
