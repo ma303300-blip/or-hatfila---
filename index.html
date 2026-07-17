@@ -7948,17 +7948,14 @@ function openPrayer(id) {
     }, 100);
   }
   const controls = document.getElementById('scrollControls');
-  if (id === 'mazon' || id === 'mazon_ashkenaz' || id === 'nishmat' || id === 'borei_nefashot' || id === 'derech' || id === 'chayalim' || id === 'challah' || id === 'shema' || id === 'hilula' || id === 'roshchodesh' || id === 'refua' || id === 'brachot' || id === 'modeh' || id === 'rachel' || id === 'tikun' || id === 'hodaya' || id === 'igeret_haramban' || id === 'shalom_bayit' || id === 'zivug' || id === 'parnasa' || id === 'shacharit_hayom' || id === 'mincha_hayom' || id === 'arvit_hayom') {
-    controls.classList.add('visible');
-    document.getElementById('btnManual').classList.add('active');
-    document.getElementById('btnAuto').classList.remove('active');
-    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
-    document.getElementById('speedControl').classList.remove('visible');
-    stopAutoScroll();
-  } else {
-    controls.classList.remove('visible');
-    stopAutoScroll();
-  }
+  // גורף: כל תפילה שנפתחת דרך openPrayer מקבלת גלילה אוטומטית — בלי רשימת היתר קשיחה,
+  // כך שכל התפילות (הקיימות והעתידיות) זהות בפונקציונליות.
+  controls.classList.add('visible');
+  document.getElementById('btnManual').classList.add('active');
+  document.getElementById('btnAuto').classList.remove('active');
+  document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+  document.getElementById('speedControl').classList.remove('visible');
+  stopAutoScroll();
 }
 
 function closePrayer() {
@@ -8744,21 +8741,41 @@ window.addEventListener('resize', function() {
 
 
 (function() {
+  var KEY = 'orHatfila_welcome_done';
+
+  // מבקש מהדפדפן אחסון קבוע — מונע פינוי (eviction) של האחסון בין הפעלות,
+  // מה שגרם לחלון להיפתח שוב ושוב.
+  try {
+    if (navigator.storage && navigator.storage.persist) { navigator.storage.persist(); }
+  } catch(e) {}
+
+  // רושם "כבר נראה" בשני מקומות בלתי-תלויים: localStorage + קוקי ל-10 שנים.
+  function markSeen() {
+    try { localStorage.setItem(KEY, 'true'); } catch(e) {}
+    try { document.cookie = KEY + '=true; max-age=' + (10*365*24*60*60) + '; path=/; samesite=lax'; } catch(e) {}
+  }
+
+  // "כבר נראה" אם אחד מהמקורות מסמן זאת.
+  function alreadySeen() {
+    try { if (localStorage.getItem(KEY) === 'true') return true; } catch(e) {}
+    try { if (document.cookie.indexOf(KEY + '=true') !== -1) return true; } catch(e) {}
+    return false;
+  }
+
   function showWelcome() {
-    try {
-      var seen = localStorage.getItem('orHatfila_welcome_done');
-      if (seen === 'true') return;
-    } catch(e) {}
+    if (alreadySeen()) return;
     setTimeout(function() {
+      if (alreadySeen()) return;
       var el = document.getElementById('welcomeOverlay');
       if (el) el.classList.add('visible');
-      try { localStorage.setItem('orHatfila_welcome_done', 'true'); } catch(e) {}
+      markSeen();
     }, 2700);
   }
 
   window.closeWelcome = function() {
     var el = document.getElementById('welcomeOverlay');
     if (el) el.classList.remove('visible');
+    markSeen();
   };
 
   if (document.readyState === 'loading') {
