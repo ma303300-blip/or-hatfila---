@@ -8132,6 +8132,15 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runRestore);
   else runRestore();
 
+  // רענון רך — מריץ מחדש את פונקציות העדכון בתוך הדף, בלי טעינה מחדש (מהיר, בלי הבזק, לא זז מהדף)
+  function softRefresh() {
+    try { if (typeof updateDateDisplay === 'function') updateDateDisplay(); } catch(e) {}
+    try { if (window._updateParasha) window._updateParasha(); } catch(e) {}
+    try { if (window._updateShabbat) window._updateShabbat(); } catch(e) {}
+    try { if (typeof checkHilula === 'function') checkHilula(); } catch(e) {}
+    try { if (typeof checkRoshChodesh === 'function') checkRoshChodesh(); } catch(e) {}
+  }
+
   // ═══ מחוות משיכה-לרענון על #appScroll ═══
   function initPTR() {
     var sc = document.getElementById('appScroll');
@@ -8167,11 +8176,16 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
       if (!pulling) return;
       pulling = false;
       if (dist > THRESH) {
+        // רענון רך במקום טעינה מחדש — נשארים בדיוק באותו דף
         ind.classList.add('spinning');
         ind.style.transform = 'translateX(-50%) translateY(16px)';
         ind.style.opacity = '1';
-        try { window._saveViewForReload(); } catch(e) {}
-        setTimeout(function() { window.location.reload(); }, 200);
+        softRefresh();
+        setTimeout(function() {
+          ind.classList.remove('spinning');
+          ind.style.opacity = '0';
+          ind.style.transform = 'translateX(-50%) translateY(-52px)';
+        }, 700);
       } else {
         ind.style.opacity = '0';
         ind.style.transform = 'translateX(-50%) translateY(-52px)';
@@ -8233,6 +8247,7 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
     }
   }
   
+  window._updateParasha = updateParashaDynamically; // חשיפה לרענון הרך
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateParashaDynamically);
   } else {
@@ -9316,6 +9331,7 @@ function _loadSortOrder(page) {
   }
 
   // הצגת / הסתרת מסך שבת
+  window._updateShabbat = updateShabbatScreen; // חשיפה לרענון הרך
   function updateShabbatScreen() {
     var screen = document.getElementById('shabbat-screen');
     if (!screen) return;
