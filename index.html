@@ -48,6 +48,8 @@
   html, body {
     height: 100%;
     overflow: hidden;
+    /* מכבה את המשיכה-לרענון הטבעית של הדפדפן בכל האפליקציה (המחווה בבית היא JS נפרד) */
+    overscroll-behavior-y: none;
   }
   html { background: #0A0E2E; }
 
@@ -8171,16 +8173,11 @@ document.getElementById('prayerOverlay').addEventListener('click', function(e) {
       if (!pulling) return;
       pulling = false;
       if (dist > THRESH) {
-        // רענון רך במקום טעינה מחדש — נשארים בדיוק באותו דף
+        // רענון אמיתי מלא של האפליקציה — רק במסך הבית, אז חוזרים לבית
         ind.classList.add('spinning');
         ind.style.transform = 'translateX(-50%) translateY(16px)';
         ind.style.opacity = '1';
-        softRefresh();
-        setTimeout(function() {
-          ind.classList.remove('spinning');
-          ind.style.opacity = '0';
-          ind.style.transform = 'translateX(-50%) translateY(-52px)';
-        }, 700);
+        setTimeout(function() { window.location.reload(); }, 200);
       } else {
         ind.style.opacity = '0';
         ind.style.transform = 'translateX(-50%) translateY(-52px)';
