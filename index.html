@@ -57,7 +57,8 @@
   body::before {
     content: '';
     position: fixed;
-    inset: 0;
+    /* overscan של 2px מונע חשיפת קצוות/"קפיצה" כששורת הכתובת של הדפדפן נעלמת בגלילה */
+    inset: -2px;
     background-image: url('https://raw.githubusercontent.com/ma303300-blip/or-hatfila---/main/background.png');
     background-size: cover;
     background-position: center top;
@@ -65,13 +66,19 @@
     opacity: 1;
     pointer-events: none;
     z-index: 0;
+    /* בידוד לשכבת GPU יציבה — מונע רינדור-מחדש של הרקע הקבוע בכל גלילה (ריצודים שחורים) */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   /* Subtle overlay for readability */
   body::after {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -2px;
     background: linear-gradient(
       180deg,
       rgba(0,0,0,0.35) 0%,
@@ -80,6 +87,11 @@
     );
     pointer-events: none;
     z-index: 0;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .header {
@@ -636,6 +648,13 @@
     transition: none !important;
   }
 
+  /* הקפאה גורפת של אנימציות מסך הבית כשפתוחה תפילה או קטגוריה —
+     מקפיא את כל הרקע (בועות, מרקיזה, זוהר, פעימות) ומשאיר את התפילה/הקטגוריה הפעילה חיים */
+  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst),
+  body.bg-frozen > *:not(.prayer-overlay):not(.category-page):not(#prayerFontCtrl):not(.icon-burst) * {
+    animation-play-state: paused !important;
+  }
+
   @keyframes iconBurst {
     0%   { transform: scale(1);    opacity: 1; }
     40%  { transform: scale(3.5);  opacity: 0.7; }
@@ -962,6 +981,10 @@
     padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
     overscroll-behavior: none;
     background: #1a0e05;
+    /* גלילת מומנטום חלקה + שכבת GPU יציבה לגלילת תפילות ארוכות */
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   /* Parchment page */
@@ -969,8 +992,8 @@
     position: relative;
     background: linear-gradient(160deg, #f5e6c0 0%, #ede0b0 40%, #f0e4b8 70%, #e8d8a8 100%);
     border-radius: 4px;
+    /* הוסר הצל הפנימי הכבד (inset 0 0 50px) שנצבע מחדש על פני דף גבוה מאוד בכל פריים גלילה */
     box-shadow:
-      inset 0 0 50px rgba(139,80,20,0.2),
       0 4px 24px rgba(0,0,0,0.55),
       0 0 0 2px rgba(180,130,20,0.5),
       0 0 0 6px rgba(139,80,20,0.2),
@@ -8076,12 +8099,20 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
 
 // כפתור חזרה פיזי (אנדרואיד)
 // הקפאת כל הפונקציות הרצות ברקע
+// מקפיא/משחרר את אנימציות מסך הבית לפי מצב אמיתי: אם פתוחה תפילה או קטגוריה — קופא.
+// בודק DOM בפועל (לא מונה) כדי שיהיה נכון בכל מסלול מעבר, כולל חזרה מתפילה לקטגוריה.
+function updateBgFreeze() {
+  var open = document.querySelector('.prayer-overlay.active, .category-page.active');
+  document.body.classList.toggle('bg-frozen', !!open);
+}
+
 function pausePage() {
   stopAutoScroll();
   clearInterval(_hilulaInterval);
   clearInterval(_roshChodeshInterval);
   clearInterval(_dateInterval);
   if (window._shabbatCheckIntervalRef) clearInterval(window._shabbatCheckIntervalRef);
+  requestAnimationFrame(updateBgFreeze);
 }
 
 // חידוש כל הפונקציות בחזרה לדף
@@ -8095,6 +8126,7 @@ function resumePage() {
       if (typeof updateShabbatScreen === 'function') updateShabbatScreen();
     }, 60000);
   }
+  requestAnimationFrame(updateBgFreeze);
 }
 
 // לוח שנה עברי חודשי
