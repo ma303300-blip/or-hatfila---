@@ -568,7 +568,7 @@
       0 0 40px rgba(212,175,55,0.4),
       0 2px 4px rgba(0,0,0,0.8);
     letter-spacing: 2px;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
     animation: titleHeartbeat 2.5s ease-in-out infinite;
     position: relative;
     z-index: 2;
@@ -640,6 +640,9 @@
     font-weight: 400;
     letter-spacing: 3px;
     text-shadow: 0 1px 6px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.6);
+    /* מעל הכותרת — כדי שהזוהר הפועם של הכותרת לא יכסה את כותרת-המשנה */
+    position: relative;
+    z-index: 3;
   }
 
   .divider {
