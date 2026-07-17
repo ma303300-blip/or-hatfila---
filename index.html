@@ -2692,7 +2692,8 @@
     z-index: 50;
     overflow-y: auto;
     overflow-x: hidden;
-    overscroll-behavior: contain;
+    /* none (ולא contain) — מבטל את הרענון הטבעי של הדפדפן בעמודי הקטגוריה */
+    overscroll-behavior: none;
     padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     will-change: transform;
     -webkit-transform: translateZ(0);
