@@ -6951,9 +6951,16 @@ async function openParasha() {
     return s.replace(/[\u05B0-\u05C7]/g, '').trim();
   }
 
+  // שלב 0: המקור הכי אמין — השם האנגלי מ-hebcal ששמור עבור הבאנר והפרשה המלאה.
+  // מיפוי ישיר מבטיח שהתקציר תמיד מסונכרן עם הבאנר ועם הפרשה המלאה.
+  var engFromHebcal = window._hebcalParashaEnglish || '';
+  if (engFromHebcal && parashaNameMap[engFromHebcal] && parashotData[parashaNameMap[engFromHebcal]]) {
+    _currentParashaKey = parashaNameMap[engFromHebcal];
+  }
+
   // שלב 1: קרא מהבאנר הרץ — תמיד מסונכרן עם המציאות
   var marqueeEl = document.getElementById('parashaTextElement1');
-  if (marqueeEl) {
+  if (!_currentParashaKey && marqueeEl) {
     var text = marqueeEl.textContent || '';
     var idx = text.indexOf('\u05E4\u05E8\u05E9\u05EA \u05D4\u05E9\u05D1\u05D5\u05E2:');
     if (idx !== -1) {
@@ -6961,7 +6968,8 @@ async function openParasha() {
       // קח עד סמן ✨ או סוף שורה
       var endIdx = after.search(/[\u2728\n]/);
       var hebRaw = (endIdx === -1 ? after : after.substring(0, endIdx)).trim();
-      var hebClean = stripNik(hebRaw).replace(/-/g, ' ');
+      // הסר קידומת "פרשת" — hebcal מחזיר "פרשת דברים" אך המפתחות הם שם נטו
+      var hebClean = stripNik(hebRaw).replace(/-/g, ' ').replace(/^פרשת\s+/, '');
 
       _currentParashaKey = Object.keys(parashotData).find(function(k) {
         var kS = stripNik(k).replace(/-/g, ' ');
