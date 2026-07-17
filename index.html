@@ -8033,16 +8033,8 @@ document.getElementById('prayerOverlay').addEventListener('click', function(e) {
   if (e.target === this) closePrayer();
 });
 
-let touchStartY = 0;
-document.querySelector('.prayer-content').addEventListener('touchstart', e => {
-  touchStartY = e.touches[0].clientY;
-});
-document.querySelector('.prayer-content').addEventListener('touchend', e => {
-  const diff = e.changedTouches[0].clientY - touchStartY;
-  if (diff > 80 && document.querySelector('.prayer-content').scrollTop === 0) {
-    closePrayer();
-  }
-});
+// מחוות "משיכה-למטה-סוגרת" הוסרה — משיכה למטה בתוך תפילה לא סוגרת אותה יותר
+// (סגירה דרך כפתור ✕ / חזרה). כך אין שום מחוות משיכה בתוך דפי התפילות.
 
 
 // ═══════════════════════════════════════
@@ -8156,6 +8148,8 @@ document.querySelector('.prayer-content').addEventListener('touchend', e => {
     var THRESH = 70, MAX = 110;
 
     sc.addEventListener('touchstart', function(e) {
+      // רק במסך הבית — לא כשפתוחה תפילה או קטגוריה
+      if (document.querySelector('.prayer-overlay.active, .category-page.active')) { pulling = false; return; }
       if (sc.scrollTop <= 0) { startY = e.touches[0].clientY; pulling = true; dist = 0; }
       else { pulling = false; }
     }, { passive: true });
