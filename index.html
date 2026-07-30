@@ -6681,6 +6681,36 @@ let autoScrollRAF = null;
 let autoScrollSpeed = 0.8;
 let isAutoScrolling = false;
 
+// מניעת כיבוי מסך בזמן גלילה אוטומטית (Screen Wake Lock API)
+let wakeLock = null;
+
+async function requestWakeLock() {
+  if (!('wakeLock' in navigator)) return; // דפדפן ללא תמיכה — פשוט לא עושים כלום
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    // אם הנעילה שוחררה מעצמה (למשל בעת מזעור), מנקים את ההפניה
+    wakeLock.addEventListener('release', () => { wakeLock = null; });
+  } catch (err) {
+    // בקשה שנכשלה (הרשאות/מצב) — מתעלמים בשקט כדי לא לשבור את הגלילה
+    wakeLock = null;
+  }
+}
+
+async function releaseWakeLock() {
+  if (!wakeLock) return;
+  try {
+    await wakeLock.release();
+  } catch (err) {}
+  wakeLock = null;
+}
+
+// כשחוזרים לאפליקציה אחרי מזעור — הדפדפן משחרר את הנעילה, אז מבקשים מחדש אם הגלילה עדיין פעילה
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && isAutoScrolling && !wakeLock) {
+    requestWakeLock();
+  }
+});
+
 function setManualScroll() {
   stopAutoScroll();
   document.getElementById('btnManual').classList.add('active');
@@ -6703,6 +6733,7 @@ function toggleAutoScroll() {
 
 function startAutoScroll() {
   isAutoScrolling = true;
+  requestWakeLock(); // המסך לא ייכבה כל עוד הגלילה האוטומטית פעילה
   const content = document.querySelector('.prayer-content');
   function step() {
     if (!isAutoScrolling) return;
@@ -6721,6 +6752,7 @@ function startAutoScroll() {
 function stopAutoScroll() {
   isAutoScrolling = false;
   cancelAnimationFrame(autoScrollRAF);
+  releaseWakeLock(); // הגלילה נעצרה (סוף תפילה / עצירה / יציאה) — המסך חוזר להתנהג רגיל
 }
 
 function updateScrollSpeed(val) {
