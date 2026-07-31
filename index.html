@@ -1923,6 +1923,23 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════ -->
+<!-- חלון "המשך מהמקום האחרון" (סימנייה)      -->
+<!-- ═══════════════════════════════════════ -->
+<div class="welcome-overlay" id="resumeOverlay">
+  <div class="welcome-modal">
+    <div class="welcome-modal-icon">🔖</div>
+    <div class="welcome-modal-title">חזרה למקום האחרון</div>
+    <div class="welcome-modal-body" style="text-align:center;">
+      עצרת באמצע התפילה. האם לחזור למקום האחרון שהיית בו?
+    </div>
+    <div class="welcome-modal-btns" style="flex-direction:row;">
+      <button class="welcome-btn-got" style="flex:1;" onclick="resumeBookmarkYes()">✅ כן</button>
+      <button class="welcome-btn-no" style="flex:1;" onclick="resumeBookmarkNo()">✕ לא</button>
+    </div>
+  </div>
+</div>
+
 
 <style>
   #shabbat-screen {
@@ -2126,6 +2143,20 @@
     border: 1px solid rgba(212,175,55,0.2);
     border-radius: 14px;
     padding: 11px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    width: 100%;
+  }
+  .welcome-btn-no {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,240,200,0.9);
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 14px;
+    padding: 13px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
@@ -6740,6 +6771,7 @@ function startAutoScroll() {
     content.scrollTop += autoScrollSpeed;
     if (content.scrollTop + content.clientHeight >= content.scrollHeight - 5) {
       stopAutoScroll();
+      clearBookmark(currentPrayerId); // הגעת לסוף התפילה → מוחקים את הזיכרון
       document.getElementById('btnAuto').classList.remove('active');
       document.getElementById('btnAuto').textContent = '✔ הסתיים';
       return;
@@ -6757,6 +6789,89 @@ function stopAutoScroll() {
 
 function updateScrollSpeed(val) {
   autoScrollSpeed = parseFloat(val) * 0.4;
+}
+
+// ═══════════════════════════════════════════════════════════
+// סימנייה — "המשך מהמקום האחרון" (שחרית / מנחה / ערבית בלבד)
+// ═══════════════════════════════════════════════════════════
+const RESUME_PRAYERS = ['shacharit_hayom', 'mincha_hayom', 'arvit_hayom'];
+const RESUME_KEY = 'orHatfila_prayerBookmarks';
+const RESUME_MIN_POS = 60;    // מתחת לזה נחשב "בראש הדף" — לא שומרים ולא שואלים
+const RESUME_END_MARGIN = 8;  // בתוך המרווח הזה מהתחתית נחשב "הגעת לסוף" — מוחקים את הזיכרון
+
+let _pendingResumeId = null;  // התפילה שממתינה לתשובת המשתמש בחלון
+let _resumeSaveThrottle = 0;
+
+function _getBookmarks() {
+  try { return JSON.parse(_store.get(RESUME_KEY) || '{}') || {}; }
+  catch (e) { return {}; }
+}
+function _setBookmarks(obj) {
+  try { _store.set(RESUME_KEY, JSON.stringify(obj)); } catch (e) {}
+}
+function saveBookmarkPos(id, pos) {
+  if (RESUME_PRAYERS.indexOf(id) === -1) return;
+  const b = _getBookmarks();
+  b[id] = Math.round(pos);
+  _setBookmarks(b);
+}
+function clearBookmark(id) {
+  if (!id) return;
+  const b = _getBookmarks();
+  if (b[id] !== undefined) { delete b[id]; _setBookmarks(b); }
+}
+
+// מאזין גלילה: שומר את המיקום ברציפות (שורד גם סגירה מלאה של האפליקציה),
+// או מוחק אם הגעת לסוף הדף — הכול רק בשלוש התפילות
+function _onPrayerContentScroll() {
+  const id = currentPrayerId;
+  if (!id || RESUME_PRAYERS.indexOf(id) === -1) return;
+  const content = document.querySelector('.prayer-content');
+  if (!content) return;
+  const atEnd = content.scrollTop + content.clientHeight >= content.scrollHeight - RESUME_END_MARGIN;
+  if (atEnd) { clearBookmark(id); return; }         // הגעת לסוף → מוחקים
+  if (content.scrollTop < RESUME_MIN_POS) return;    // עדיין בראש הדף — אין מה לשמור
+  const now = Date.now();
+  if (now - _resumeSaveThrottle < 400) return;       // ויסות כתיבות ל-localStorage
+  _resumeSaveThrottle = now;
+  saveBookmarkPos(id, content.scrollTop);
+}
+(function _bindResumeScroll() {
+  const content = document.querySelector('.prayer-content');
+  if (content) content.addEventListener('scroll', _onPrayerContentScroll, { passive: true });
+})();
+
+// בפתיחת אחת משלוש התפילות — אם יש מיקום שמור משמעותי, שואלים אם לחזור אליו
+function maybeShowResume(id) {
+  if (RESUME_PRAYERS.indexOf(id) === -1) return;
+  const pos = _getBookmarks()[id];
+  if (typeof pos !== 'number' || pos < RESUME_MIN_POS) return;
+  _pendingResumeId = id;
+  const ov = document.getElementById('resumeOverlay');
+  if (ov) ov.classList.add('visible');
+}
+
+function resumeBookmarkYes() {
+  const ov = document.getElementById('resumeOverlay');
+  if (ov) ov.classList.remove('visible');
+  const id = _pendingResumeId;
+  _pendingResumeId = null;
+  if (!id) return;
+  const pos = _getBookmarks()[id];
+  if (typeof pos !== 'number') return;
+  const content = document.querySelector('.prayer-content');
+  if (!content) return;
+  // גוללים אחרי שהגופן והפריסה מתייצבים, כדי שהמיקום יהיה מדויק
+  setTimeout(function () { content.scrollTop = pos; }, 200);
+}
+
+function resumeBookmarkNo() {
+  const ov = document.getElementById('resumeOverlay');
+  if (ov) ov.classList.remove('visible');
+  const id = _pendingResumeId;
+  _pendingResumeId = null;
+  if (id) clearBookmark(id);   // מבטלים את הזיכרון האחרון
+  closePrayer();               // חזרה לדף הבית
 }
 
 document.addEventListener('touchstart', function(e) {
@@ -8031,6 +8146,9 @@ function openPrayer(id) {
   document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
   document.getElementById('speedControl').classList.remove('visible');
   stopAutoScroll();
+
+  // סימנייה: אם זו אחת משלוש התפילות ויש מיקום שמור — לשאול אם לחזור אליו
+  maybeShowResume(id);
 }
 
 function closePrayer() {
