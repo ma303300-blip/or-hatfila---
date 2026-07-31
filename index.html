@@ -3291,6 +3291,15 @@
           <span class="banner-arrow">◀</span>
         </div>
       </div>
+      <div class="banner banner-24" data-prayer-id="sheva_brachot" data-page="tefilot" onclick="openPrayerWithBurst(event, 'sheva_brachot', '💍')">
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-inner">
+          <span class="banner-icon">💍</span>
+          <div class="banner-title">שבע ברכות לחתן וכלה</div>
+          <div class="banner-subtitle">שבע הברכות לחתן וכלה</div>
+          <span class="banner-arrow">◀</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -3652,6 +3661,30 @@ const _store = (() => {
 })();
 
 const prayers = {
+  sheva_brachot: {
+    title: "שבע ברכות לחתן וכלה",
+    body: `<span class="section-title">✦ ברכה ראשונה ✦</span>
+<span class="highlight">בָּרוּךְ</span> אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם. שֶׁהַכֹּל בָּרָא לִכְבוֹדוֹ:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה שנייה ✦</span>
+<span class="highlight">בָּרוּךְ</span> אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם. יוֹצֵר הָאָדָם:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה שלישית ✦</span>
+<span class="highlight">בָּרוּךְ</span> אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם. אֲשֶׁר יָצַר אֶת הָאָדָם בְּצַלְמוֹ. בְּצֶלֶם דְּמוּת תַּבְנִיתוֹ. וְהִתְקִין לוֹ מִמֶּנּוּ בִּנְיַן עֲדֵי עַד. בָּרוּךְ אַתָּה יְהֹוָה יוֹצֵר הָאָדָם:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה רביעית ✦</span>
+<span class="highlight">שׂוֹשׂ</span> תָּשִׂישׂ וְתָגֵל הָעֲקָרָה. בְּקִבּוּץ בָּנֶיהָ לְתוֹכָהּ בְּשִׂמְחָה. בָּרוּךְ אַתָּה יְהֹוָה מְשַׂמֵּחַ צִיּוֹן בְּבָנֶיהָ:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה חמישית ✦</span>
+<span class="highlight">שַׂמֵּחַ</span> תְּשַׂמַּח רֵעִים הָאֲהוּבִים. כְּשַׂמֵּחֲךָ יְצִירְךָ בְּגַן עֵדֶן מִקֶּדֶם. בָּרוּךְ אַתָּה יְהֹוָה מְשַׂמֵּחַ חָתָן וְכַלָּה:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה שישית ✦</span>
+<span class="highlight">בָּרוּךְ</span> אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם. אֲשֶׁר בָּרָא שָׂשׂוֹן וְשִׂמְחָה. חָתָן וְכַלָּה. גִּילָה רִנָּה. דִּיצָה וְחֶדְוָה. אַהֲבָה וְאַחֲוָה. וְשָׁלוֹם וְרֵעוּת. מְהֵרָה יְהֹוָה אֱלֹהֵינוּ יִשָּׁמַע בְּעָרֵי יְהוּדָה וּבְחוּצוֹת יְרוּשָׁלַיִם. קוֹל שָׂשׂוֹן וְקוֹל שִׂמְחָה. קוֹל חָתָן וְקוֹל כַּלָּה. קוֹל מִצְהֲלוֹת חֲתָנִים מֵחֻפָּתָם וּנְעָרִים מִמִּשְׁתֵּה נְגִינָתָם. בָּרוּךְ אַתָּה יְהֹוָה מְשַׂמֵּחַ הֶחָתָן עִם הַכַּלָּה:<br>
+<div class="ornament">✦ ✦ ✦</div>
+<span class="section-title">✦ ברכה שביעית ✦</span>
+<span class="highlight">בָּרוּךְ</span> אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם בּוֹרֵא פְּרִי הַגָּפֶן:<br>
+`
+  },
   derech: {
     title: "תפילת הדרך",
     body: `
@@ -7540,6 +7573,7 @@ function _getParashaByDate() {
 }
 
 const prayerMeta = {
+  sheva_brachot:   { icon: '💍', title: 'שבע ברכות לחתן וכלה' },
   tehilim_yomi:    { icon: '📖', title: 'תהילים יומי' },
   halacha_yomit:   { icon: '📚', title: 'הלכה יומית' },
   tanya_yomi:      { icon: '📕', title: 'תניא יומי' },
