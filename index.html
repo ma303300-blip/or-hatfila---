@@ -7560,8 +7560,11 @@ async function loadFullParasha() {
     if (!engName) throw new Error('no name');
 
     // ספריא דורש טווח פסוקים מפורש (למשל "Numbers 8:1-12:16"), לא שם פרשה חשוף.
+    // חובה בפורמט ה-URL של ספריא (נקודות) — בדיוק כמו שאר הקריאות שעובדות
+    // באפליקציה (Psalms.23, Kitzur_Shulchan_Aruch.5). "Numbers 8:1-12:16" -> "Numbers.8.1-12.16".
     var sefariaRef = parashaSefariaRef[engName] || engName;
-    var url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(sefariaRef) + '?lang=he&stripItags=1';
+    var apiRef = sefariaRef.replace(' ', '.').replace(/:/g, '.');
+    var url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(apiRef) + '?lang=he&stripItags=1';
     var r = await fetch(url);
     var d = await r.json();
 
