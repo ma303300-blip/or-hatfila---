@@ -7433,6 +7433,30 @@ const parashaSefariaRef = {
 
 var _currentParashaKey = null;
 
+// בונה קישור ישיר לעמוד הפרשה באתר ספריא (פורמט URL עם נקודות).
+// ללא fetch/CORS/פענוח — קישור רגיל שנפתח באתר ספריא, לכן תמיד עובד.
+// עמיד לגרסאות שונות של גרש בשם האנגלי (' ’ ׳ וכו') שמגיע מ-hebcal.
+function _parashaSefariaUrl() {
+  function normA(s) { return (s || '').replace(/[‘’ʼ׳`´]/g, "'").trim(); }
+  var engName = window._hebcalParashaEnglish || '';
+  if (!engName && _currentParashaKey) {
+    for (var en in parashaNameMap) {
+      if (parashaNameMap[en] === _currentParashaKey) { engName = en; break; }
+    }
+  }
+  var refDisplay = parashaSefariaRef[engName];
+  if (!refDisplay && engName) {
+    var target = normA(engName);
+    for (var k in parashaSefariaRef) {
+      if (normA(k) === target) { refDisplay = parashaSefariaRef[k]; break; }
+    }
+  }
+  // ברירת מחדל בטוחה — עמוד התורה בספריא (לא אמור לקרות)
+  if (!refDisplay) return 'https://www.sefaria.org/texts/Tanakh/Torah';
+  var apiRef = refDisplay.replace(' ', '.').replace(/:/g, '.');
+  return 'https://www.sefaria.org/' + apiRef + '?lang=he';
+}
+
 async function openParasha() {
   pausePage();
   _currentParashaKey = null;
@@ -7503,16 +7527,16 @@ async function openParasha() {
     '<span class="section-title">\u2756 \u05E2\u05D9\u05E7\u05E8\u05D9 \u05D4\u05E4\u05E8\u05E9\u05D4 \u2756</span>' +
     pData.content +
     '<div style="text-align:center;margin-top:32px;margin-bottom:16px;">' +
-    '<button id="btnFullParasha" onclick="loadFullParasha()" style="' +
+    '<a id="btnFullParasha" href="' + _parashaSefariaUrl() + '" target="_blank" rel="noopener" style="' +
+    'display:inline-block;text-decoration:none;' +
     'background:linear-gradient(135deg,#8B0000,#c0392b);' +
     'color:#ffffff;font-family:\'Frank Ruhl Libre\',serif;font-size:17px;font-weight:700;' +
     'border:none;border-radius:20px;padding:14px 28px;cursor:pointer;' +
     'box-shadow:0 0 16px rgba(192,57,43,0.7);' +
     'animation:monthFlash 1.3s ease-in-out infinite;' +
     '-webkit-tap-highlight-color:transparent;">' +
-    '📖 לפרשת השבוע המלאה' +
-    '</button></div>' +
-    '<div id="fullParashaContent"></div>';
+    '📖 לפרשת השבוע המלאה בספריא' +
+    '</a></div>';
 
   var overlay = document.getElementById('prayerOverlay');
   overlay.classList.add('active');
