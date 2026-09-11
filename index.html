@@ -158,7 +158,7 @@
 
   .favs-home-btn {
     position: fixed;
-    top: 14px;
+    top: 64px;
     left: 14px;
     z-index: 50;
     display: flex;
@@ -370,7 +370,7 @@
 
   .voice-btn {
     position: fixed;
-    top: 64px;
+    top: 114px;
     left: 14px;
     z-index: 50;
     display: flex;
@@ -397,7 +397,7 @@
   /* כפתור שיתוף האפליקציה */
   .share-app-btn {
     position: fixed;
-    top: 114px;
+    top: 14px;
     left: 14px;
     z-index: 50;
     display: flex;
@@ -1871,9 +1871,9 @@
   }
   .bsd { top: calc(env(safe-area-inset-top, 0px) + 14px + 0.5cm) !important; }
   .date-display { top: calc(env(safe-area-inset-top, 0px) + 36px + 0.5cm) !important; }
-  .favs-home-btn { top: calc(env(safe-area-inset-top, 0px) + 14px + 0.5cm) !important; }
-  .voice-btn { top: calc(env(safe-area-inset-top, 0px) + 64px + 0.5cm) !important; }
-  .share-app-btn { top: calc(env(safe-area-inset-top, 0px) + 114px + 0.5cm) !important; }
+  .share-app-btn { top: calc(env(safe-area-inset-top, 0px) + 14px + 0.5cm) !important; }
+  .favs-home-btn { top: calc(env(safe-area-inset-top, 0px) + 64px + 0.5cm) !important; }
+  .voice-btn { top: calc(env(safe-area-inset-top, 0px) + 114px + 0.5cm) !important; }
 
   /* תיקון והדגשת תיבת החיפוש - מורדכי */
   .search-input {
@@ -2939,6 +2939,14 @@
 <div class="bsd">בס"ד</div>
 <div class="date-display" id="dateDisplay"></div>
 
+<!-- Share App Button -->
+<button class="share-app-btn" onclick="shareApp()" title="שתף את האפליקציה" aria-label="שתף את האפליקציה">
+  <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>
+    <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line>
+  </svg>
+</button>
+
 <!-- Favs Home Button -->
 <button class="favs-home-btn" onclick="openFavsModal()" title="מועדפים">
   <span class="fhb-count" id="fhbCount"></span>
@@ -2947,12 +2955,6 @@
 </button>
 
 <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית">🎙️</button>
-<button class="share-app-btn" onclick="shareApp()" title="שתף את האפליקציה" aria-label="שתף את האפליקציה">
-  <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>
-    <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line>
-  </svg>
-</button>
 <div class="voice-toast" id="voiceToast"></div>
 
 <!-- Favs Modal -->
