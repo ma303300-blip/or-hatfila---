@@ -623,38 +623,45 @@
     pointer-events: none;
   }
 
+  /* הקרניים: הרוחב קבוע על המקסימום (130px) והפעימה נעשית ב-scaleX במקום ב-width.
+     אנימציית width מכריחה חישוב פריסה + צביעה מחדש בכל פריים על 12 אלמנטים במקביל —
+     זה היה עומס עיקרי על ה-thread הראשי וגרם לריצודים בגלילה. transform מטופל
+     ב-compositor ולכן זול מאוד. הסיבוב עובר למשתנה --rot ומורכב יחד עם ה-scaleX. */
   .ray {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120px;
+    --rot: 0deg;
+    width: 130px;
     height: 3px;
     transform-origin: 0 50%;
     border-radius: 2px;
     background: linear-gradient(90deg, rgba(212,175,55,0.6), transparent);
+    transform: rotate(var(--rot)) scaleX(0.615);
     animation: rayPulse 2.5s ease-in-out infinite;
   }
 
-  .ray:nth-child(1)  { transform: rotate(0deg);    animation-delay: 0s; }
-  .ray:nth-child(2)  { transform: rotate(30deg);   animation-delay: 0.1s; }
-  .ray:nth-child(3)  { transform: rotate(60deg);   animation-delay: 0.2s; }
-  .ray:nth-child(4)  { transform: rotate(90deg);   animation-delay: 0.2s; }
-  .ray:nth-child(5)  { transform: rotate(120deg);  animation-delay: 0.4s; }
-  .ray:nth-child(6)  { transform: rotate(150deg);  animation-delay: 0.2s; }
-  .ray:nth-child(7)  { transform: rotate(180deg);  animation-delay: 0.6s; }
-  .ray:nth-child(8)  { transform: rotate(210deg);  animation-delay: 0.7s; }
-  .ray:nth-child(9)  { transform: rotate(240deg);  animation-delay: 0.8s; }
-  .ray:nth-child(10) { transform: rotate(270deg);  animation-delay: 0.9s; }
-  .ray:nth-child(11) { transform: rotate(300deg);  animation-delay: 1.0s; }
-  .ray:nth-child(12) { transform: rotate(330deg);  animation-delay: 1.1s; }
+  .ray:nth-child(1)  { --rot: 0deg;    animation-delay: 0s; }
+  .ray:nth-child(2)  { --rot: 30deg;   animation-delay: 0.1s; }
+  .ray:nth-child(3)  { --rot: 60deg;   animation-delay: 0.2s; }
+  .ray:nth-child(4)  { --rot: 90deg;   animation-delay: 0.2s; }
+  .ray:nth-child(5)  { --rot: 120deg;  animation-delay: 0.4s; }
+  .ray:nth-child(6)  { --rot: 150deg;  animation-delay: 0.2s; }
+  .ray:nth-child(7)  { --rot: 180deg;  animation-delay: 0.6s; }
+  .ray:nth-child(8)  { --rot: 210deg;  animation-delay: 0.7s; }
+  .ray:nth-child(9)  { --rot: 240deg;  animation-delay: 0.8s; }
+  .ray:nth-child(10) { --rot: 270deg;  animation-delay: 0.9s; }
+  .ray:nth-child(11) { --rot: 300deg;  animation-delay: 1.0s; }
+  .ray:nth-child(12) { --rot: 330deg;  animation-delay: 1.1s; }
 
+  /* 80/130=0.615, 130/130=1, 110/130=0.846 — אותו מראה בדיוק, בלי חישוב פריסה */
   @keyframes rayPulse {
-    0%   { opacity: 0.2; width: 80px; }
-    14%  { opacity: 0.9; width: 130px; }
-    28%  { opacity: 0.2; width: 80px; }
-    42%  { opacity: 0.6; width: 110px; }
-    70%  { opacity: 0.2; width: 80px; }
-    100% { opacity: 0.2; width: 80px; }
+    0%   { opacity: 0.2; transform: rotate(var(--rot)) scaleX(0.615); }
+    14%  { opacity: 0.9; transform: rotate(var(--rot)) scaleX(1);     }
+    28%  { opacity: 0.2; transform: rotate(var(--rot)) scaleX(0.615); }
+    42%  { opacity: 0.6; transform: rotate(var(--rot)) scaleX(0.846); }
+    70%  { opacity: 0.2; transform: rotate(var(--rot)) scaleX(0.615); }
+    100% { opacity: 0.2; transform: rotate(var(--rot)) scaleX(0.615); }
   }
 
   @keyframes titleHeartbeat {
@@ -724,10 +731,36 @@
     transition: none !important;
   }
 
+  /* ═══ הקפאת אנימציות כבדות-צביעה בזמן גלילה פעילה ═══
+     האנימציות האלה משנות box-shadow / filter / text-shadow — מאפיינים שאי אפשר
+     להריץ ב-compositor, ולכן כל פריים שלהן מאלץ צביעה מחדש על ה-thread הראשי.
+     כשזה קורה בדיוק בזמן גלילה, הגלילה והצביעה מתחרות על אותו thread והתוצאה היא
+     בדיוק ההבזקים והקפיצות. בזמן גלילה אף אחד לא מבחין בפעימת הזוהר, ולכן מקפיאים
+     אותן לגלילה ומשחררים 140ms אחרי שהגלילה נעצרת — במנוחה המראה זהה לחלוטין. */
+  body.is-scrolling .header h1,
+  body.is-scrolling .memorial-box,
+  body.is-scrolling .memorial-flame-big,
+  body.is-scrolling .heb-cal-cell.has-chag,
+  body.is-scrolling .heb-cal-cell.is-rosh-chodesh,
+  body.is-scrolling .shabbat-times-box,
+  body.is-scrolling .candle-flame,
+  body.is-scrolling .flame {
+    animation-play-state: paused !important;
+  }
+
   /* הקפאה גורפת של אנימציות מסך הבית כשפתוחה תפילה או קטגוריה —
      מקפיא את כל הרקע (בועות, מרקיזה, זוהר, פעימות) ומשאיר את התפילה/הקטגוריה הפעילה חיים */
-  body.bg-frozen #appScroll > *:not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst),
-  body.bg-frozen #appScroll > *:not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst) * {
+  /* אחרי שהשכבות הקבועות הוצאו מ-#appScroll, המיכל הנגלל מכיל רק את תוכן מסך הבית,
+     ולכן אפשר להקפיא אותו במלואו. שאר השכבות הן כבר ילדות ישירות של body, ושם מחריגים
+     את מה שצריך להישאר חי: התפילה/הקטגוריה הפתוחה, המרקיזה, בקרת הגופן ופיצוץ האייקון.
+     ההחרגה נעשית על הילד הישיר, כך שכל תת-העץ שלו נשאר פעיל. */
+  body.bg-frozen #appScroll,
+  body.bg-frozen #appScroll * {
+    animation-play-state: paused !important;
+  }
+
+  body.bg-frozen > *:not(#appScroll):not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst),
+  body.bg-frozen > *:not(#appScroll):not(.prayer-overlay):not(.category-page):not(.parasha-marquee-container):not(#prayerFontCtrl):not(.icon-burst) * {
     animation-play-state: paused !important;
   }
 
@@ -7585,8 +7618,6 @@ async function openParasha() {
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
 
   setTimeout(applyFontSize, 10);
@@ -7778,8 +7809,6 @@ function openFavsModal() {
   document.getElementById('favsModalOverlay').classList.add('active');
   const scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.favsScrollY = scrollY;
 }
 function closeFavsModal(e) {
@@ -7789,8 +7818,6 @@ function closeFavsModalDirect() {
   document.getElementById('favsModalOverlay').classList.remove('active');
   const scrollY = parseInt(document.body.dataset.favsScrollY || '0');
   _unlockAppScroll();
-  document.body.style.top = '';
-  document.body.style.width = '';
   _appScrollTo(scrollY);
 }
 function updateFhbCount() {
@@ -8307,8 +8334,6 @@ function openPrayer(id) {
   // נועל גלילה בלי קפיצה
   const scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
 
   setTimeout(applyFontSize, 10);
@@ -8385,8 +8410,6 @@ function closePrayer() {
   // (הדף הפתוח מנהל את ה-scroll בעצמו ומונע חשיפת מסך הבית)
   if (!returningToCategory) {
     _unlockAppScroll();
-    document.body.style.top = '';
-    document.body.style.width = '';
   }
 }
 
@@ -8543,8 +8566,31 @@ document.getElementById('prayerOverlay').addEventListener('click', function(e) {
       dist = 0;
     }, { passive: true });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPTR);
-  else initPTR();
+  // ═══ סימון "גלילה פעילה" ═══
+  // מוסיף body.is-scrolling בזמן גלילה ומסיר אותו 140ms אחרי שהגלילה נעצרה.
+  // ה-CSS משתמש בזה כדי להקפיא את האנימציות כבדות-הצביעה (ראה body.is-scrolling למעלה).
+  // מאזין passive + דגל, כדי שהמאזין עצמו לא יוסיף עבודה לכל פריים גלילה.
+  function initScrollFlag() {
+    var sc = document.getElementById('appScroll');
+    if (!sc) return;
+    var t = null, on = false;
+    function onScroll() {
+      if (!on) { on = true; document.body.classList.add('is-scrolling'); }
+      if (t) clearTimeout(t);
+      t = setTimeout(function () {
+        on = false;
+        document.body.classList.remove('is-scrolling');
+      }, 140);
+    }
+    sc.addEventListener('scroll', onScroll, { passive: true });
+    // גם גלילה בתוך תפילה פתוחה — שם הדף ארוך במיוחד
+    var pc = document.querySelector('.prayer-content');
+    if (pc) pc.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { initPTR(); initScrollFlag(); });
+  } else { initPTR(); initScrollFlag(); }
 })();
 </script>
 <script>
@@ -8622,6 +8668,29 @@ function updateBgFreeze() {
   var open = document.querySelector('.prayer-overlay.active, .category-page.active');
   document.body.classList.toggle('bg-frozen', !!open);
 }
+window.updateBgFreeze = updateBgFreeze;
+
+// ═══ הקפאת הרקע מבוססת-מצב (ולא מבוססת-תזמון) ═══
+// בעבר updateBgFreeze נקרא דרך requestAnimationFrame מתוך pausePage(), כלומר *לפני*
+// שהמחלקה .active נוספה לשכבת התפילה. בכל מסלול שמוסיף .active באיחור —
+// rAF כפול (זום), await של fetch (תהילים/הלכה/תניא יומי), או פתיחה מהחיפוש שלא
+// קוראת ל-pausePage בכלל — הבדיקה רצה מוקדם מדי, מצאה "אין שכבה פתוחה" ולא חזרה שוב,
+// כך ש-33 אנימציות הרקע המשיכו לרוץ מתחת לתפילה הפתוחה וגרמו להבזקים ולקפיצות בגלילה.
+// מאזין על שינויי ה-class מבטיח שההקפאה תמיד תשקף את המצב האמיתי של ה-DOM,
+// בלי תלות בתזמון ובלי צורך לזכור לקרוא לפונקציה בכל מסלול פתיחה חדש שיתווסף בעתיד.
+(function initBgFreezeObserver() {
+  function attach() {
+    var layers = document.querySelectorAll('.prayer-overlay, .category-page');
+    if (!layers.length) { requestAnimationFrame(attach); return; }
+    var obs = new MutationObserver(updateBgFreeze);
+    for (var i = 0; i < layers.length; i++) {
+      obs.observe(layers[i], { attributes: true, attributeFilter: ['class'] });
+    }
+    updateBgFreeze();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach);
+  else attach();
+})();
 
 function pausePage() {
   stopAutoScroll();
@@ -8629,7 +8698,7 @@ function pausePage() {
   clearInterval(_roshChodeshInterval);
   clearInterval(_dateInterval);
   if (window._shabbatCheckIntervalRef) clearInterval(window._shabbatCheckIntervalRef);
-  requestAnimationFrame(updateBgFreeze);
+  updateBgFreeze();
 }
 
 // חידוש כל הפונקציות בחזרה לדף
@@ -8643,7 +8712,7 @@ function resumePage() {
       if (typeof updateShabbatScreen === 'function') updateShabbatScreen();
     }, 60000);
   }
-  requestAnimationFrame(updateBgFreeze);
+  updateBgFreeze();
 }
 
 // לוח שנה עברי חודשי
@@ -9309,8 +9378,6 @@ function openCategoryPage(pageId) {
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.scrollY = scrollY;
   _loadSortOrder(pageId);
 }
@@ -9334,13 +9401,11 @@ function openMazonSelector(e) {
   pageEl.style.width = '100%';
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
-  if (document.body.style.position !== 'fixed') {
-    var scrollY = _appScrollTop();
-    _lockAppScroll();
-    document.body.style.top = '-' + scrollY + 'px';
-    document.body.style.width = '100%';
-    document.body.dataset.scrollY = scrollY;
-  }
+  // מאז המעבר ל-app-shell הנעילה נעשית על #appScroll ולא על body position:fixed,
+  // ולכן אין יותר מה לבדוק — נועלים תמיד ושומרים את מקום הגלילה.
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
+  document.body.dataset.scrollY = scrollY;
   // סגור את categoryTefilot ללא transition כדי למנוע פלאש
   if (fromTefilot) {
     tefilotPage.style.transition = 'none';
@@ -9371,13 +9436,10 @@ function closeMazonSelector() {
   pageEl.classList.remove('active');
   setTimeout(function() { pageEl.style.transition = ''; }, 50);
   resumePage();
-  if (document.body.style.position === 'fixed') {
-    var scrollY = parseInt(document.body.dataset.scrollY || '0');
-    _unlockAppScroll();
-    document.body.style.top = '';
-    document.body.style.width = '';
-    _appScrollTo(scrollY);
-  }
+  // שוחרר ללא תנאי: התנאי הקודם (body.style.position === 'fixed') לא התקיים אף פעם
+  // מאז המעבר ל-app-shell, ולכן #appScroll נשאר overflow:hidden ומסך הבית לא נגלל.
+  _unlockAppScroll();
+  _appScrollTo(parseInt(document.body.dataset.scrollY || '0'));
 }
 
 // על הניסים לנוסח אשכנז
@@ -9487,13 +9549,11 @@ function openCategoryPageTefilotHayom() {
   pageEl.style.height = window.innerHeight + 'px';
   pageEl.classList.add('active');
   pageEl.scrollTop = 0;
-  if (document.body.style.position !== 'fixed') {
-    var scrollY = _appScrollTop();
-    _lockAppScroll();
-    document.body.style.top = '-' + scrollY + 'px';
-    document.body.style.width = '100%';
-    document.body.dataset.scrollY = scrollY;
-  }
+  // מאז המעבר ל-app-shell הנעילה נעשית על #appScroll ולא על body position:fixed,
+  // ולכן אין יותר מה לבדוק — נועלים תמיד ושומרים את מקום הגלילה.
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
+  document.body.dataset.scrollY = scrollY;
   // סגור את categoryTefilot ללא transition כדי למנוע פלאש
   if (fromTefilot) {
     tefilotPage.style.transition = 'none';
@@ -9523,14 +9583,10 @@ function closeCategoryPageTefilotHayom() {
   pageEl.classList.remove('active');
   setTimeout(function() { pageEl.style.transition = ''; }, 50);
   resumePage();
-  if (document.body.style.position === 'fixed') {
-    var scrollY = parseInt(document.body.dataset.scrollY || '0');
-    _unlockAppScroll();
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.documentElement.scrollTop = scrollY;
-    document.body.scrollTop = scrollY;
-  }
+  // שוחרר ללא תנאי (כמו למעלה). בנוסף: הגלילה מוחזרת ל-#appScroll ולא ל-document,
+  // שכבר לא נגלל כלל ב-app-shell.
+  _unlockAppScroll();
+  _appScrollTo(parseInt(document.body.dataset.scrollY || '0'));
 }
 
 // סגירת דף קטגוריה
@@ -9541,8 +9597,6 @@ function closeCategoryPage(pageId) {
   resumePage();
   var scrollY = parseInt(document.body.dataset.scrollY || '0');
   _unlockAppScroll();
-  document.body.style.top = '';
-  document.body.style.width = '';
   _appScrollTo(scrollY);
   if (_currentSortPage === pageId) _cancelSort(pageId);
 }
@@ -10065,8 +10119,6 @@ async function openTehilimYomi() {
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
 
   // fetch מקביל מ-Sefaria לכל פרקי היום
@@ -10171,8 +10223,6 @@ async function openHalachaYomit() {
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
 
   var html = '';
@@ -10260,8 +10310,6 @@ async function openTanyaYomi() {
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
-  document.body.style.top = '-' + scrollY + 'px';
-  document.body.style.width = '100%';
   document.body.dataset.prayerScrollY = scrollY;
 
   var html = '';
@@ -10455,5 +10503,24 @@ function initAmidaDefaults() {
 document.addEventListener('DOMContentLoaded', initAmidaDefaults);
 </script>
 </div><!-- /#appScroll -->
+<script>
+// ═══ הוצאת שכבות ה-position:fixed מחוץ למיכל הגלילה ═══
+// כל 25 שכבות ה-fixed (שכבת התפילה, דפי הקטגוריה, המרקיזה, הכפתורים הקבועים, הטוסטים)
+// נכתבו בתוך #appScroll כשהאפליקציה הומרה ל-app-shell. הן לא נגללות בכל מקרה, אבל
+// כשהן יושבות בתוך תת-עץ הצביעה של מיכל נגלל, הדפדפן צריך למקם אותן מחדש מול שכבת
+// הגלילה בכל פריים — אחד המקורות הקלאסיים לריצוד ולקפיצות במובייל.
+// הסקריפט הזה רץ בזמן ניתוח ה-HTML (לפני הצביעה הראשונה, כך שאין הבהוב או reflow גלוי)
+// ומעביר אותן להיות ילדות ישירות של body. לכולן יש z-index מפורש, ולכן סדר הערימה נשמר.
+// מכיוון שהבחירה נעשית לפי position מחושב ולא לפי רשימת שמות, גם שכבת fixed שתתווסף
+// בעתיד בתוך #appScroll תטופל אוטומטית — בדיוק כדי שהתקלה הזו לא תחזור.
+(function liftFixedLayers() {
+  var sc = document.getElementById('appScroll');
+  if (!sc) return;
+  var kids = Array.prototype.slice.call(sc.children);
+  for (var i = 0; i < kids.length; i++) {
+    if (getComputedStyle(kids[i]).position === 'fixed') document.body.appendChild(kids[i]);
+  }
+})();
+</script>
 </body>
 </html>
