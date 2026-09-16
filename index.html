@@ -731,6 +731,80 @@
     transition: none !important;
   }
 
+  /* ═══════════════════════════════════════════════════════
+     נגישות — ת"י 5568 / WCAG 2.0 AA
+     ═══════════════════════════════════════════════════════ */
+
+  /* WCAG 2.4.7 — סימון מוקד מקלדת. השתמשנו ב-:focus-visible כדי שהמסגרת
+     תופיע רק בניווט מקלדת ולא בלחיצת עכבר/מגע, כך שהעיצוב נשמר. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 3px solid #FFD966 !important;
+    outline-offset: 3px !important;
+    border-radius: 4px;
+  }
+
+  /* קישור דילוג לתוכן — מוסתר עד שמגיעים אליו במקלדת */
+  .skip-link {
+    position: fixed;
+    top: -100px;
+    right: 12px;
+    z-index: 100000;
+    background: #0A0E2E;
+    color: #FFD966;
+    border: 2px solid #FFD966;
+    border-radius: 0 0 8px 8px;
+    padding: 12px 20px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* כפתור עצירת הכיתובית הנעה — WCAG 2.2.2 (Pause, Stop, Hide) */
+  .marquee-toggle {
+    position: fixed;
+    top: env(safe-area-inset-top, 0px);
+    left: 0;
+    height: 0.5cm;
+    z-index: 1001;
+    background: rgba(10,14,46,0.85);
+    color: #FFD966;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.25);
+    font-size: 10px;
+    line-height: 1;
+    padding: 0 7px;
+    cursor: pointer;
+  }
+  body.marquee-paused .parasha-marquee-wrapper {
+    animation-play-state: paused !important;
+  }
+
+  /* WCAG 2.3.1 / 2.2.2 — כיבוד בקשת המשתמש לצמצום תנועה ברמת מערכת ההפעלה.
+     עוצר את כל האנימציות, המעברים, הכיתובית הנעה והגלילה האוטומטית. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .parasha-marquee-wrapper {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+
   /* ═══ הקפאת אנימציות כבדות-צביעה בזמן גלילה פעילה ═══
      האנימציות האלה משנות box-shadow / filter / text-shadow — מאפיינים שאי אפשר
      להריץ ב-compositor, ולכן כל פריים שלהן מאלץ צביעה מחדש על ה-thread הראשי.
@@ -2981,13 +3055,13 @@
 </button>
 
 <!-- Favs Home Button -->
-<button class="favs-home-btn" onclick="openFavsModal()" title="מועדפים">
+<button class="favs-home-btn" onclick="openFavsModal()" title="מועדפים" aria-label="פתיחת רשימת התפילות המועדפות">
   <span class="fhb-count" id="fhbCount"></span>
   <span class="fhb-icon">⭐</span>
   <span class="fhb-label">מועדפים</span>
 </button>
 
-<button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית">🎙️</button>
+<button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="פקודה קולית" aria-label="הפעלת פקודה קולית — דורש הרשאת מיקרופון"><span aria-hidden="true">🎙️</span></button>
 <div class="voice-toast" id="voiceToast"></div>
 
 <!-- Favs Modal -->
@@ -3141,7 +3215,7 @@
   <div class="memorial-title-top">לעילוי נשמת</div>
   <div class="memorial-main-row">
     <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
-      <div class="memorial-photo-wrap" onclick="document.getElementById('memPhotoInput').click()">
+      <div class="memorial-photo-wrap" onclick="document.getElementById('memPhotoInput').click()" aria-label="בחירת תמונה לנר הזיכרון">
         <img id="memPhotoImg" src="" alt="" />
         <div class="memorial-photo-placeholder" id="memPhotoPlaceholder">
           <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg" width="60">
@@ -3151,7 +3225,7 @@
         </div>
       </div>
       <div class="memorial-photo-actions">
-        <button class="memorial-photo-edit" onclick="document.getElementById('memPhotoInput').click()">✎</button>
+        <button class="memorial-photo-edit" onclick="document.getElementById('memPhotoInput').click()" aria-label="בחירת תמונה לנר הזיכרון">✎</button>
         <button class="memorial-photo-remove" id="memPhotoRemove" onclick="memRemovePhoto(event)">✕</button>
       </div>
     </div>
@@ -3177,7 +3251,7 @@
     <div class="memorial-title-top">🩺 רפואה שלמה</div>
     <div class="memorial-main-row">
       <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;">
-        <div class="memorial-photo-wrap" onclick="document.getElementById('refuaPhotoInput').click()">
+        <div class="memorial-photo-wrap" onclick="document.getElementById('refuaPhotoInput').click()" aria-label="בחירת תמונה לתפילת הרפואה">
           <img id="refuaPhotoImg" src="" alt="" />
           <div class="memorial-photo-placeholder" id="refuaPhotoPlaceholder">
             <svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg" width="60">
@@ -3187,7 +3261,7 @@
           </div>
         </div>
         <div class="memorial-photo-actions">
-          <button class="memorial-photo-edit" onclick="document.getElementById('refuaPhotoInput').click()">✎</button>
+          <button class="memorial-photo-edit" onclick="document.getElementById('refuaPhotoInput').click()" aria-label="בחירת תמונה לתפילת הרפואה">✎</button>
           <button class="memorial-photo-remove" id="refuaPhotoRemove" onclick="refuaRemovePhoto(event)">✕</button>
         </div>
       </div>
@@ -3218,7 +3292,7 @@
     </div>
     <div class="banners" id="bannersTefilot">
       <div class="banner banner-20" data-prayer-id="tefilot_hayom" data-page="tefilot" onclick="pressAndOpen(this, function(){ openCategoryPageTefilotHayom(); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕍</span>
           <div class="banner-title">תפילות היום</div>
@@ -3227,7 +3301,7 @@
         </div>
       </div>
       <div class="banner banner-1" data-prayer-id="derech" data-page="tefilot" onclick="openPrayerWithBurst(event, 'derech', '🗺️')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🗺️</span>
           <div class="banner-title">תפילת הדרך</div>
@@ -3236,7 +3310,7 @@
         </div>
       </div>
       <div class="banner banner-2" data-prayer-id="mazon" data-page="tefilot" onclick="pressAndOpen(this, function(){ openMazonSelector(null); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
@@ -3245,7 +3319,7 @@
         </div>
       </div>
       <div class="banner banner-3" data-prayer-id="chayalim" data-page="tefilot" onclick="openPrayerWithBurst(event, 'chayalim', '🪖')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🪖</span>
           <div class="banner-title">תפילה לחיילי צה"ל</div>
@@ -3254,7 +3328,7 @@
         </div>
       </div>
       <div class="banner banner-6" data-prayer-id="challah" data-page="tefilot" onclick="openPrayerWithBurst(event, 'challah', '🍞')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🍞</span>
           <div class="banner-title">הפרשת חלה</div>
@@ -3263,7 +3337,7 @@
         </div>
       </div>
       <div class="banner banner-7" data-prayer-id="shema" data-page="tefilot" onclick="openPrayerWithBurst(event, 'shema', '📖')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">📖</span>
           <div class="banner-title">קריאת שמע שעל המיטה</div>
@@ -3272,7 +3346,7 @@
         </div>
       </div>
       <div class="banner banner-8" data-prayer-id="refua" data-page="tefilot" onclick="openPrayerWithBurst(event, 'refua', '🩺')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🩺</span>
           <div class="banner-title">תפילה לרפואה</div>
@@ -3281,7 +3355,7 @@
         </div>
       </div>
       <div class="banner banner-10" data-prayer-id="modeh" data-page="tefilot" onclick="openPrayerWithBurst(event, 'modeh', '☀️')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">☀️</span>
           <div class="banner-title">מודה אני ותפילת הבוקר</div>
@@ -3290,7 +3364,7 @@
         </div>
       </div>
       <div class="banner banner-12" data-prayer-id="tikun" data-page="tefilot" onclick="openPrayerWithBurst(event, 'tikun', '📖')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">📖</span>
           <div class="banner-title">התיקון הכללי</div>
@@ -3299,7 +3373,7 @@
         </div>
       </div>
       <div class="banner banner-13" data-prayer-id="igeret_haramban" data-page="tefilot" onclick="openPrayerWithBurst(event, 'igeret_haramban', '&#9997;')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">&#9997;</span>
           <div class="banner-title">איגרת הרמב&quot;ן</div>
@@ -3308,7 +3382,7 @@
         </div>
       </div>
       <div class="banner banner-15" data-prayer-id="nishmat" data-page="tefilot" onclick="openPrayerWithBurst(event, 'nishmat', '🌊')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌊</span>
           <div class="banner-title">נשמת כל חי</div>
@@ -3317,7 +3391,7 @@
         </div>
       </div>
       <div class="banner banner-17" data-prayer-id="shalom_bayit" data-page="tefilot" onclick="openPrayerWithBurst(event, 'shalom_bayit', '🕊️')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕊️</span>
           <div class="banner-title">תפילה לשלום בית</div>
@@ -3326,7 +3400,7 @@
         </div>
       </div>
       <div class="banner banner-18" data-prayer-id="zivug" data-page="tefilot" onclick="openPrayerWithBurst(event, 'zivug', '💍')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">💍</span>
           <div class="banner-title">תפילה למציאת זיווג</div>
@@ -3335,7 +3409,7 @@
         </div>
       </div>
       <div class="banner banner-19" data-prayer-id="parnasa" data-page="tefilot" onclick="openPrayerWithBurst(event, 'parnasa', '💰')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">💰</span>
           <div class="banner-title">תפילה על פרנסה</div>
@@ -3344,7 +3418,7 @@
         </div>
       </div>
       <div class="banner banner-21" data-prayer-id="ketoret" data-page="tefilot" onclick="openPrayerWithBurst(event, 'ketoret', '🪔')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🪔</span>
           <div class="banner-title">פיטום הקטורת</div>
@@ -3353,7 +3427,7 @@
         </div>
       </div>
       <div class="banner banner-22" data-prayer-id="yeladim" data-page="tefilot" onclick="openPrayerWithBurst(event, 'yeladim', '👨‍👩‍👧‍👦')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">👨‍👩‍👧‍👦</span>
           <div class="banner-title">תפילה על הילדים</div>
@@ -3362,7 +3436,7 @@
         </div>
       </div>
       <div class="banner banner-23" data-prayer-id="shir_hashirim" data-page="tefilot" onclick="openPrayerWithBurst(event, 'shir_hashirim', '🌹')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌹</span>
           <div class="banner-title">שיר השירים</div>
@@ -3371,7 +3445,7 @@
         </div>
       </div>
       <div class="banner banner-24" data-prayer-id="sheva_brachot" data-page="tefilot" onclick="openPrayerWithBurst(event, 'sheva_brachot', '💍')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">💍</span>
           <div class="banner-title">שבע ברכות לחתן וכלה</div>
@@ -3392,7 +3466,7 @@
     </div>
     <div class="banners" id="bannersTefilotHayom">
       <div class="banner banner-10" data-prayer-id="shacharit_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'shacharit_hayom', '🌅'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌅</span>
           <div class="banner-title">תפילת שחרית</div>
@@ -3401,7 +3475,7 @@
         </div>
       </div>
       <div class="banner banner-19" data-prayer-id="mincha_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mincha_hayom', '🕯️'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕯️</span>
           <div class="banner-title">תפילת מנחה</div>
@@ -3410,7 +3484,7 @@
         </div>
       </div>
       <div class="banner banner-7" data-prayer-id="arvit_hayom" data-page="tefilot_hayom" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'arvit_hayom', '🌙'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌙</span>
           <div class="banner-title">תפילת ערבית</div>
@@ -3431,7 +3505,7 @@
     </div>
     <div class="banners" id="bannersMazon">
       <div class="banner banner-2" data-prayer-id="mazon" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mazon', '🤲'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
@@ -3440,7 +3514,7 @@
         </div>
       </div>
       <div class="banner banner-14" data-prayer-id="mazon_ashkenaz" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'mazon_ashkenaz', '🤲'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🤲</span>
           <div class="banner-title">ברכת המזון</div>
@@ -3449,7 +3523,7 @@
         </div>
       </div>
       <div class="banner banner-16" data-prayer-id="borei_nefashot" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'borei_nefashot', '🍎'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🍎</span>
           <div class="banner-title">בורא נפשות</div>
@@ -3458,7 +3532,7 @@
         </div>
       </div>
       <div class="banner banner-9" data-prayer-id="brachot" data-page="mazon" onclick="pressAndOpen(this, function(){ openPrayerWithBurst({currentTarget:this}, 'brachot', '🫒'); })">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🫒</span>
           <div class="banner-title">ברכות הנהנין</div>
@@ -3479,7 +3553,7 @@
     </div>
     <div class="banners" id="bannersHadlaka">
       <div class="banner banner-4" data-prayer-id="hilula" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'hilula', '🕯️')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕯️</span>
           <div class="banner-title">הדלקת נר בהילולה</div>
@@ -3488,7 +3562,7 @@
         </div>
       </div>
       <div class="banner banner-5" data-prayer-id="roshchodesh" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'roshchodesh', '🌙')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🌙</span>
           <div class="banner-title">הדלקת נר ראש חודש</div>
@@ -3497,7 +3571,7 @@
         </div>
       </div>
       <div class="banner banner-11" data-prayer-id="rachel" data-page="hadlaka" onclick="openPrayerWithBurst(event, 'rachel', '🕯️')">
-        <div class="banner-sort-circle" onclick="handleSortClick(event, this)"></div>
+        <div class="banner-sort-circle" onclick="handleSortClick(event, this)" aria-label="שינוי מיקום התפילה ברשימה"></div>
         <div class="banner-inner">
           <span class="banner-icon">🕯️</span>
           <div class="banner-title">תפילת רחל אימנו</div>
@@ -3517,12 +3591,49 @@
 </div>
 
 <!-- Toast -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- פוטר -->
 <div class="app-footer">
-  <a onclick="openLegal('privacy')">✦ מדיניות פרטיות</a>
-  <a onclick="openLegal('terms')">✦ תקנון</a>
+  <a onclick="openLegal('privacy')" role="button" tabindex="0">✦ מדיניות פרטיות</a>
+  <a onclick="openLegal('terms')" role="button" tabindex="0">✦ תקנון</a>
+  <a onclick="openLegal('accessibility')" role="button" tabindex="0">✦ הצהרת נגישות</a>
+  <a onclick="wipeAllData()" role="button" tabindex="0">✦ מחיקת כל הנתונים</a>
+</div>
+
+<!-- מודל הצהרת נגישות -->
+<div class="legal-overlay" id="legalAccessibility" onclick="closeLegalIfOutside(event,'legalAccessibility')">
+  <div class="legal-modal" role="dialog" aria-modal="true" aria-label="הצהרת נגישות">
+    <div class="legal-handle"></div>
+    <div class="legal-title">✦ הצהרת נגישות ✦</div>
+    <div class="legal-body">
+      <h3>מחויבות</h3>
+      אפליקציית "אור התפילה" רואה חשיבות רבה במתן שירות שוויוני לכלל הציבור, לרבות אנשים עם מוגבלות. אנו פועלים להנגיש את האפליקציה בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), תשע"ג–2013, ולתקן הישראלי ת"י 5568 המבוסס על הנחיות WCAG 2.0 ברמה AA.
+
+      <h3>התאמות הנגישות שבוצעו</h3>
+      • ניווט מלא באמצעות מקלדת בכל הכפתורים והקישורים, עם סימון ברור של מוקד המקלדת<br>
+      • תמיכה בקוראי מסך — תוויות קוליות לכפתורים, הכרזה על הודעות והתראות, וסימון אלמנטים דקורטיביים כך שלא יוקראו<br>
+      • אפשרות להגדלת גופן התפילות בתוך האפליקציה<br>
+      • כיבוד הגדרת "צמצום תנועה" של מערכת ההפעלה — עצירת כל האנימציות, ההבהובים והכיתוביות הנעות<br>
+      • כפתור ייעודי לעצירת הכיתובית הנעה של פרשת השבוע<br>
+      • ניגודיות צבעים תקינה בין הטקסט לרקע<br>
+      • מבנה כותרות היררכי, הגדרת שפה וכיוון כתיבה (עברית, מימין לשמאל)<br>
+      • קישור לדילוג ישיר אל התוכן המרכזי
+
+      <h3>מגבלות ידועות</h3>
+      חלק מהתכנים באפליקציה מגיעים משירותים חיצוניים (Hebcal, ספריא) שאינם בשליטת המפעיל, ורמת הנגישות שלהם באחריות מפעיליהם. ייתכן שקיימים באפליקציה רכיבים שטרם הונגשו במלואם. אנו ממשיכים לשפר את הנגישות באופן שוטף.
+
+      <h3>רכז הנגישות</h3>
+      נתקלתם בקושי, בתקלת נגישות או שיש לכם הצעה לשיפור? נשמח מאוד לשמוע ולתקן.<br><br>
+      <b>שם רכז הנגישות:</b> מרדכי עמר<br>
+      <b>דוא"ל:</b> <a href="mailto:ma303300@gmail.com" style="color:#D4AF37">ma303300@gmail.com</a><br><br>
+      נשתדל לטפל בכל פנייה בהקדם האפשרי.
+
+      <h3>תאריך ההצהרה</h3>
+      הצהרה זו עודכנה בחודש ספטמבר 2026.
+    </div>
+    <button class="legal-close" onclick="closeLegal('legalAccessibility')">סגור</button>
+  </div>
 </div>
 
 <!-- מודל מדיניות פרטיות -->
@@ -3532,22 +3643,34 @@
     <div class="legal-title">✦ מדיניות פרטיות ✦</div>
     <div class="legal-body">
       <h3>כללי</h3>
-      אפליקציית "אור התפילה" (להלן: "האפליקציה") פותחה ומופעלת על ידי מרדכי עמר (להלן: "המפתח"). השימוש באפליקציה מהווה הסכמה מלאה למדיניות פרטיות זו.
+      אפליקציית "אור התפילה" (להלן: "האפליקציה") מופעלת על ידי מרדכי עמר (להלן: "המפעיל"). עדכון אחרון: ספטמבר 2026, גרסה 2.0. השימוש באפליקציה מהווה הסכמה למדיניות זו.
 
-      <h3>איסוף מידע</h3>
-      האפליקציה אינה אוספת, שומרת, מעבירה או משתפת כל מידע אישי מזהה של המשתמש. כל הנתונים (מועדפים, הגדרות) נשמרים באופן מקומי על מכשיר המשתמש בלבד ואינם מועברים לשרת כלשהו.
+      <h3>מידע הנשמר במכשיר</h3>
+      המידע הבא נשמר מקומית במכשירכם בלבד ואינו נשלח למפעיל: תפילות מועדפות וסדר התפילות, סימניות, גודל גופן, תאריכי תזכורות, וכן — אם הזנתם אותם — שם ותמונה של נפטר, שם ותמונה של חולה, ושמות בני זוג. שמות ותמונות של אנשים אחרים הם מידע אישי שלהם; אנא הזינו אותם רק אם אתם רשאים.
 
-      <h3>הרשאות</h3>
-      האפליקציה עשויה לבקש גישה למיקרופון לצורך הפקודה הקולית. מידע זה אינו נשמר ואינו מועבר לכל גורם חיצוני. האפליקציה עשויה לבקש הרשאת התראות לצורך תזכורות הלכתיות (הילולות, ראש חודש).
+      <h3>מיקום</h3>
+      האפליקציה מבקשת גישה למיקום כדי להציג זמני שבת והדלקת נרות מדויקים לאזורכם. אם תאשרו, הקואורדינטות נשלחות לשירות Hebcal לחישוב הזמנים ולשירות OpenStreetMap לזיהוי שם היישוב. המיקום אינו נשמר בשום מקום. אם תסרבו — האפליקציה תעבוד ותציג זמנים לפי ירושלים.
+
+      <h3>מיקרופון</h3>
+      בלחיצה על כפתור הפקודה הקולית האפליקציה מבקשת גישה למיקרופון ומשתמשת במנוע זיהוי הדיבור של הדפדפן. חשוב לדעת: ברוב הדפדפנים (כולל Chrome ואנדרואיד) המנוע משדר את ההקלטה לשרתי Google לצורך תמלול. המפעיל אינו מקליט, אינו שומר ואינו מקבל גישה להקלטות. השימוש מרצון בלבד.
 
       <h3>שירותי צד שלישי</h3>
-      האפליקציה משתמשת בשירות Hebcal לצורך חישוב זמני שבת ומועדים. מדיניות הפרטיות של Hebcal חלה על מידע המועבר אליהם.
+      האפליקציה פונה ל-Hebcal, OpenStreetMap, ספריא, Google Fonts, Cloudflare CDN, GitHub, ולפי בחירתכם גם ל-Google Forms ול-WhatsApp. לכל פנייה כזו נחשפת כתובת ה-IP שלכם לספק השירות. אין באפליקציה פרסומות, מעקב או אנליטיקס.
 
-      <h3>עדכונים</h3>
-      המפתח שומר לעצמו את הזכות לעדכן מדיניות זו בכל עת. המשך השימוש באפליקציה לאחר עדכון מהווה הסכמה לשינויים.
+      <h3>עוגיות ואחסון</h3>
+      האפליקציה אינה משתמשת בעוגיות ואינה עוקבת בין אתרים. היא משתמשת באחסון מקומי לשמירת ההעדפות וב-Service Worker לשמירת עותק לשימוש ללא אינטרנט — שניהם במכשירכם בלבד.
+
+      <h3>אבטחה</h3>
+      הנתונים במכשיר מעורפלים לפני השמירה. זהו ערפול ולא הצפנה חזקה: מי שיש לו גישה פיזית למכשיר לא נעול עשוי לחלץ אותם. אין לשמור באפליקציה מידע רגיש במיוחד.
+
+      <h3>מחיקת המידע</h3>
+      ניתן למחוק את כל הנתונים בלחיצה אחת דרך "מחיקת כל הנתונים" בתחתית מסך הבית, או לנקות את נתוני האפליקציה בהגדרות המכשיר. הרשאות מיקום, מיקרופון והתראות ניתנות לביטול בהגדרות המכשיר. למפעיל אין מאגר מידע ואין גישה לנתונים שלכם.
+
+      <h3>ילדים</h3>
+      האפליקציה מיועדת לכלל הציבור ואינה פונה במיוחד לילדים. מאחר שהיא מבקשת הרשאות מיקרופון ומיקום, מומלץ ששימוש של ילדים ייעשה בפיקוח הורה.
 
       <h3>יצירת קשר</h3>
-      לכל שאלה בנוגע למדיניות הפרטיות ניתן לפנות למפתח.
+      מרדכי עמר — ma303300@gmail.com. למדיניות המלאה: <a href="privacy-policy.html" target="_blank" rel="noopener" style="color:#D4AF37">privacy-policy.html</a>
     </div>
     <button class="legal-close" onclick="closeLegal('legalPrivacy')">סגור</button>
   </div>
@@ -3559,33 +3682,57 @@
     <div class="legal-handle"></div>
     <div class="legal-title">✦ תקנון ותנאי שימוש ✦</div>
     <div class="legal-body">
-      <h3>בעלות וזכויות יוצרים</h3>
-      © כל הזכויות שמורות למרדכי עמר. האפליקציה, עיצובה, תוכנה, קודה ותכניה — לרבות טקסטים, תפילות מקוריות, עיצוב גרפי ופיתוח טכנולוגי — הינם רכושו הבלעדי של המפתח ומוגנים על פי חוק זכויות יוצרים, תשס"ח–2007, וחוקים בינלאומיים רלוונטיים.
+      <h3>כללי</h3>
+      תקנון זה חל על השימוש באפליקציית "אור התפילה", המופעלת על ידי מרדכי עמר (להלן: "המפעיל"). עדכון אחרון: ספטמבר 2026, גרסה 2.0. השימוש באפליקציה מהווה הסכמה לתנאים אלה.
 
-      <h3>איסור העתקה ושימוש</h3>
-      חל איסור מוחלט על העתקה, שכפול, הפצה, שינוי, מכירה, פרסום או כל שימוש מסחרי בכל חלק מהאפליקציה ללא אישור מפורש בכתב מהמפתח. הפרת תנאי זה עלולה לגרור הליכים משפטיים אזרביים ופליליים ותביעת פיצויים.
+      <h3>זמנים הלכתיים — אזהרה חשובה</h3>
+      זמני כניסת שבת ויציאתה, זמני הדלקת נרות, זמני היום, תאריכים עבריים, מועדים והילולות מוצגים באמצעות חישוב אוטומטי של שירות חיצוני (Hebcal), ועשויים להיות מושפעים מדיוק המיקום, מהגדרות המכשיר, מתקלות טכניות או מהבדלי מנהג ופסיקה. הזמנים מוצגים לנוחות בלבד ואינם מהווים פסק הלכה. <b>אין להסתמך עליהם לקביעת זמן הדלקת נרות, כניסת שבת או כל עניין הלכתי אחר.</b> יש לוודא את הזמנים מול לוח מוסמך או רב מוסמך. המפעיל אינו אחראי לכל נזק, הפסד או תקלה הלכתית הנובעים מהסתמכות על הזמנים המוצגים.
+
+      <h3>נוסחי התפילות</h3>
+      נוסחי התפילות מובאים לנוחות המתפללים ועשויים להיות שונים ממנהג עדתכם. אין בהם משום פסק הלכה. לשאלות בענייני נוסח והלכה יש להיוועץ ברב מוסמך.
+
+      <h3>בעלות וזכויות יוצרים</h3>
+      העיצוב, הקוד, הליקוט, הסידור הגרפי והפיתוח הטכנולוגי של האפליקציה הם רכושו של המפעיל ומוגנים לפי חוק זכות יוצרים, תשס"ח–2007. נוסחי תפילות מסורתיים הם נחלת הכלל. תכנים המוצגים או מקושרים משירותים חיצוניים — ובכללם ספריא (Sefaria) ו-Hebcal — הם רכוש בעליהם וכפופים לתנאי השימוש והרישוי שלהם.
+
+      <h3>איסור העתקה ושימוש מסחרי</h3>
+      חל איסור על העתקה, שכפול, הפצה, שינוי, מכירה או כל שימוש מסחרי ברכיבים שבבעלות המפעיל, ללא אישור מראש ובכתב. הפרה עלולה לגרור הליכים משפטיים אזרחיים ופליליים ותביעת פיצויים.
+
+      <h3>תוכן שמזין המשתמש</h3>
+      באפשרותכם להזין שמות ולבחור תמונות (נר זיכרון, תפילה לרפואה, שלום בית). התכנים נשמרים במכשירכם בלבד ואינם מועברים למפעיל. אתם האחראים הבלעדיים לכך שאתם רשאים להזין מידע ותמונות של אדם אחר, ומתחייבים שלא להזין תוכן פוגעני או מפר זכויות.
 
       <h3>מטרת האפליקציה</h3>
-      האפליקציה פותחה למטרת זיכוי הרבים ולשירות הציבור בלבד, ואינה מיועדת למטרות רווח. כל תוכן רוחני ותפילות המופיעים באפליקציה נועדו לחיזוק הקשר עם הבורא ולשמירת המסורת היהודית.
+      האפליקציה פותחה למטרת זיכוי הרבים ולשירות הציבור, ואינה מיועדת למטרות רווח.
+
+      <h3>זמינות השירות</h3>
+      האפליקציה ניתנת "כמות שהיא" (AS IS). המפעיל אינו מתחייב לזמינות רציפה, לתקינות מלאה או להיעדר שגיאות, ורשאי לשנות, להשעות או להפסיק את השירות בכל עת. חלק מהתכנים תלויים בשירותים חיצוניים שאינם בשליטת המפעיל.
 
       <h3>הגבלת אחריות</h3>
-      המפתח אינו אחראי לכל נזק ישיר, עקיף או תוצאתי הנובע מהשימוש באפליקציה. התוכן ניתן "כמות שהוא" (AS IS) ללא כל אחריות. לנוסחי תפילות הלכתיים יש להיוועץ ברב מוסמך.
+      המפעיל לא יישא באחריות לכל נזק ישיר, עקיף, מיוחד או תוצאתי הנובע מהשימוש באפליקציה או מאי-יכולת להשתמש בה, לרבות נזק הנובע מהסתמכות על זמנים, תאריכים או תכנים המוצגים בה.
+
+      <h3>קטינים</h3>
+      השימוש מותר לכל גיל. מאחר שהאפליקציה מבקשת הרשאות מיקרופון ומיקום, שימוש של קטינים מתחת לגיל 18 ייעשה באחריות ובפיקוח הורה או אפוטרופוס.
+
+      <h3>נגישות</h3>
+      המפעיל פועל להנגשת האפליקציה. להצהרת הנגישות המלאה ולפנייה בנושא — ראו "הצהרת נגישות" בתחתית מסך הבית.
 
       <h3>שינויים בתקנון</h3>
-      המפתח רשאי לשנות תקנון זה בכל עת. המשך השימוש באפליקציה מהווה הסכמה לתנאים המעודכנים.
+      המפעיל רשאי לשנות תקנון זה בכל עת. המשך השימוש לאחר העדכון מהווה הסכמה לתנאים המעודכנים.
 
       <h3>שיפוט</h3>
-      כל סכסוך הנובע מהשימוש באפליקציה יידון בבתי המשפט המוסמכים בישראל, בהתאם לדין הישראלי.
+      על תקנון זה יחול הדין הישראלי. סמכות השיפוט הבלעדית נתונה לבתי המשפט המוסמכים במחוז תל אביב.
+
+      <h3>יצירת קשר</h3>
+      מרדכי עמר — ma303300@gmail.com
     </div>
     <button class="legal-close" onclick="closeLegal('legalTerms')">סגור</button>
   </div>
 </div>
 
 <!-- Floating font control (fixed, shown only inside prayer) -->
-<div class="prayer-font-ctrl" id="prayerFontCtrl">
-  <button class="pfont-btn" onclick="prayerFontChange(8)">+</button>
+<div class="prayer-font-ctrl" id="prayerFontCtrl" role="group" aria-label="בקרת גודל טקסט">
+  <button class="pfont-btn" onclick="prayerFontChange(8)" aria-label="הגדלת גודל הטקסט">+</button>
   <div class="pfont-pct" id="pfontPct"></div>
-  <button class="pfont-btn" onclick="prayerFontChange(-8)">−</button>
+  <button class="pfont-btn" onclick="prayerFontChange(-8)" aria-label="הקטנת גודל הטקסט">−</button>
 </div>
 <div class="prayer-overlay" id="prayerOverlay">
   <div class="prayer-bg"></div>
@@ -8960,7 +9107,9 @@ function closeReminderIfOutside(e) {
 
 // מודלים משפטיים
 function openLegal(type) {
-  var id = type === 'privacy' ? 'legalPrivacy' : 'legalTerms';
+  var id = type === 'privacy' ? 'legalPrivacy'
+         : type === 'accessibility' ? 'legalAccessibility'
+         : 'legalTerms';
   document.getElementById(id).classList.add('active');
 }
 function closeLegal(id) {
@@ -8969,6 +9118,92 @@ function closeLegal(id) {
 function closeLegalIfOutside(e, id) {
   if (e.target === document.getElementById(id)) closeLegal(id);
 }
+
+// ═══════════════════════════════════════════════════════
+// נגישות — ת"י 5568 / WCAG 2.0 AA
+// ═══════════════════════════════════════════════════════
+
+// מחיקת כל הנתונים שהאפליקציה שמרה במכשיר.
+// מדיניות הפרטיות מבטיחה את האפשרות הזו, ולכן היא חייבת לעבוד בפועל.
+function wipeAllData() {
+  if (!confirm('פעולה זו תמחק לצמיתות את כל הנתונים ששמרת באפליקציה במכשיר זה:\n\n• תפילות מועדפות וסדר התפילות\n• סימניות\n• גודל גופן והעדפות\n• שמות ותמונות שהזנת (נר זיכרון, רפואה, שלום בית)\n\nלא ניתן לשחזר. להמשיך?')) return;
+  try { localStorage.clear(); } catch (e) {}
+  try { sessionStorage.clear(); } catch (e) {}
+  alert('כל הנתונים נמחקו. האפליקציה תיטען מחדש.');
+  window.location.reload();
+}
+
+(function initAccessibility() {
+  function ready(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  ready(function () {
+    // ── קישור דילוג לתוכן ──
+    if (!document.querySelector('.skip-link')) {
+      var skip = document.createElement('a');
+      skip.className = 'skip-link';
+      skip.href = '#appScroll';
+      skip.textContent = 'דילוג לתוכן הראשי';
+      skip.addEventListener('click', function (e) {
+        e.preventDefault();
+        var t = document.getElementById('appScroll');
+        if (t) { t.setAttribute('tabindex', '-1'); t.focus(); }
+      });
+      document.body.insertBefore(skip, document.body.firstChild);
+    }
+
+    // ── כפתור עצירה/הפעלה לכיתובית הנעה (WCAG 2.2.2) ──
+    var marquee = document.querySelector('.parasha-marquee-container');
+    if (marquee && !document.querySelector('.marquee-toggle')) {
+      var btn = document.createElement('button');
+      btn.className = 'marquee-toggle';
+      btn.setAttribute('aria-label', 'עצירת הכיתובית הנעה של פרשת השבוע');
+      btn.textContent = '⏸';
+      btn.addEventListener('click', function () {
+        var paused = document.body.classList.toggle('marquee-paused');
+        btn.textContent = paused ? '▶' : '⏸';
+        btn.setAttribute('aria-label', paused
+          ? 'הפעלת הכיתובית הנעה של פרשת השבוע'
+          : 'עצירת הכיתובית הנעה של פרשת השבוע');
+      });
+      document.body.appendChild(btn);
+    }
+
+    // ── הנגשת אלמנטים לחיצים שאינם button/a ──
+    // באפליקציה יש עשרות <div onclick> — בלי טיפול הם אינם נגישים למקלדת
+    // ואינם מוכרזים בקורא מסך. מוסיפים role ו-tabindex ומפעילים אותם ב-Enter/רווח.
+    // לא נוגעים ברקעי חלונות (סגירה בלחיצה מחוץ) — הם אינם פקדים.
+    var clickables = document.querySelectorAll('[onclick]');
+    for (var i = 0; i < clickables.length; i++) {
+      var el = clickables[i];
+      var tag = el.tagName;
+      if (tag === 'BUTTON' || tag === 'A' || tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') continue;
+      var oc = el.getAttribute('onclick') || '';
+      if (oc.indexOf('IfOutside') !== -1) continue;
+      if (/\b(overlay|legal-overlay|category-page|prayer-overlay)\b/.test(el.className || '')) continue;
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    }
+
+    // הפעלה במקלדת עבור כל מה שסומן כ-role="button" ואינו כפתור אמיתי
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      var el = document.activeElement;
+      if (!el || el.getAttribute('role') !== 'button') return;
+      var tag = el.tagName;
+      if (tag === 'BUTTON' || tag === 'A' || tag === 'INPUT') return;
+      e.preventDefault();
+      el.click();
+    });
+
+    // ── אמוג'י דקורטיבי לא יוקרא בקורא מסך ──
+    // מוסתרים רק אלמנטים שכל תוכנם סימן דקורטיבי, כדי לא להסתיר טקסט אמיתי.
+    var deco = document.querySelectorAll('.ornament, .divider, .ray, .bubble-icon, .section-icon');
+    for (var j = 0; j < deco.length; j++) deco[j].setAttribute('aria-hidden', 'true');
+  });
+})();
 
 // הוסף history state בפתיחת כל דף כדי שה-popstate יירה
 var _origOpenCategory = openCategoryPage;
