@@ -7780,68 +7780,9 @@ async function openParasha() {
   updateFavBtn();
 }
 
-async function loadFullParasha() {
-  var btn = document.getElementById('btnFullParasha');
-  var container = document.getElementById('fullParashaContent');
-  if (!btn || !container) return;
-
-  btn.style.display = 'none';
-  container.innerHTML =
-    '<div style="display:flex;flex-direction:column;align-items:center;padding:40px 20px;">' +
-    '<div style="width:48px;height:48px;border:4px solid rgba(212,175,55,0.2);border-top-color:rgba(212,175,55,0.9);border-radius:50%;animation:tehilimSpin 0.9s linear infinite;"></div>' +
-    '<div style="margin-top:16px;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;font-size:1em;">טוען פרשה מלאה...</div>' +
-    '</div>';
-
-  try {
-    var engName = window._hebcalParashaEnglish || '';
-    if (!engName && _currentParashaKey) {
-      // fallback — מצא שם אנגלי ממיפוי הפוך
-      for (var en in parashaNameMap) {
-        if (parashaNameMap[en] === _currentParashaKey) { engName = en; break; }
-      }
-    }
-    if (!engName) throw new Error('no name');
-
-    // ספריא דורש טווח פסוקים מפורש (למשל "Numbers 8:1-12:16"), לא שם פרשה חשוף.
-    // חובה בפורמט ה-URL של ספריא (נקודות) — בדיוק כמו שאר הקריאות שעובדות
-    // באפליקציה (Psalms.23, Kitzur_Shulchan_Aruch.5). "Numbers 8:1-12:16" -> "Numbers.8.1-12.16".
-    var sefariaRef = parashaSefariaRef[engName] || engName;
-    var apiRef = sefariaRef.replace(' ', '.').replace(/:/g, '.');
-    var url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(apiRef) + '?lang=he&stripItags=1';
-    var r = await fetch(url);
-    var d = await r.json();
-
-    var verses = [];
-    if (Array.isArray(d.he)) {
-      d.he.forEach(function(chapter) {
-        if (Array.isArray(chapter)) {
-          chapter.forEach(function(v) { verses.push(v); });
-        } else if (typeof chapter === 'string') {
-          verses.push(chapter);
-        }
-      });
-    }
-
-    if (verses.length === 0) throw new Error('empty');
-
-    var html = '<div class="ornament">\u2756 \u2756 \u2756</div>' +
-      '<span class="section-title">\u2756 \u05E4\u05E8\u05E9\u05D4 \u05DE\u05DC\u05D0\u05D4 \u2756</span>' +
-      '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;text-align:right;direction:rtl;">';
-    verses.forEach(function(v, i) {
-      html += '<span style="color:rgba(139,96,32,0.5);font-size:0.7em;margin-left:4px;">(' + (i+1) + ')</span> ' + v + '<br>';
-    });
-    html += '</div>';
-    container.innerHTML = html;
-    setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
-  } catch(e) {
-    container.innerHTML =
-      '<div style="text-align:center;padding:30px;color:rgba(212,175,55,0.6);font-family:\'Heebo\',sans-serif;font-size:14px;">' +
-      'שגיאה בטעינה. נסה שנית.' +
-      '</div>';
-    if (btn) btn.style.display = '';
-  }
-}
-
+// הפונקציה loadFullParasha הוסרה: היא לא נקראה מאף מקום (קוד מת) ובכל זאת הכילה
+// קריאה ל-API של ספריא ששלפה את טקסט הפרשה אל תוך האפליקציה. הפרשה המלאה נפתחת
+// באתר ספריא עצמו, ולכן אין צורך להביא את התוכן שלהם פנימה.
 // חישוב פרשה לפי תאריך (fallback) — לוח תשפ"ו
 function _getParashaByDate() {
   const keys = Object.keys(parashotData);
@@ -8168,19 +8109,9 @@ updateFhbCount();
   if (!search) return;
   const params = new URLSearchParams(search);
   const pid = params.get('prayer');
-  const name = params.get('name');
+  // פרמטר name בוטל במכוון: בעבר קישור משותף נשא שם של חולה, והפתיחה שלו שמרה
+  // את השם במכשיר של הנמען בלי ידיעתו. קישור יכול לפתוח תפילה — לא להעביר שמות.
   if (pid && prayers[pid]) {
-    if (pid === 'refua' && name) {
-      var decodedName = decodeURIComponent(name);
-      try {
-        var el = document.getElementById('refuaBoxNameDisplay');
-        var inp = document.getElementById('refuaBoxNameInput');
-        if (el) el.textContent = decodedName;
-        if (inp) inp.value = decodedName;
-        localStorage.setItem('orHatfila_refuaName', decodedName);
-        if (typeof updateRefuaName === 'function') updateRefuaName(decodedName);
-      } catch(e) {}
-    }
     setTimeout(() => openPrayerWithBurst({ currentTarget: document.body }, pid, prayerMeta[pid]?.icon || '📖'), 400);
   }
   // deep link לתהילים יומי
@@ -9379,12 +9310,14 @@ openCategoryPage = function(pageId) {
       if (photoActions) photoActions.style.display = '';
       canvas.toBlob(function(blob) {
         if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
-        var nameEl = document.getElementById('memNameDisplay');
-        var nameText = nameEl ? nameEl.textContent.trim() : 'זיכרון';
-        var fileName = 'לעילוי_נשמת_' + nameText.replace(/\s+/g, '_') + '.png';
+        // שם הנפטר אינו נכנס לשם הקובץ ולא לכותרת השיתוף. השם מופיע בתוך התמונה
+        // עצמה (זו מטרת הפיצ'ר), אבל לא בשדות מטא-דאטה שמופיעים בהתראות, ברשימות
+        // קבצים ובתצוגות מקדימות — ושם המשתמש כבר לא שולט בהם.
+        var fileName = 'ner-zikaron.png';
         var file = new File([blob], fileName, { type: 'image/png' });
+        if (!_confirmPersonalShare('נר הזיכרון')) { showToast('השיתוף בוטל'); return; }
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({ title: 'לעילוי נשמת ' + nameText, text: 'ת.נ.צ.ב.ה', files: [file] })
+          navigator.share({ title: 'לעילוי נשמת', text: 'ת.נ.צ.ב.ה', files: [file] })
             .catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
         } else { _memShareFallback(blob, fileName); }
       }, 'image/png');
@@ -9394,6 +9327,14 @@ openCategoryPage = function(pageId) {
       showToast('שגיאה בצילום הבאנר');
     });
   };
+  // נקודת עצירה לפני שיתוף תמונה שמכילה שם ותמונה של אדם אחר.
+  // המשתמש הוא שמחליט לשתף, אבל האפליקציה לא תהפוך את זה ללחיצה אחת בלי תזכורת
+  // שמדובר במידע אישי של מישהו אחר, ושנדרש אישורו.
+  function _confirmPersonalShare(what) {
+    return confirm('התמונה של ' + what + ' שאתה עומד לשתף מכילה את השם והתמונה שהזנת.\n\n' +
+      'אלה פרטים אישיים של אדם אחר. ודא שיש בידך אישור לשתף אותם.\n\nלשתף?');
+  }
+
   function _memShareFallback(blob, fileName) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -9502,15 +9443,17 @@ openCategoryPage = function(pageId) {
       if (photoActions) photoActions.style.display = '';
       canvas.toBlob(function(blob) {
         if (!blob) { showToast('שגיאה ביצירת תמונה'); return; }
-        var nameEl = document.getElementById('refuaBoxNameDisplay');
-        var nameText = nameEl ? nameEl.textContent.trim() : 'חולה';
-        var fileName = 'רפואה_שלמה_' + nameText.replace(/\s+/g, '_') + '.png';
-        var link = 'https://ma303300-blip.github.io/or-hatfila---/?prayer=refua&name=' + encodeURIComponent(nameText);
+        var fileName = 'refua-shlema.png';
+        // הקישור לא נושא שם. שם של חולה הוא מידע רפואי על אדם מזוהה, ובתוך URL הוא
+        // מטייל ליומני שרת, לתצוגות מקדימות של קישורים ולהיסטוריית הדפדפן של כל מי
+        // שהקישור מגיע אליו — לכן הוא הוסר לחלוטין.
+        var link = 'https://ma303300-blip.github.io/or-hatfila---/?prayer=refua';
         var file = new File([blob], fileName, { type: 'image/png' });
+        if (!_confirmPersonalShare('תפילת הרפואה')) { showToast('השיתוף בוטל'); return; }
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           navigator.share({
-            title: 'רפואה שלמה ל' + nameText,
-            text: 'רפואה שלמה מן השמים ל' + nameText + '\n' + link,
+            title: 'רפואה שלמה',
+            text: 'רפואה שלמה מן השמים\n' + link,
             files: [file]
           }).catch(function(e) { if (e.name !== 'AbortError') _memShareFallback(blob, fileName); });
         } else { _memShareFallback(blob, fileName); }
@@ -10308,6 +10251,17 @@ var _tehilimHebNums = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י',
   'קלא','קלב','קלג','קלד','קלה','קלו','קלז','קלח','קלט','קמ',
   'קמא','קמב','קמג','קמד','קמה','קמו','קמז','קמח','קמט','קנ'];
 
+function _sefariaCredit() {
+  return '<div class="ornament">\u2726 \u2726 \u2726</div>' +
+    '<div style="text-align:center;font-size:0.78em;line-height:1.7;' +
+    'color:rgba(212,175,55,0.6);direction:rtl;padding:4px 10px 2px;">' +
+    '\u05D8\u05E7\u05E1\u05D8 \u05D4\u05DE\u05E7\u05D5\u05E8 \u05DE\u05D1\u05D5\u05E1\u05E1 \u05E2\u05DC \u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05E9\u05D1\u05E0\u05D7\u05DC\u05EA \u05D4\u05DB\u05DC\u05DC, ' +
+    '\u05D1\u05D0\u05DE\u05E6\u05E2\u05D5\u05EA \u05D4-API \u05D4\u05D7\u05D5\u05E4\u05E9\u05D9 \u05E9\u05DC ' +
+    '<a href="https://www.sefaria.org" target="_blank" rel="noopener" style="color:#D4AF37">Sefaria</a>.<br>' +
+    '\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05D6\u05D5 \u05D0\u05D9\u05E0\u05D4 \u05DE\u05D8\u05E2\u05DD \u05E1\u05E4\u05E8\u05D9\u05D0 \u05D5\u05D0\u05D9\u05E0\u05D4 \u05E7\u05E9\u05D5\u05E8\u05D4 \u05D0\u05DC\u05D9\u05D4.' +
+    '</div>';
+}
+
 async function openTehilimYomi() {
   pausePage();
   // תאריך עברי
@@ -10401,6 +10355,10 @@ async function openTehilimYomi() {
     }
   });
 
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
   document.getElementById('prayerBody').innerHTML = html;
   overlay.querySelector('.prayer-content').scrollTop = 0;
 
@@ -10488,6 +10446,10 @@ async function openHalachaYomit() {
     html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
   }
 
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
   document.getElementById('prayerBody').innerHTML = html;
   overlay.querySelector('.prayer-content').scrollTop = 0;
   setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
@@ -10585,6 +10547,10 @@ async function openTanyaYomi() {
     html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
   }
 
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
   document.getElementById('prayerBody').innerHTML = html;
   overlay.querySelector('.prayer-content').scrollTop = 0;
   setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
