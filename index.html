@@ -7686,20 +7686,107 @@ function _hebNum(n) {
 
 // שם הפרשה באנגלית — מ-Hebcal, ובהיעדרו ממיפוי הפוך של המפתח העברי
 function _parashaEngName() {
-  function normA(x) { return (x || '').replace(/[‘’ʼ׳`´]/g, "'").trim(); }
   var engName = window._hebcalParashaEnglish || '';
   if (!engName && _currentParashaKey) {
     for (var en in parashaNameMap) {
       if (parashaNameMap[en] === _currentParashaKey) { engName = en; break; }
     }
   }
-  if (engName && !parashaSefariaRef[engName]) {
-    var target = normA(engName);
+  return engName;
+}
+
+// נרמול שם באנגלית: אותיות קטנות, בלי גרשים, מקפים ורווחים.
+// נדרש כי אותה פרשה מאויתת שונה בכל מקור: הטבלה כאן 'Haazinu',
+// Hebcal מחזיר "Ha'azinu" וספריא קוראת לזה "Ha'Azinu".
+function _normEngName(x) {
+  return (x || '').toLowerCase()
+    .replace(/[‘’ʼ׳`´']/g, '')
+    .replace(/[-–—_\s.]/g, '');
+}
+
+// נרמול רופף להבדלי תעתיק של תנועות (Vayeilech מול Vayelech)
+function _looseEngName(x) {
+  var v = _normEngName(x);
+  if (v.slice(-1) === 'h') v = v.slice(0, -1);
+  return v.replace(/ei|ie|ee/g, 'e')
+          .replace(/aa/g, 'a')
+          .replace(/oo|ou/g, 'o')
+          .replace(/y/g, 'i');
+}
+
+// שלד עיצורים — השכבה האחרונה, לתעתיקים שנבדלים בתנועות בלבד
+// (Shmini מול Shemini, Chayei Sara מול Chayei Sarah).
+// נבדק שאין שתי פרשות מתוך 61 שחולקות שלד זהה, ולכן ההתאמה חד-משמעית.
+function _skelEngName(x) {
+  var v = _normEngName(x);
+  if (v.slice(-1) === 'h') v = v.slice(0, -1);
+  return v.replace(/[aeiou]/g, '');
+}
+
+// חיפוש הטווח בטבלה המקומית, עמיד להבדלי איות
+var _parashaRefIndex = null;
+function _parashaTableRef(engName) {
+  if (!engName) return null;
+  if (parashaSefariaRef[engName]) return parashaSefariaRef[engName];
+  if (!_parashaRefIndex) {
+    _parashaRefIndex = { exact: {}, loose: {}, skel: {} };
     for (var k in parashaSefariaRef) {
-      if (normA(k) === target) return k;
+      _parashaRefIndex.exact[_normEngName(k)] = parashaSefariaRef[k];
+      _parashaRefIndex.loose[_looseEngName(k)] = parashaSefariaRef[k];
+      _parashaRefIndex.skel[_skelEngName(k)]  = parashaSefariaRef[k];
     }
   }
-  return engName;
+  return _parashaRefIndex.exact[_normEngName(engName)] ||
+         _parashaRefIndex.loose[_looseEngName(engName)] ||
+         _parashaRefIndex.skel[_skelEngName(engName)] || null;
+}
+
+// נרמול שם פרשה להשוואה: בלי ניקוד, בלי "פרשת", מקפים ואפוסטרופים אחידים
+function _normParashaName(x) {
+  return (x || '')
+    .replace(/[\u0591-\u05C7]/g, '')
+    .replace(/פרשת\s*/g, '')
+    .replace(/[‘’ʼ׳`´']/g, '')
+    .replace(/[-–—]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// איתור הטווח של פרשת השבוע.
+// מסלול ראשי: לוח השנה של ספריא — אותו מקור שממנו נשלף הטקסט, ולכן השם והטווח
+// תמיד עקביים ביניהם, וגם פרשות מחוברות ולוח ישראל (diaspora=0) מטופלים אצלם.
+// גיבוי: הטבלה המקומית, כפי שהיה עד כה.
+// אם ספריא מחזירה פרשה אחרת מזו שמוצגת באפליקציה — מעדיפים את הטבלה, כדי שהטקסט
+// המלא לא יסתור את "עיקרי הפרשה" שמופיע מעליו. אם אין רשומה בטבלה — לוקחים את של
+// ספריא, כי טקסט נכון עדיף על כפתור שלא עובד.
+async function _resolveParashaRef() {
+  var tableRef = null;
+  var refDisplay = _parashaTableRef(_parashaEngName());
+  if (refDisplay) tableRef = refDisplay.replace(' ', '.').replace(/:/g, '.');
+
+  try {
+    var r = await fetch('https://www.sefaria.org/api/calendars?diaspora=0');
+    if (r.ok) {
+      var d = await r.json();
+      var items = (d && d.calendar_items) || [];
+      for (var i = 0; i < items.length; i++) {
+        var it = items[i] || {};
+        var kind = (it.title && (it.title.en || '')) || '';
+        if (!/parashat\s*hashavua/i.test(kind) || !it.url) continue;
+
+        var sefName = (it.displayValue && (it.displayValue.he || it.displayValue.en)) || '';
+        // אם אין במה להשוות, או שהשמות תואמים — ספריא היא המקור המדויק
+        if (!_currentParashaKey || !sefName) return { ref: it.url, via: 'sefaria' };
+        var a = _normParashaName(sefName), b = _normParashaName(_currentParashaKey);
+        if (a === b || a.indexOf(b) === 0 || b.indexOf(a) === 0) return { ref: it.url, via: 'sefaria' };
+        // חוסר התאמה: שומרים על עקביות עם מה שמוצג, ואם אין טבלה — ספריא
+        return tableRef ? { ref: tableRef, via: 'table-mismatch' }
+                        : { ref: it.url, via: 'sefaria-mismatch' };
+      }
+    }
+  } catch (e) { /* נופלים לגיבוי */ }
+
+  return tableRef ? { ref: tableRef, via: 'table' } : null;
 }
 
 async function loadFullParasha() {
@@ -7721,12 +7808,9 @@ async function loadFullParasha() {
     '</div>';
 
   try {
-    var engName = _parashaEngName();
-    var refDisplay = parashaSefariaRef[engName];
-    if (!refDisplay) throw new Error('no-ref');
-
-    // 'Genesis 1:1-6:8' -> 'Genesis.1.1-6.8'
-    var apiRef = refDisplay.replace(' ', '.').replace(/:/g, '.');
+    var resolved = await _resolveParashaRef();
+    if (!resolved || !resolved.ref) throw new Error('no-ref');
+    var apiRef = resolved.ref;
 
     var d = _fullParashaCache[apiRef];
     if (!d) {
@@ -7797,21 +7881,10 @@ async function loadFullParasha() {
 }
 
 function _parashaSefariaUrl() {
-  function normA(s) { return (s || '').replace(/[‘’ʼ׳`´]/g, "'").trim(); }
-  var engName = window._hebcalParashaEnglish || '';
-  if (!engName && _currentParashaKey) {
-    for (var en in parashaNameMap) {
-      if (parashaNameMap[en] === _currentParashaKey) { engName = en; break; }
-    }
-  }
-  var refDisplay = parashaSefariaRef[engName];
-  if (!refDisplay && engName) {
-    var target = normA(engName);
-    for (var k in parashaSefariaRef) {
-      if (normA(k) === target) { refDisplay = parashaSefariaRef[k]; break; }
-    }
-  }
-  // ברירת מחדל בטוחה — עמוד התורה בספריא (לא אמור לקרות)
+  // משתמש באותו חיפוש עמיד-לאיות כמו הטעינה, כדי שהקישור לא יישבר
+  // בשבוע שבו Hebcal מאיית את שם הפרשה אחרת מהטבלה.
+  var refDisplay = _parashaTableRef(_parashaEngName());
+  // ברירת מחדל בטוחה — עמוד התורה בספריא
   if (!refDisplay) return 'https://www.sefaria.org/texts/Tanakh/Torah';
   var apiRef = refDisplay.replace(' ', '.').replace(/:/g, '.');
   return 'https://www.sefaria.org/' + apiRef + '?lang=he';
