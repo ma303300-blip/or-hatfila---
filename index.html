@@ -1280,94 +1280,6 @@
     letter-spacing: 8px;
   }
 
-  /* ═══════════════════════════════════════════════════════
-     כרטיס "פתיחה בספריא"
-     האפליקציה אינה מביאה אל תוכה טקסט משירות חיצוני — היא מציינת מה הקטע
-     של היום (חישוב מקומי שלנו) ופותחת את הטקסט עצמו באתר המקור.
-     ═══════════════════════════════════════════════════════ */
-  .sef-gate {
-    direction: rtl;
-    text-align: center;
-    max-width: 520px;
-    margin: 8px auto 0;
-  }
-  .sef-gate-label {
-    color: rgba(139,96,32,0.85);
-    font-size: clamp(14px, 3.4vw, 16px);
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .sef-gate-portion {
-    color: #7a3e10;
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: clamp(27px, 7vw, 38px);
-    font-weight: 700;
-    line-height: 1.35;
-    text-shadow: 0 1px 0 rgba(255,220,150,0.35);
-    margin: 2px 0 4px;
-  }
-  .sef-gate-source {
-    color: #8B1a1a;
-    font-size: clamp(15px, 3.8vw, 18px);
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  .sef-gate-btn {
-    display: block;
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto 12px;
-    padding: 16px 20px;
-    background: linear-gradient(180deg, #8a4a12 0%, #6d3a0e 100%);
-    color: #ffeec2;
-    border: 2px solid rgba(139,96,32,0.65);
-    border-radius: 12px;
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: clamp(18px, 4.6vw, 22px);
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 3px 10px rgba(80,45,10,0.35);
-    letter-spacing: 0.5px;
-  }
-  .sef-gate-btn:active { transform: translateY(1px); }
-  .sef-gate-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin: 4px auto 16px;
-    max-width: 440px;
-  }
-  .sef-gate-chip {
-    min-width: 62px;
-    padding: 10px 14px;
-    background: rgba(139,90,20,0.1);
-    border: 1.5px solid rgba(139,96,32,0.45);
-    border-radius: 9px;
-    color: #6d3a0e;
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: clamp(17px, 4.2vw, 20px);
-    font-weight: 700;
-    text-decoration: none;
-  }
-  .sef-gate-note {
-    color: rgba(60,34,8,0.72);
-    font-size: clamp(12.5px, 3.1vw, 14px);
-    line-height: 1.75;
-    text-align: center;
-    padding: 14px 14px 2px;
-    border-top: 1px solid rgba(139,96,32,0.28);
-    margin-top: 6px;
-  }
-  .sef-gate-note a { color: #7a3e10; font-weight: 700; }
-  .sef-gate-zchut {
-    color: #7a3e10;
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: clamp(14px, 3.5vw, 16px);
-    margin-top: 14px;
-    letter-spacing: 1px;
-  }
-
   @keyframes tzaddikPulse {
     0%   { border-color: rgba(220,50,50,0.3); box-shadow: 0 0 0 0 rgba(220,50,50,0); background: rgba(139,90,20,0.08); }
     45%  { border-color: rgba(220,50,50,1);   box-shadow: 0 0 0 5px rgba(220,50,50,0.2); background: rgba(139,90,20,0.18); }
@@ -3743,7 +3655,7 @@
       בלחיצה על כפתור הפקודה הקולית האפליקציה מבקשת גישה למיקרופון ומשתמשת במנוע זיהוי הדיבור של הדפדפן. חשוב לדעת: ברוב הדפדפנים (כולל Chrome ואנדרואיד) המנוע משדר את ההקלטה לשרתי Google לצורך תמלול. המפעיל אינו מקליט, אינו שומר ואינו מקבל גישה להקלטות. השימוש מרצון בלבד.
 
       <h3>שירותי צד שלישי</h3>
-      האפליקציה פונה ל-Hebcal, OpenStreetMap, Google Fonts, Cloudflare CDN ו-GitHub, ולפי בחירתכם גם ל-Google Forms ול-WhatsApp. לכל פנייה כזו נחשפת כתובת ה-IP שלכם לספק השירות. לספריא האפליקציה אינה פונה כלל — היא רק מציגה קישורים לאתרם, ורק לחיצה שלכם על קישור תעביר אותכם לשם. אין באפליקציה פרסומות, מעקב או אנליטיקס.
+      האפליקציה פונה ל-Hebcal, OpenStreetMap, ספריא, Google Fonts, Cloudflare CDN, GitHub, ולפי בחירתכם גם ל-Google Forms ול-WhatsApp. לכל פנייה כזו נחשפת כתובת ה-IP שלכם לספק השירות. אין באפליקציה פרסומות, מעקב או אנליטיקס.
 
       <h3>עוגיות ואחסון</h3>
       האפליקציה אינה משתמשת בעוגיות ואינה עוקבת בין אתרים. היא משתמשת באחסון מקומי לשמירת ההעדפות וב-Service Worker לשמירת עותק לשימוש ללא אינטרנט — שניהם במכשירכם בלבד.
@@ -3780,11 +3692,7 @@
       נוסחי התפילות מובאים לנוחות המתפללים ועשויים להיות שונים ממנהג עדתכם. אין בהם משום פסק הלכה. לשאלות בענייני נוסח והלכה יש להיוועץ ברב מוסמך.
 
       <h3>בעלות וזכויות יוצרים</h3>
-      העיצוב, הקוד, הליקוט, הסידור הגרפי והפיתוח הטכנולוגי של האפליקציה הם רכושו של המפעיל ומוגנים לפי חוק זכות יוצרים, תשס"ח–2007. נוסחי תפילות מסורתיים הם נחלת הכלל.
-      <br><br>
-      האפליקציה <b>אינה מעתיקה, אינה שומרת ואינה מציגה תוכן של אתרים אחרים</b>. במקומות שבהם מוצגים תהילים יומי, הלכה יומית, תניא יומי ופרשת השבוע, האפליקציה מחשבת בעצמה מהו הקטע של אותו יום ומציגה <b>קישור בלבד</b> לאתר המקור — הטקסט נפתח שם, באחריות מפעילי אותו אתר ובכפוף לתנאיו. אין בכך שימוש בתוכנם אלא הפניה אליו, לזיכוי הרבים.
-      <br><br>
-      שמות וסימני מסחר של שירותים חיצוניים — ובכללם ספריא (Sefaria) ו-Hebcal — הם רכוש בעליהם. האפליקציה אינה מטעמם, אינה קשורה אליהם ואינה מתיימרת לייצג אותם.
+      העיצוב, הקוד, הליקוט, הסידור הגרפי והפיתוח הטכנולוגי של האפליקציה הם רכושו של המפעיל ומוגנים לפי חוק זכות יוצרים, תשס"ח–2007. נוסחי תפילות מסורתיים הם נחלת הכלל. תכנים המוצגים או מקושרים משירותים חיצוניים — ובכללם ספריא (Sefaria) ו-Hebcal — הם רכוש בעליהם וכפופים לתנאי השימוש והרישוי שלהם.
 
       <h3>איסור העתקה ושימוש מסחרי</h3>
       חל איסור על העתקה, שכפול, הפצה, שינוי, מכירה או כל שימוש מסחרי ברכיבים שבבעלות המפעיל, ללא אישור מראש ובכתב. הפרה עלולה לגרור הליכים משפטיים אזרחיים ופליליים ותביעת פיצויים.
@@ -10326,105 +10234,64 @@ var tehilimYomi = [
   /* יום 30 */ [42,43,44,45,46,47,48,49,50],
 ];
 
+var _tehilimCache = {};
+var _tehilimHebNums = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+  'יא','יב','יג','יד','טו','טז','יז','יח','יט','כ',
+  'כא','כב','כג','כד','כה','כו','כז','כח','כט','ל',
+  'לא','לב','לג','לד','לה','לו','לז','לח','לט','מ',
+  'מא','מב','מג','מד','מה','מו','מז','מח','מט','נ',
+  'נא','נב','נג','נד','נה','נו','נז','נח','נט','ס',
+  'סא','סב','סג','סד','סה','סו','סז','סח','סט','ע',
+  'עא','עב','עג','עד','עה','עו','עז','עח','עט','פ',
+  'פא','פב','פג','פד','פה','פו','פז','פח','פט','צ',
+  'צא','צב','צג','צד','צה','צו','צז','צח','צט','ק',
+  'קא','קב','קג','קד','קה','קו','קז','קח','קט','קי',
+  'קיא','קיב','קיג','קיד','קטו','קטז','קיז','קיח','קיט','קכ',
+  'קכא','קכב','קכג','קכד','קכה','קכו','קכז','קכח','קכט','קל',
+  'קלא','קלב','קלג','קלד','קלה','קלו','קלז','קלח','קלט','קמ',
+  'קמא','קמב','קמג','קמד','קמה','קמו','קמז','קמח','קמט','קנ'];
 
-// ═══════════════════════════════════════════════════════
-// כרטיס "פתיחה בספריא"
-// האפליקציה אינה שולפת ואינה מאחסנת טקסט מספריא. מה שמחושב כאן הוא רק *איזה*
-// קטע קוראים היום — חישוב מקומי שלנו (טבלת תהילים יומי / מספר יום בשנה) — ואת
-// הטקסט עצמו המשתמש פותח באתר המקור. כך אין שימוש בתוכן של אף גורם חיצוני,
-// רק הפניה אליו לזיכוי הרבים.
-// מלבד הקישור לקטע היום מוצג גם קישור לעמוד הראשי של החיבור בספריא, כדי
-// שתמיד תהיה דרך פתוחה גם אם מבנה קישור עמוק ישתנה בעתיד בצד שלהם.
-// ═══════════════════════════════════════════════════════
-// המרת מספר לאותיות עבריות (גרש לאות בודדת, גרשיים לפני האחרונה).
-// מטפל גם במאות, כדי שיתאים לתהילים (עד ק"נ) ולקיצור שולחן ערוך (עד רכ"א),
-// ומונע את הצירופים י"ה וי"ו בט"ו ובט"ז כמנהג.
-function _hebNum(n) {
-  n = parseInt(n, 10);
-  if (!n || n < 1) return '';
-  var H = [[400,'ת'],[300,'ש'],[200,'ר'],[100,'ק'],
-           [90,'צ'],[80,'פ'],[70,'ע'],[60,'ס'],[50,'נ'],[40,'מ'],[30,'ל'],[20,'כ'],[10,'י'],
-           [9,'ט'],[8,'ח'],[7,'ז'],[6,'ו'],[5,'ה'],[4,'ד'],[3,'ג'],[2,'ב'],[1,'א']];
-  var out = '', rem = n;
-  while (rem > 0) {
-    if (rem === 15) { out += 'טו'; break; }
-    if (rem === 16) { out += 'טז'; break; }
-    for (var i = 0; i < H.length; i++) {
-      if (rem >= H[i][0]) { out += H[i][1]; rem -= H[i][0]; break; }
-    }
-  }
-  return out.length === 1 ? out + "'" : out.slice(0, -1) + '"' + out.slice(-1);
-}
-
-function _sefUrl(ref) {
-  // encodeURI ולא encodeURIComponent — כדי לא לשבור את הפסיק והנקודה-פסיק
-  // שמופיעים במזהי החיבורים של ספריא (למשל Tanya,_Part_I;_Likkutei_Amarim.5)
-  return 'https://www.sefaria.org/' + encodeURI(ref) + '?lang=he';
-}
-
-function _sefariaGateway(opts) {
-  var html = '<div class="sef-gate">';
-  html += '<div class="sef-gate-label">' + opts.label + '</div>';
-  html += '<div class="sef-gate-portion">' + opts.portion + '</div>';
-  html += '<div class="sef-gate-source">' + opts.source + '</div>';
-
-  html += '<a class="sef-gate-btn" href="' + _sefUrl(opts.ref) + '" target="_blank" rel="noopener noreferrer">' +
-          'פתיחת הקטע באתר ספריא \u2190</a>';
-
-  // תהילים יומי: גם קישור לכל פרק בנפרד, לנוחות הקורא
-  if (opts.parts && opts.parts.length > 1) {
-    html += '<div class="sef-gate-grid">';
-    opts.parts.forEach(function (prt) {
-      html += '<a class="sef-gate-chip" href="' + _sefUrl(prt.ref) + '" target="_blank" rel="noopener noreferrer">' +
-              prt.label + '</a>';
-    });
-    html += '</div>';
-  }
-
-  html += '<div class="sef-gate-note">' +
-    'אפליקציית אור התפילה אינה מעתיקה, אינה שומרת ואינה מציגה את תוכנם של אתרים אחרים. ' +
-    'הקטע של היום מחושב באפליקציה, והטקסט נפתח אצל המקור: ' +
-    '<a href="' + _sefUrl(opts.indexRef) + '" target="_blank" rel="noopener noreferrer">' + opts.source + ' בספריא</a>.<br>' +
-    'האפליקציה אינה מטעם ספריא ואינה קשורה אליה.' +
+function _sefariaCredit() {
+  return '<div class="ornament">\u2726 \u2726 \u2726</div>' +
+    '<div style="text-align:center;font-size:0.78em;line-height:1.7;' +
+    'color:rgba(212,175,55,0.6);direction:rtl;padding:4px 10px 2px;">' +
+    '\u05D8\u05E7\u05E1\u05D8 \u05D4\u05DE\u05E7\u05D5\u05E8 \u05DE\u05D1\u05D5\u05E1\u05E1 \u05E2\u05DC \u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05E9\u05D1\u05E0\u05D7\u05DC\u05EA \u05D4\u05DB\u05DC\u05DC, ' +
+    '\u05D1\u05D0\u05DE\u05E6\u05E2\u05D5\u05EA \u05D4-API \u05D4\u05D7\u05D5\u05E4\u05E9\u05D9 \u05E9\u05DC ' +
+    '<a href="https://www.sefaria.org" target="_blank" rel="noopener" style="color:#D4AF37">Sefaria</a>.<br>' +
+    '\u05D0\u05E4\u05DC\u05D9\u05E7\u05E6\u05D9\u05D4 \u05D6\u05D5 \u05D0\u05D9\u05E0\u05D4 \u05DE\u05D8\u05E2\u05DD \u05E1\u05E4\u05E8\u05D9\u05D0 \u05D5\u05D0\u05D9\u05E0\u05D4 \u05E7\u05E9\u05D5\u05E8\u05D4 \u05D0\u05DC\u05D9\u05D4.' +
     '</div>';
-
-  html += '<div class="sef-gate-zchut">\u2726 לזיכוי הרבים \u2726</div>';
-  html += '</div>';
-  return html;
 }
 
 async function openTehilimYomi() {
   pausePage();
+  // תאריך עברי
   var hDate  = getHebrewDayMonth();
   var hebDay = hDate ? hDate.day : new Date().getDate();
-  var idx    = Math.min(hebDay, 30) - 1;
+  var idx     = Math.min(hebDay, 30) - 1;
   var chapters = tehilimYomi[idx] || tehilimYomi[0];
+  var dayNum  = hebDay;
 
-  var dayHeb  = _hebNum(hebDay);
+  // המרה לאותיות עבריות
+  var _hebLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י',
+    'י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ',
+    'כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  var dayHeb = _hebLetters[dayNum - 1] || String(dayNum);
+
   var dateStr = hDate ? dayHeb + ' ' + hDate.month : 'יום ' + dayHeb;
+  var title   = 'תהילים יומי — ' + dateStr;
 
-  var first = chapters[0], last = chapters[chapters.length - 1];
-  var firstHeb = _hebNum(first);
-  var lastHeb  = _hebNum(last);
-  var portion  = chapters.length > 1
-    ? 'פרקים ' + firstHeb + ' – ' + lastHeb
-    : 'פרק ' + firstHeb;
-
-  var parts = chapters.map(function (n) {
-    return { label: _hebNum(n), ref: 'Psalms.' + n };
-  });
-
+  // פתח overlay עם ספינר
   if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'tehilim_yomi';
   history.pushState({ prayer: 'tehilim_yomi' }, '');
-  document.getElementById('prayerTitle').textContent = 'תהילים יומי — ' + dateStr;
-  document.getElementById('prayerBody').innerHTML = _sefariaGateway({
-    label: dateStr,
-    portion: portion,
-    source: 'תהילים',
-    ref: chapters.length > 1 ? 'Psalms.' + first + '-' + last : 'Psalms.' + first,
-    indexRef: 'Psalms',
-    parts: parts
-  });
+  document.getElementById('prayerTitle').textContent = title;
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(212,175,55,0.2);' +
+    'border-top-color:rgba(212,175,55,0.9);border-radius:50%;' +
+    'animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(212,175,55,0.85);' +
+    'font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען תהילים...</div>' +
+    '</div>';
 
   var overlay = document.getElementById('prayerOverlay');
   var vh = window.innerHeight;
@@ -10434,20 +10301,77 @@ async function openTehilimYomi() {
   overlay.classList.add('zoom-in');
   overlay.querySelector('.prayer-content').scrollTop = 0;
   requestAnimationFrame(function() {
-    requestAnimationFrame(function() { overlay.classList.add('active'); });
+    requestAnimationFrame(function() {
+      overlay.classList.add('active');
+    });
   });
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
   document.body.dataset.prayerScrollY = scrollY;
 
+  // fetch מקביל מ-Sefaria לכל פרקי היום
+  var results = await Promise.all(chapters.map(async function(n) {
+    if (_tehilimCache[n]) return { n: n, verses: _tehilimCache[n] };
+    try {
+      var r = await fetch('https://www.sefaria.org/api/texts/Psalms.' + n + '?lang=he&stripItags=1');
+      var d = await r.json();
+      var verses = Array.isArray(d.he) ? d.he : [];
+      _tehilimCache[n] = verses;
+      return { n: n, verses: verses };
+    } catch(e) {
+      return { n: n, verses: null };
+    }
+  }));
+
+  // בנה HTML בסגנון האפליקציה
+  var firstHeb = _tehilimHebNums[chapters[0]] || chapters[0];
+  var lastHeb  = _tehilimHebNums[chapters[chapters.length - 1]] || chapters[chapters.length - 1];
+
+  var html =
+    '<span class="section-title">✦ תהילים יומי ✦</span>' +
+    '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>' +
+    '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">' +
+    'פרקים ' + firstHeb + ' – ' + lastHeb + '</div>' +
+    '<div class="ornament">✦ ✦ ✦</div>';
+
+  results.forEach(function(res, i) {
+    var hebNum = _tehilimHebNums[res.n] || res.n;
+    html += '<div style="margin:0 0 20px 0;direction:rtl;">';
+    html += '<div style="text-align:center;font-family:\'Frank Ruhl Libre\',serif;' +
+            'font-size:1.05em;font-weight:700;color:#7a3e10;margin-bottom:10px;">פרק ' + hebNum + '</div>';
+    if (res.verses && res.verses.length > 0) {
+      html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;' +
+              'text-align:right;direction:rtl;">';
+      res.verses.forEach(function(v) { html += v + ' '; });
+      html += '</div>';
+    } else {
+      html += '<div style="text-align:center;color:rgba(212,175,55,0.5);font-size:0.9em;">' +
+              'לא ניתן לטעון פרק זה</div>';
+    }
+    html += '</div>';
+    if (i < results.length - 1) {
+      html += '<div class="ornament" style="margin:4px 0 20px 0;">✦ ✦ ✦</div>';
+    }
+  });
+
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+
   setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
   setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
 
-  // אין כאן טקסט ארוך לגלול, ולכן פקדי הגלילה האוטומטית מוסתרים
   var controls = document.getElementById('scrollControls');
   if (controls) {
-    controls.classList.remove('visible');
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
     if (typeof stopAutoScroll === 'function') stopAutoScroll();
   }
   if (typeof updateFavBtn === 'function') updateFavBtn();
@@ -10459,28 +10383,27 @@ async function openTehilimYomi() {
 // ═══════════════════════════════════════════════════
 // הלכה יומית — קיצור שולחן ערוך מ-Sefaria
 // ═══════════════════════════════════════════════════
+var _halachaCache = {};
 async function openHalachaYomit() {
   pausePage();
   var now = new Date();
   var start = new Date(now.getFullYear(), 0, 0);
   var dayOfYear = Math.floor((now - start) / 86400000);
   var simanNum = (dayOfYear % 221) + 1;
-
   var hDate = getHebrewDayMonth();
-  var hebDay  = hDate ? hDate.day : now.getDate();
-  var dayHeb  = _hebNum(hebDay);
+  var _hebLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ','כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  var hebDay = hDate ? hDate.day : now.getDate();
+  var dayHeb = _hebLetters[Math.min(hebDay,30)-1] || String(hebDay);
   var dateStr = hDate ? dayHeb + ' ' + hDate.month : 'יום ' + dayHeb;
 
   if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'halacha_yomit';
   history.pushState({ prayer: 'halacha_yomit' }, '');
   document.getElementById('prayerTitle').textContent = 'הלכה יומית — ' + dateStr;
-  document.getElementById('prayerBody').innerHTML = _sefariaGateway({
-    label: dateStr,
-    portion: 'סימן ' + _hebNum(simanNum),
-    source: 'קיצור שולחן ערוך',
-    ref: 'Kitzur_Shulchan_Aruch.' + simanNum,
-    indexRef: 'Kitzur_Shulchan_Aruch'
-  });
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(212,175,55,0.2);border-top-color:rgba(212,175,55,0.9);border-radius:50%;animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען הלכה יומית...</div>' +
+    '</div>';
 
   var overlay = document.getElementById('prayerOverlay');
   var vh = window.innerHeight;
@@ -10489,21 +10412,55 @@ async function openHalachaYomit() {
   overlay.classList.remove('active');
   overlay.classList.add('zoom-in');
   overlay.querySelector('.prayer-content').scrollTop = 0;
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() { overlay.classList.add('active'); });
-  });
+  requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
   document.body.dataset.prayerScrollY = scrollY;
 
+  var html = '';
+  try {
+    if (_halachaCache[simanNum]) {
+      var cached = _halachaCache[simanNum];
+      html = cached.html;
+    } else {
+      var r = await fetch('https://www.sefaria.org/api/texts/Kitzur_Shulchan_Aruch.' + simanNum + '?lang=he&stripItags=1');
+      var d = await r.json();
+      var verses = Array.isArray(d.he) ? d.he : [];
+      var simanTitle = d.heTitle || '';
+      html = '<span class="section-title">✦ הלכה יומית ✦</span>' +
+        '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>' +
+        '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">קיצור שולחן ערוך — סימן ' + simanNum + '</div>';
+      if (simanTitle) html += '<div style="text-align:center;font-size:0.95em;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;margin-bottom:8px;">' + simanTitle + '</div>';
+      html += '<div class="ornament">✦ ✦ ✦</div>';
+      if (verses.length > 0) {
+        html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;text-align:right;direction:rtl;">';
+        verses.forEach(function(v, i) {
+          html += '<span style="font-size:0.8em;color:rgba(122,62,16,0.7);margin-left:4px;">' + (i+1) + '. </span>' + v + '<br><br>';
+        });
+        html += '</div>';
+      }
+      _halachaCache[simanNum] = { html: html };
+    }
+  } catch(e) {
+    html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
+  }
+
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
   setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
   setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
-
-  // אין כאן טקסט ארוך לגלול, ולכן פקדי הגלילה האוטומטית מוסתרים
   var controls = document.getElementById('scrollControls');
   if (controls) {
-    controls.classList.remove('visible');
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
     if (typeof stopAutoScroll === 'function') stopAutoScroll();
   }
   if (typeof updateFavBtn === 'function') updateFavBtn();
@@ -10514,28 +10471,30 @@ async function openHalachaYomit() {
 // ═══════════════════════════════════════════════════
 // תניא יומי — מ-Sefaria
 // ═══════════════════════════════════════════════════
+var _tanyaCache = {};
 async function openTanyaYomi() {
   pausePage();
+
+  // חישוב קטע תניא לפי יום השנה (365 ÷ 53 פרקים)
   var now = new Date();
   var start = new Date(now.getFullYear(), 0, 0);
   var dayOfYear = Math.floor((now - start) / 86400000);
   var perekNum = (dayOfYear % 53) + 1;
 
   var hDate = getHebrewDayMonth();
-  var hebDay  = hDate ? hDate.day : now.getDate();
-  var dayHeb  = _hebNum(hebDay);
+  var _hebLetters = ['א','ב','ג','ד','ה','ו','ז','ח','ט','י','י"א','י"ב','י"ג','י"ד','ט"ו','ט"ז','י"ז','י"ח','י"ט','כ','כ"א','כ"ב','כ"ג','כ"ד','כ"ה','כ"ו','כ"ז','כ"ח','כ"ט','ל'];
+  var hebDay = hDate ? hDate.day : now.getDate();
+  var dayHeb = _hebLetters[Math.min(hebDay,30)-1] || String(hebDay);
   var dateStr = hDate ? dayHeb + ' ' + hDate.month : 'יום ' + dayHeb;
 
   if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'tanya_yomi';
   history.pushState({ prayer: 'tanya_yomi' }, '');
   document.getElementById('prayerTitle').textContent = 'תניא יומי — ' + dateStr;
-  document.getElementById('prayerBody').innerHTML = _sefariaGateway({
-    label: dateStr,
-    portion: 'פרק ' + _hebNum(perekNum),
-    source: 'תניא — ליקוטי אמרים',
-    ref: 'Tanya,_Part_I;_Likkutei_Amarim.' + perekNum,
-    indexRef: 'Tanya'
-  });
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(212,175,55,0.2);border-top-color:rgba(212,175,55,0.9);border-radius:50%;animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען תניא יומי...</div>' +
+    '</div>';
 
   var overlay = document.getElementById('prayerOverlay');
   var vh = window.innerHeight;
@@ -10544,21 +10503,65 @@ async function openTanyaYomi() {
   overlay.classList.remove('active');
   overlay.classList.add('zoom-in');
   overlay.querySelector('.prayer-content').scrollTop = 0;
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() { overlay.classList.add('active'); });
-  });
+  requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
 
   var scrollY = _appScrollTop();
   _lockAppScroll();
   document.body.dataset.prayerScrollY = scrollY;
 
+  var html = '';
+  try {
+    if (_tanyaCache[perekNum]) {
+      html = _tanyaCache[perekNum];
+    } else {
+      var urls = [
+        'https://www.sefaria.org/api/texts/Tanya,_Part_I;_Likkutei_Amarim.' + perekNum + '?lang=he&stripItags=1',
+      ];
+      var d = null;
+      for (var u of urls) {
+        try {
+          var r = await fetch(u);
+          var tmp = await r.json();
+          if (tmp && Array.isArray(tmp.he) && tmp.he.length > 0) { d = tmp; break; }
+        } catch(e2) {}
+      }
+      if (!d) throw new Error('not found');
+      var verses = Array.isArray(d.he) ? d.he : [];
+      var perekTitle = d.heTitle || ('פרק ' + perekNum);
+
+      html = '<span class="section-title">✦ תניא יומי ✦</span>' +
+        '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>' +
+        '<div style="text-align:center;font-size:0.88em;color:rgba(212,175,55,0.65);margin-bottom:4px;">ליקוטי אמרים — פרק ' + perekNum + '</div>';
+      if (perekTitle) html += '<div style="text-align:center;font-size:0.95em;color:rgba(212,175,55,0.85);font-family:\'Frank Ruhl Libre\',serif;margin-bottom:8px;">' + perekTitle + '</div>';
+      html += '<div class="ornament">✦ ✦ ✦</div>';
+      if (verses.length > 0) {
+        html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;text-align:right;direction:rtl;">';
+        verses.forEach(function(v) { html += v + '<br><br>'; });
+        html += '</div>';
+      } else {
+        html += '<div style="text-align:center;color:rgba(212,175,55,0.5);">לא ניתן לטעון</div>';
+      }
+      _tanyaCache[perekNum] = html;
+    }
+  } catch(e) {
+    html = '<div style="text-align:center;padding:40px;color:rgba(212,175,55,0.6);">שגיאה בטעינה.<br>נסה שנית.</div>';
+  }
+
+  // ייחוס גלוי למקור הטקסט. ספריא מעמידה את ה-API שלה לשימוש חופשי ומעודדת
+  // אפליקציות צד שלישי, אך השם והלוגו שלה מוגנים בסימן מסחרי — ולכן חשוב לציין
+  // שהטקסט מגיע מספריא ושהאפליקציה אינה מטעמה.
+  html += _sefariaCredit();
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
   setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
   setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
-
-  // אין כאן טקסט ארוך לגלול, ולכן פקדי הגלילה האוטומטית מוסתרים
   var controls = document.getElementById('scrollControls');
   if (controls) {
-    controls.classList.remove('visible');
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
     if (typeof stopAutoScroll === 'function') stopAutoScroll();
   }
   if (typeof updateFavBtn === 'function') updateFavBtn();
