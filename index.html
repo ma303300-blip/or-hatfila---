@@ -2628,7 +2628,7 @@
     gap: 14px;
     padding: 10px 0 24px;
     overflow: visible;
-    min-height: 560px;   /* הוגדל מ-510: נוספה שורת בועות (475+65) */
+    min-height: 510px;
   }
   .bubble {
     width: 130px;
@@ -2664,15 +2664,6 @@
   .bubble-7 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-2 { animation: bubbleFloat 3.8s ease-in-out infinite 0.6s; }
   .bubble-3 { animation: bubbleFloat 3.5s ease-in-out infinite 1.2s; }
-  .bubble-8 {
-    animation: bubbleFloat 4.7s ease-in-out infinite 2.7s;
-    width: 65px; height: 65px;
-    position: absolute;
-    right: 7px;
-    top: 475px;
-    font-size: 0.55em; overflow: visible;
-    z-index: 50;
-  }
 
   /* חוק לישראל יומי — ישר מתחת להלכה יומית (bubble-6 ב-187), באותו מרווח
      של 144px בין הבועות בעמודה הימנית. "בקשות והערות" ירדה ל-475 כדי לפנות
@@ -2688,8 +2679,6 @@
   }
   .bubble-9 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
   .bubble-9 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
-  .bubble-8 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
-  .bubble-8 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-4 {
     animation: bubbleFloat 4.1s ease-in-out infinite 1.8s;
     width: 65px; height: 65px;
@@ -2812,6 +2801,56 @@
   /* ═══════════════════════════════════
      תיבת זמני שבת
   ═══════════════════════════════════ */
+  /* באנר "בקשות והערות" — שורה דקה אחת.
+     היה בועה שישבה לבד בשורה רביעית ושברה את הסימטריה של שתי העמודות.
+     הרוחב זהה לתיבת זמני השבת כדי ששניהם ייראו מיושרים, והעיצוב עדין ממנה
+     במכוון — זו פנייה משנית בחשיבות ואינה צריכה להתחרות בזמני השבת. */
+  .requests-banner {
+    margin: 0 auto 26px;
+    max-width: 340px;
+    width: calc(100% - 32px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    direction: rtl;
+    padding: 11px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(212,175,55,0.45);
+    background: rgba(245,235,210,0.10);
+    box-shadow: 0 0 10px rgba(212,175,55,0.18);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    z-index: 10;
+    transition: background 0.18s ease, border-color 0.18s ease;
+  }
+  .requests-banner:active {
+    background: rgba(245,235,210,0.18);
+    border-color: rgba(212,175,55,0.75);
+  }
+  .requests-banner .rb-icon {
+    font-size: 21px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  }
+  .requests-banner .rb-text {
+    flex: 1;
+    text-align: center;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(212,175,55,0.35), 0 1px 3px rgba(0,0,0,0.8);
+    white-space: nowrap;
+  }
+  .requests-banner .rb-arrow {
+    font-size: 15px;
+    color: rgba(212,175,55,0.7);
+    flex-shrink: 0;
+  }
+
   .shabbat-times-box {
     position: relative;
     z-index: 10;
@@ -3160,10 +3199,6 @@
   </div>
   <!-- בקשות והערות: פנייה ישירה בוואטסאפ. הוחלף טופס Google שנמחק והציג
        "הדף לא נמצא", וכך גם אין יותר איסוף פניות בשרת של צד שלישי. -->
-  <div class="bubble bubble-8" onclick="pressAndOpen(this, function(){ window.open('https://wa.me/972502303300?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%99%D7%A9%20%D7%9C%D7%99%20%D7%91%D7%A7%D7%A9%D7%94%20%2F%20%D7%94%D7%A2%D7%A8%D7%94%20%D7%9C%D7%92%D7%91%D7%99%20%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%20%D7%94%D7%AA%D7%A4%D7%99%D7%9C%D7%94%3A','_blank'); })">
-    <div class="bubble-icon">📬</div>
-    <div class="bubble-label">בקשות<br>והערות</div>
-  </div>
   <!-- תהילים יומי — fixed מתחת לבועת לוח שנה -->
   <div class="bubble bubble-4" onclick="pressAndOpen(this, openTehilimYomi)">
     <div class="bubble-icon">📖</div>
@@ -3201,6 +3236,14 @@
     </div>
   </div>
   <div class="shabbat-times-location" id="shabbatTimesLocation"></div>
+</div>
+
+<!-- בקשות והערות — באנר דק, מתחת לזמני השבת -->
+<div class="requests-banner" aria-label="שליחת בקשה או הערה בוואטסאפ"
+     onclick="pressAndOpen(this, function(){ window.open('https://wa.me/972502303300?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%99%D7%A9%20%D7%9C%D7%99%20%D7%91%D7%A7%D7%A9%D7%94%20%2F%20%D7%94%D7%A2%D7%A8%D7%94%20%D7%9C%D7%92%D7%91%D7%99%20%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%20%D7%94%D7%AA%D7%A4%D7%99%D7%9C%D7%94%3A','_blank'); })">
+  <span class="rb-icon" aria-hidden="true">📬</span>
+  <span class="rb-text">בקשות והערות</span>
+  <span class="rb-arrow" aria-hidden="true">←</span>
 </div>
 
 <!-- רקע לוח שנה -->
