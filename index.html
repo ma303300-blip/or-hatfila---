@@ -2628,7 +2628,7 @@
     gap: 14px;
     padding: 10px 0 24px;
     overflow: visible;
-    min-height: 510px;
+    min-height: 560px;   /* הוגדל מ-510: נוספה שורת בועות (475+65) */
   }
   .bubble {
     width: 130px;
@@ -2669,10 +2669,25 @@
     width: 65px; height: 65px;
     position: absolute;
     right: 7px;
+    top: 475px;
+    font-size: 0.55em; overflow: visible;
+    z-index: 50;
+  }
+
+  /* חוק לישראל יומי — ישר מתחת להלכה יומית (bubble-6 ב-187), באותו מרווח
+     של 144px בין הבועות בעמודה הימנית. "בקשות והערות" ירדה ל-475 כדי לפנות
+     את המקום הזה. */
+  .bubble-9 {
+    animation: bubbleFloat 4.9s ease-in-out infinite 3s;
+    width: 65px; height: 65px;
+    position: absolute;
+    right: 7px;
     top: 331px;
     font-size: 0.55em; overflow: visible;
     z-index: 50;
   }
+  .bubble-9 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
+  .bubble-9 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-8 .bubble-icon { margin-bottom: 0; margin-top: -8px; }
   .bubble-8 .bubble-label { font-size: 11.5px; line-height: 1.2; margin-top: 2px; }
   .bubble-4 {
@@ -3154,6 +3169,12 @@
     <div class="bubble-icon">📖</div>
     <div class="bubble-label">תהילים<br>יומי</div>
   </div>
+  <!-- חוק לישראל יומי — נשלף מלוח הלימוד היומי של ספריא -->
+  <div class="bubble bubble-9" onclick="pressAndOpen(this, openChokLeYisrael)">
+    <div class="bubble-icon">📘</div>
+    <div class="bubble-label">חוק<br>לישראל</div>
+  </div>
+
   <div class="bubble bubble-6" onclick="pressAndOpen(this, openHalachaYomit)">
     <div class="bubble-icon">📚</div>
     <div class="bubble-label">הלכה<br>יומית</div>
@@ -10651,6 +10672,155 @@ async function openTehilimYomi() {
 // הלכה יומית — קיצור שולחן ערוך מ-Sefaria
 // ═══════════════════════════════════════════════════
 var _halachaCache = {};
+// ═══════════════════════════════════════════════════════
+// חוק לישראל יומי
+// ═══════════════════════════════════════════════════════
+// "Chok LeYisrael" הוא אחד מלוחות הלימוד היומי הרשמיים של ספריא, ולכן אין
+// צורך לחשב אצלנו מהו הקטע של היום — שואלים את הלוח שלהם ומקבלים את
+// המקורות המדויקים. זו אותה שיטה שעובדת בפרשת השבוע.
+// הלימוד היומי מורכב מכמה חלקים (תורה, משנה, גמרא, זוהר, הלכה, מוסר), ולכן
+// הקוד מטפל גם ב-refs (מערך מקורות) וגם ב-url/ref בודד — התשובה יכולה לחזור
+// בכל אחת מהצורות, ואין לי דרך לאמת מולם איזו מהן בפועל.
+var _chokCache = {};
+
+// he עשוי לחזור כמחרוזת, כמערך פסוקים, או כמערך-של-מערכים (פרקים)
+function _chokFlatten(he) {
+  var out = [];
+  if (typeof he === 'string') { if (he.trim()) out.push(he); return out; }
+  if (!Array.isArray(he)) return out;
+  he.forEach(function (part) {
+    if (typeof part === 'string') { if (part.trim()) out.push(part); }
+    else if (Array.isArray(part)) {
+      part.forEach(function (v) { if (typeof v === 'string' && v.trim()) out.push(v); });
+    }
+  });
+  return out;
+}
+
+async function _chokRefsForToday() {
+  var r = await fetch('https://www.sefaria.org/api/calendars?diaspora=0');
+  if (!r.ok) throw new Error('cal-http-' + r.status);
+  var d = await r.json();
+  var items = (d && d.calendar_items) || [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i] || {};
+    var en = (it.title && it.title.en) || '';
+    if (!/chok\s*le.?yisrael/i.test(en)) continue;
+    var refs = [];
+    if (Array.isArray(it.refs) && it.refs.length) refs = it.refs.slice();
+    else if (it.url) refs = [it.url];
+    else if (it.ref) refs = [it.ref];
+    if (!refs.length) continue;
+    return {
+      refs: refs,
+      name: (it.displayValue && (it.displayValue.he || it.displayValue.en)) || ''
+    };
+  }
+  return null;
+}
+
+async function openChokLeYisrael() {
+  pausePage();
+  var hDate  = getHebrewDayMonth();
+  var now    = new Date();
+  var hebDay = hDate ? hDate.day : now.getDate();
+  var dateStr = hDate ? _hebNum(hebDay) + ' ' + hDate.month : 'יום ' + _hebNum(hebDay);
+
+  if (typeof currentPrayerId !== 'undefined') currentPrayerId = 'chok_leyisrael';
+  history.pushState({ prayer: 'chok_leyisrael' }, '');
+  document.getElementById('prayerTitle').textContent = 'חוק לישראל — ' + dateStr;
+  document.getElementById('prayerBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;">' +
+    '<div style="width:52px;height:52px;border:4px solid rgba(139,96,32,0.2);border-top-color:rgba(139,96,32,0.85);border-radius:50%;animation:tehilimSpin 0.9s linear infinite;"></div>' +
+    '<div style="margin-top:20px;color:rgba(139,96,32,0.9);font-family:\'Frank Ruhl Libre\',serif;font-size:1.1em;">טוען חוק לישראל...</div>' +
+    '</div>';
+
+  var overlay = document.getElementById('prayerOverlay');
+  var vh = window.innerHeight;
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;z-index:100;display:flex;flex-direction:column;';
+  overlay.style.height = vh + 'px';
+  overlay.classList.remove('active');
+  overlay.classList.add('zoom-in');
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+  requestAnimationFrame(function() { requestAnimationFrame(function() { overlay.classList.add('active'); }); });
+
+  var scrollY = _appScrollTop();
+  _lockAppScroll();
+  document.body.dataset.prayerScrollY = scrollY;
+
+  var dayKey = (hDate ? hDate.day + '-' + hDate.month : '') + '|' + now.toDateString();
+  var html = '';
+  try {
+    if (_chokCache[dayKey]) {
+      html = _chokCache[dayKey];
+    } else {
+      var info = await _chokRefsForToday();
+      if (!info) throw new Error('no-chok-item');
+
+      html = '<span class="section-title">✦ חוק לישראל ✦</span>' +
+             '<span class="highlight" style="font-size:1.1em;">' + dateStr + '</span>';
+      if (info.name) {
+        html += '<div style="text-align:center;font-size:0.88em;color:rgba(122,62,16,0.75);' +
+                'margin-bottom:4px;">' + info.name + '</div>';
+      }
+
+      var rendered = 0;
+      for (var k = 0; k < info.refs.length; k++) {
+        var ref = info.refs[k];
+        var rr = await fetch('https://www.sefaria.org/api/texts/' +
+                             encodeURI(ref) + '?lang=he&stripItags=1');
+        if (!rr.ok) continue;
+        var dd = await rr.json();
+        var verses = _chokFlatten(dd.he);
+        if (!verses.length) continue;
+
+        // כל חלק בלימוד מקבל כותרת משלו, לפי שם המקור כפי שספריא מחזירה אותו
+        var heading = dd.heRef || dd.heTitle || ref;
+        html += '<div class="ornament">✦ ✦ ✦</div>' +
+                '<span class="section-title">✦ ' + heading + ' ✦</span>' +
+                '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;' +
+                'text-align:right;direction:rtl;">';
+        verses.forEach(function(v, i) {
+          html += '<span style="color:rgba(139,96,32,0.55);font-size:0.68em;' +
+                  'margin-left:5px;">(' + _hebNum(i + 1) + ')</span> ' + v + '<br>';
+        });
+        html += '</div>';
+        rendered++;
+      }
+
+      if (!rendered) throw new Error('empty');
+      _chokCache[dayKey] = html;
+    }
+  } catch(e) {
+    html = '<div style="text-align:center;padding:30px 18px;font-family:\'Heebo\',sans-serif;">' +
+           '<div style="color:#8B1a1a;font-size:15px;font-weight:700;margin-bottom:6px;">' +
+           'לא הצלחנו לטעון את חוק לישראל</div>' +
+           '<div style="color:rgba(60,34,8,0.75);font-size:13.5px;line-height:1.7;">' +
+           'ייתכן שאין חיבור לאינטרנט. אפשר לנסות שוב מאוחר יותר, או לקרוא במקור.</div>' +
+           '<div style="margin-top:14px;">' +
+           '<a href="https://www.sefaria.org/calendars" target="_blank" rel="noopener noreferrer" ' +
+           'style="color:#7a3e10;font-weight:700;font-size:14px;">לוחות הלימוד בספריא ←</a>' +
+           '</div></div>';
+  }
+
+  html += _sefariaCredit();
+  document.getElementById('prayerBody').innerHTML = html;
+  overlay.querySelector('.prayer-content').scrollTop = 0;
+  setTimeout(function() { if (typeof applyFontSize === 'function') applyFontSize(); }, 10);
+  setTimeout(function() { if (typeof showPrayerFontCtrl === 'function') showPrayerFontCtrl(); }, 50);
+
+  var controls = document.getElementById('scrollControls');
+  if (controls) {
+    controls.classList.add('visible');
+    document.getElementById('btnManual').classList.add('active');
+    document.getElementById('btnAuto').classList.remove('active');
+    document.getElementById('btnAuto').textContent = '▶ גלילה אוטומטית';
+    document.getElementById('speedControl').classList.remove('visible');
+    if (typeof stopAutoScroll === 'function') stopAutoScroll();
+  }
+  if (typeof updateFavBtn === 'function') updateFavBtn();
+}
+
 async function openHalachaYomit() {
   pausePage();
   var now = new Date();
