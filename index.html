@@ -10684,6 +10684,48 @@ var _halachaCache = {};
 var _chokCache = {};
 
 // he עשוי לחזור כמחרוזת, כמערך פסוקים, או כמערך-של-מערכים (פרקים)
+// המרת מקור מצורת תצוגה לצורת ה-URL של ספריא:
+// 'Mishnah Berakhot 1:1' -> 'Mishnah_Berakhot.1.1'
+function _refToUrlForm(ref) {
+  return String(ref || '').trim().replace(/\s*:\s*/g, '.').replace(/\s+/g, '_');
+}
+
+// שליפת הטקסט של מקור בודד, עם כמה נסיונות.
+// לא ידוע לי באיזו צורה בדיוק חוזרים המקורות של חוק לישראל, ולכן מנסים את
+// המקור כפי שהוא, את צורת ה-URL שלו, ולבסוף את endpoint v3 שהוא המומלץ
+// אצל ספריא ומחזיר את הטקסט במבנה versions.
+async function _chokFetchText(ref) {
+  var tries = [
+    { url: 'https://www.sefaria.org/api/texts/' + encodeURI(ref) + '?lang=he&stripItags=1', v: 1 },
+    { url: 'https://www.sefaria.org/api/texts/' + encodeURI(_refToUrlForm(ref)) + '?lang=he&stripItags=1', v: 1 },
+    { url: 'https://www.sefaria.org/api/v3/texts/' + encodeURI(_refToUrlForm(ref)) + '?version=hebrew', v: 3 }
+  ];
+  var why = [];
+  for (var t = 0; t < tries.length; t++) {
+    try {
+      var r = await fetch(tries[t].url);
+      if (!r.ok) { why.push('h' + r.status); continue; }
+      var d = await r.json();
+      var he = null;
+      if (tries[t].v === 3) {
+        // v3: הטקסט יושב תחת versions[].text
+        var vers = (d && d.versions) || [];
+        for (var k = 0; k < vers.length; k++) {
+          if (vers[k] && vers[k].text) { he = vers[k].text; break; }
+        }
+      } else {
+        he = d && d.he;
+      }
+      var verses = _chokFlatten(he);
+      if (verses.length) {
+        return { verses: verses, heading: (d && (d.heRef || d.heTitle)) || ref, why: why.join(',') };
+      }
+      why.push('empty' + tries[t].v);
+    } catch (e) { why.push('err'); }
+  }
+  return { verses: [], heading: ref, why: why.join(',') };
+}
+
 function _chokFlatten(he) {
   var out = [];
   if (typeof he === 'string') { if (he.trim()) out.push(he); return out; }
@@ -10785,17 +10827,16 @@ async function openChokLeYisrael() {
       }
 
       var rendered = 0;
+      var refDiag = [];
       for (var k = 0; k < info.refs.length; k++) {
         var ref = info.refs[k];
-        var rr = await fetch('https://www.sefaria.org/api/texts/' +
-                             encodeURI(ref) + '?lang=he&stripItags=1');
-        if (!rr.ok) continue;
-        var dd = await rr.json();
-        var verses = _chokFlatten(dd.he);
-        if (!verses.length) continue;
+        var got = await _chokFetchText(ref);
+        refDiag.push(ref + (got.verses.length ? '=ok' : '=' + (got.why || 'none')));
+        if (!got.verses.length) continue;
+        var verses = got.verses;
 
         // כל חלק בלימוד מקבל כותרת משלו, לפי שם המקור כפי שספריא מחזירה אותו
-        var heading = dd.heRef || dd.heTitle || ref;
+        var heading = got.heading;
         html += '<div class="ornament">✦ ✦ ✦</div>' +
                 '<span class="section-title">✦ ' + heading + ' ✦</span>' +
                 '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;' +
@@ -10808,7 +10849,7 @@ async function openChokLeYisrael() {
         rendered++;
       }
 
-      if (!rendered) throw new Error('empty');
+      if (!rendered) { _chokDiag = refDiag.join(' ;; '); throw new Error('empty'); }
       _chokCache[dayKey] = html;
     }
   } catch(e) {
