@@ -10697,15 +10697,35 @@ function _chokFlatten(he) {
   return out;
 }
 
+// פרטי האבחון של הטעינה האחרונה. מוצגים בהודעת השגיאה כדי שניתן יהיה לראות
+// אילו לוחות ספריא באמת מחזירה, במקום לנחש מה השם שצריך להתאים לו.
+var _chokDiag = null;
+
+// זיהוי הלוח של חוק לישראל.
+// השם האנגלי מתועתק בכמה צורות (Chok LeYisrael / Chok l'Yisrael / Hok leYisrael),
+// ולכן ההשוואה נעשית על השם בעברית — שהוא חד-משמעי — ובמקביל על השם האנגלי
+// אחרי הסרת כל מה שאינו אות. זו בדיוק התקלה שהפילה בעבר את פרשת האזינו.
+function _isChokItem(it) {
+  var he = (it.title && it.title.he) || '';
+  if (he.indexOf('חוק') !== -1 && he.indexOf('ישראל') !== -1) return true;
+  var en = ((it.title && it.title.en) || '').toLowerCase().replace(/[^a-z]/g, '');
+  return /(chok|hok|chuk|huk)/.test(en) && /(yisrael|yisroel|israel)/.test(en);
+}
+
 async function _chokRefsForToday() {
   var r = await fetch('https://www.sefaria.org/api/calendars?diaspora=0');
   if (!r.ok) throw new Error('cal-http-' + r.status);
   var d = await r.json();
   var items = (d && d.calendar_items) || [];
+
+  // נרשם לאבחון: רשימת הלוחות שחזרו בפועל
+  _chokDiag = items.map(function (x) {
+    return ((x.title && (x.title.en || x.title.he)) || '?');
+  }).join(' | ');
+
   for (var i = 0; i < items.length; i++) {
     var it = items[i] || {};
-    var en = (it.title && it.title.en) || '';
-    if (!/chok\s*le.?yisrael/i.test(en)) continue;
+    if (!_isChokItem(it)) continue;
     var refs = [];
     if (Array.isArray(it.refs) && it.refs.length) refs = it.refs.slice();
     else if (it.url) refs = [it.url];
@@ -10800,6 +10820,10 @@ async function openChokLeYisrael() {
            '<div style="margin-top:14px;">' +
            '<a href="https://www.sefaria.org/calendars" target="_blank" rel="noopener noreferrer" ' +
            'style="color:#7a3e10;font-weight:700;font-size:14px;">לוחות הלימוד בספריא ←</a>' +
+           '</div>' +
+           '<div style="margin-top:16px;font-size:10px;line-height:1.5;direction:ltr;' +
+           'text-align:left;color:rgba(60,34,8,0.45);word-break:break-word;">' +
+           'diag: ' + ((e && e.message) || '?') + ' :: ' + (_chokDiag || 'no-calendar-data') +
            '</div></div>';
   }
 
