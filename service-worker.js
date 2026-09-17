@@ -1,4 +1,4 @@
-const CACHE_NAME = 'or-hatfila-05ebe56';
+const CACHE_NAME = 'or-hatfila-675e73c';
 const ASSETS = [
   '/',
   '/index.html',
