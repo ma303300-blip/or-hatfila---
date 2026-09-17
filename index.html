@@ -10684,6 +10684,92 @@ var _halachaCache = {};
 var _chokCache = {};
 
 // he עשוי לחזור כמחרוזת, כמערך פסוקים, או כמערך-של-מערכים (פרקים)
+// ═══ חוק לישראל דרך דפי מקורות ═══
+// ספריא אינה מחזיקה את חוק לישראל כספר בספרייה אלא כאוסף של דפי מקורות,
+// ולכן הלוח שלה מחזיר כתובת מהצורה collections/<אוסף>?tag=<פרשה> ולא מקור
+// טקסט. לאוסף ולדפים יש API נפרד, וזה המסלול שמביא את התוכן.
+var _hebWeekdayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+function _chokParseCollection(ref) {
+  var m = /^\/?collections\/([^?]+)(?:\?(.*))?$/.exec(String(ref || '').trim());
+  if (!m) return null;
+  var tag = '';
+  if (m[2]) {
+    var tm = /(?:^|&)tag=([^&]*)/.exec(m[2]);
+    if (tm) { try { tag = decodeURIComponent(tm[1].replace(/\+/g, ' ')); } catch(e) { tag = tm[1]; } }
+  }
+  var slug = m[1];
+  try { slug = decodeURIComponent(slug); } catch(e) {}
+  return { slug: slug, tag: tag };
+}
+
+// רינדור דף מקורות: כל פריט יכול להיות מקור מהספרייה (text), טקסט חופשי
+// (outsideText / outsideBiText) או הערה (comment).
+function _chokRenderSheet(sheet) {
+  var srcs = (sheet && sheet.sources) || [];
+  var html = '', n = 0;
+  for (var i = 0; i < srcs.length; i++) {
+    var sv = srcs[i] || {};
+    var head = sv.heRef || sv.ref || '';
+    var body = '';
+    if (sv.text && (sv.text.he || sv.text.text)) {
+      body = _chokFlatten(sv.text.he || sv.text.text).join(' ');
+    } else if (sv.outsideBiText && (sv.outsideBiText.he || sv.outsideBiText.en)) {
+      body = sv.outsideBiText.he || sv.outsideBiText.en;
+    } else if (sv.outsideText) {
+      body = sv.outsideText;
+    } else if (sv.comment) {
+      body = sv.comment;
+    }
+    if (!body || !String(body).replace(/<[^>]*>/g, '').trim()) continue;
+    if (head) html += '<span class="section-title">\u2726 ' + head + ' \u2726</span>';
+    html += '<div style="font-family:\'Frank Ruhl Libre\',serif;line-height:2.1;' +
+            'text-align:right;direction:rtl;">' + body + '</div>' +
+            '<div class="ornament">\u2726 \u2726 \u2726</div>';
+    n++;
+  }
+  return { html: html, count: n };
+}
+
+async function _chokFromCollection(coll) {
+  var r = await fetch('https://www.sefaria.org/api/collections/' + encodeURIComponent(coll.slug));
+  if (!r.ok) throw new Error('coll-h' + r.status);
+  var d = await r.json();
+  var sheets = (d && (d.sheets || (d.collection && d.collection.sheets))) || [];
+  if (!sheets.length) throw new Error('coll-nosheets');
+
+  // סינון לפי התג של הפרשה, ואז בחירת הדף של יום השבוע הנוכחי
+  function hay(sh) {
+    var tags = [];
+    if (Array.isArray(sh.tags)) tags = tags.concat(sh.tags);
+    if (Array.isArray(sh.topics)) {
+      tags = tags.concat(sh.topics.map(function(t){ return (t && (t.asTyped || t.slug)) || ''; }));
+    }
+    return ((sh.title || '') + ' ' + tags.join(' ')).toLowerCase();
+  }
+  var pool = sheets;
+  if (coll.tag) {
+    var t = coll.tag.toLowerCase();
+    var tagged = sheets.filter(function(sh){ return hay(sh).indexOf(t) !== -1; });
+    if (tagged.length) pool = tagged;
+  }
+  var dayName = _hebWeekdayNames[new Date().getDay()];
+  var chosen = pool.filter(function(sh){ return (sh.title || '').indexOf(dayName) !== -1; })[0] || pool[0];
+  var id = chosen && (chosen.id || chosen.sheetId || chosen._id);
+  if (!id) throw new Error('coll-noid');
+
+  var sr = await fetch('https://www.sefaria.org/api/sheets/' + encodeURIComponent(id));
+  if (!sr.ok) throw new Error('sheet-h' + sr.status);
+  var sheet = await sr.json();
+  var out = _chokRenderSheet(sheet);
+  if (!out.count) throw new Error('sheet-empty');
+  return {
+    html: out.html,
+    name: (sheet && (sheet.title || chosen.title)) || coll.tag || '',
+    diag: 'sheets=' + sheets.length + ' pool=' + pool.length + ' id=' + id + ' parts=' + out.count
+  };
+}
+
 // המרת מקור מצורת תצוגה לצורת ה-URL של ספריא:
 // 'Mishnah Berakhot 1:1' -> 'Mishnah_Berakhot.1.1'
 function _refToUrlForm(ref) {
@@ -10828,8 +10914,29 @@ async function openChokLeYisrael() {
 
       var rendered = 0;
       var refDiag = [];
-      for (var k = 0; k < info.refs.length; k++) {
+
+      // מסלול דפי המקורות: זה מה שספריא מחזירה בפועל עבור חוק לישראל
+      for (var c = 0; c < info.refs.length; c++) {
+        var coll = _chokParseCollection(info.refs[c]);
+        if (!coll) continue;
+        try {
+          var res = await _chokFromCollection(coll);
+          if (res.name) {
+            html += '<div style="text-align:center;font-size:0.88em;color:rgba(122,62,16,0.75);' +
+                    'margin-bottom:4px;">' + res.name + '</div>';
+          }
+          html += res.html;
+          rendered++;
+          refDiag.push('collection=ok ' + res.diag);
+        } catch (ce) {
+          refDiag.push('collection=' + ((ce && ce.message) || 'fail'));
+        }
+      }
+
+      // מסלול הטקסטים: נשמר למקרה שיום מסוים יחזיר מקור טקסט אמיתי
+      for (var k = 0; rendered === 0 && k < info.refs.length; k++) {
         var ref = info.refs[k];
+        if (_chokParseCollection(ref)) continue;
         var got = await _chokFetchText(ref);
         refDiag.push(ref + (got.verses.length ? '=ok' : '=' + (got.why || 'none')));
         if (!got.verses.length) continue;
