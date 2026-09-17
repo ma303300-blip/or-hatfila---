@@ -2817,7 +2817,10 @@
     padding: 11px 16px;
     border-radius: 14px;
     border: 1px solid rgba(212,175,55,0.45);
-    background: rgba(245,235,210,0.10);
+    /* ירוק יער עמוק ב-70% אטימות. הרקע הקודם היה 10% בלבד, ולכן תמונת בית
+       המקדש נראתה מבעדו והכיתוב נבלע. הגוון נבחר כך שטקסט הזהב יעבור 4.5:1
+       גם במקרה הגרוע, כשהשמיים הבהירים של התמונה נמצאים מאחור (4.66:1). */
+    background: rgba(12,52,36,0.70);
     box-shadow: 0 0 10px rgba(212,175,55,0.18);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -2826,7 +2829,7 @@
     transition: background 0.18s ease, border-color 0.18s ease;
   }
   .requests-banner:active {
-    background: rgba(245,235,210,0.18);
+    background: rgba(18,70,50,0.82);
     border-color: rgba(212,175,55,0.75);
   }
   .requests-banner .rb-icon {
