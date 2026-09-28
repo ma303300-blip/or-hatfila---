@@ -11355,8 +11355,121 @@ function initAmidaDefaults() {
     var btn = document.querySelector('[onclick*="' + id + '"]');
     if (btn) btn.classList.add('active');
   });
+  autoOpenHolidayButtons();
 }
 document.addEventListener('DOMContentLoaded', initAmidaDefaults);
+
+// ═══ פתיחה אוטומטית של כפתורי החגים (יעלה ויבוא, על הניסים, הרחמן) ═══
+// לפי מנהג ארץ ישראל. התאריך העברי מחושב במכשיר (Intl), בלי רשת.
+// ערבית — מהצהריים והלאה נחשב כבר התאריך של הלילה הבא; ברכת המזון — מהשקיעה.
+function _sunsetJerusalem(date) {
+  // חישוב שקיעה מקורב (NOAA) לירושלים — דיוק של דקות ספורות, מספיק להחלפת התאריך העברי
+  var lat = 31.778, lng = 35.235, rad = Math.PI / 180;
+  var start = Date.UTC(date.getFullYear(), 0, 0);
+  var n = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - start) / 86400000);
+  var g = 2 * Math.PI / 365 * (n - 1);
+  var eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  var decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  var ha = Math.acos(Math.cos(90.833 * rad) / (Math.cos(lat * rad) * Math.cos(decl)) - Math.tan(lat * rad) * Math.tan(decl)) / rad;
+  var minutesUTC = 720 - 4 * (lng - ha) - eqt;
+  return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) + minutesUTC * 60000);
+}
+
+function _hebDateParts(date) {
+  var parts = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long' }).formatToParts(date);
+  var day = 0, month = '';
+  parts.forEach(function(p) {
+    if (p.type === 'day') day = parseInt(p.value, 10);
+    if (p.type === 'month') month = p.value;
+  });
+  return { day: day, month: month };
+}
+
+function _holidaysFor(date) {
+  var h = _hebDateParts(date), d = h.day, m = h.month;
+  var r = {};
+  if (m === 'Tishri' && (d === 1 || d === 2)) r.roshHashana = true;
+  if ((d === 1 && m !== 'Tishri') || d === 30) r.roshChodesh = true;
+  if (m === 'Tishri' && d >= 15 && d <= 21) r.sukkot = true;
+  if (m === 'Tishri' && d === 22) r.shminiAtzeret = true;
+  if (m === 'Nisan' && d >= 15 && d <= 21) r.pesach = true;
+  if (m === 'Sivan' && d === 6) r.shavuot = true;
+  if ((m === 'Tishri' && (d === 15 || d === 22)) || (m === 'Nisan' && (d === 15 || d === 21)) || r.shavuot) r.yomTov = true;
+  if ((m === 'Adar' || m === 'Adar II') && d === 14) r.purim = true;
+  // חנוכה — כ"ה בכסלו ושבעת הימים שאחריו (אורך כסלו משתנה, ולכן בודקים אחורה)
+  for (var k = 0; k < 8; k++) {
+    var back = _hebDateParts(new Date(date.getTime() - k * 86400000));
+    if (back.month === 'Kislev' && back.day === 25) { r.chanuka = true; break; }
+  }
+  return r;
+}
+
+function autoOpenHolidayButtons() {
+  var body = document.getElementById('prayerBody');
+  if (!body) return;
+  try {
+    var now = new Date();
+    var tomorrow = new Date(now.getTime() + 86400000);
+    var dayH = _holidaysFor(now);
+    var nightH = _holidaysFor(tomorrow);
+    var arvitH = now.getHours() >= 12 ? nightH : dayH;
+    var mazonH = now >= _sunsetJerusalem(now) ? nightH : dayH;
+
+    function btns(fnPrefix, extra) {
+      return Array.prototype.filter.call(body.querySelectorAll('button.month-btn'), function(b) {
+        var oc = b.getAttribute('onclick') || '';
+        return oc.indexOf(fnPrefix) === 0 && (!extra || oc.indexOf(extra) !== -1);
+      });
+    }
+    function open(list, label) {
+      list.forEach(function(b) {
+        if (b.textContent.trim() === label && !b.classList.contains('active')) b.click();
+      });
+    }
+
+    // שמונה עשרה — שחרית, מנחה, ערבית
+    ['shacharit', 'mincha', 'arvit'].forEach(function(p) {
+      var h = p === 'arvit' ? arvitH : dayH;
+      var yaaleh = btns('selectAmida3(', "'" + p + '_yaaleh_');
+      if (h.pesach) open(yaaleh, 'פסח');
+      else if (h.sukkot) open(yaaleh, 'סוכות');
+      else if (h.roshChodesh) open(yaaleh, 'ראש חודש');
+      var nissim = btns('selectAmida2(', "'" + p + '_nissim_');
+      if (h.chanuka) open(nissim, 'חנוכה');
+      else if (h.purim) open(nissim, 'פורים');
+    });
+
+    // ברכת המזון — עדות המזרח ואשכנז
+    var h = mazonH;
+    var yaalehLabel = h.pesach ? 'פסח' : h.sukkot ? 'סוכות' : h.shminiAtzeret ? 'שמיני עצרת'
+      : h.shavuot ? 'שבועות' : h.roshHashana ? 'ראש השנה' : h.roshChodesh ? 'ראש חודש' : '';
+    if (yaalehLabel) {
+      open(btns('selectYaaleh('), yaalehLabel);
+      open(btns('selectYaalehAshkenaz('), yaalehLabel);
+    }
+    var nissimLabel = h.chanuka ? 'חנוכה' : h.purim ? 'פורים' : '';
+    if (nissimLabel) {
+      open(btns('selectNissim('), nissimLabel);
+      open(btns('selectNissimAshkenaz('), nissimLabel);
+    }
+
+    // הרחמן — תוספות נוסח אשכנז. ביום טוב של סוכות אומרים את שניהם.
+    var tosefet = btns('selectTosefetAshkenaz(');
+    var container = document.getElementById('tosefetAshkenazText');
+    if (tosefet.length && container) {
+      if (h.yomTov && h.sukkot) {
+        open(tosefet, 'סוכות');
+        var sukkotText = container.innerHTML;
+        open(tosefet, 'יום טוב');
+        container.innerHTML += '<br>' + sukkotText;
+        tosefet.forEach(function(b) { if (b.textContent.trim() === 'סוכות') b.classList.add('active'); });
+      } else {
+        var tLabel = h.roshHashana ? 'ראש השנה' : h.yomTov ? 'יום טוב' : h.sukkot ? 'סוכות' : h.roshChodesh ? 'ראש חודש' : '';
+        if (tLabel) open(tosefet, tLabel);
+      }
+    }
+  } catch (e) {}
+}
 </script>
 </div><!-- /#appScroll -->
 <script>
