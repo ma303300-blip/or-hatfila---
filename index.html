@@ -3061,8 +3061,8 @@
 <!-- תיבה רצה אוטומטית לפרשת השבוע - מורדכי -->
 <div class="parasha-marquee-container">
   <div class="parasha-marquee-wrapper">
-    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת בהעלותך ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement1">✨ פרשת השבוע ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="parasha-marquee-text" id="parashaTextElement2">✨ פרשת השבוע ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   </div>
 </div>
 
@@ -8068,24 +8068,11 @@ async function openParasha() {
 // הפונקציה loadFullParasha הוסרה: היא לא נקראה מאף מקום (קוד מת) ובכל זאת הכילה
 // קריאה ל-API של ספריא ששלפה את טקסט הפרשה אל תוך האפליקציה. הפרשה המלאה נפתחת
 // באתר ספריא עצמו, ולכן אין צורך להביא את התוכן שלהם פנימה.
-// חישוב פרשה לפי תאריך (fallback) — לוח תשפ"ו
+// חישוב פרשה לפי תאריך (fallback) — מהחישוב המקומי המלא (computeParasha)
 function _getParashaByDate() {
-  const keys = Object.keys(parashotData);
-  const now = new Date();
-  // מצא שבת הקרובה (יום 6 ב-JS)
-  const day = now.getDay();
-  const daysToSat = (6 - day + 7) % 7;
-  const nextSat = new Date(now);
-  nextSat.setDate(now.getDate() + daysToSat);
-
-  // תחילת מחזור תשפ"ו — שמחת תורה: 27 ספטמבר 2025
-  // T12:00:00 מונע בעיות timezone (UTC vs ישראל)
-  const cycleStart = new Date('2025-09-27T12:00:00');
-  nextSat.setHours(12, 0, 0, 0); // אחיד
-
-  const weeksSince = Math.floor((nextSat - cycleStart) / (7 * 24 * 3600 * 1000));
-  const idx = ((weeksSince % keys.length) + keys.length) % keys.length;
-  return keys[idx] || keys[0];
+  var p = typeof computeParasha === 'function' ? computeParasha() : null;
+  var key = p && parashaNameMap[p.en];
+  return (key && parashotData[key]) ? key : null;
 }
 
 const prayerMeta = {
@@ -8980,32 +8967,124 @@ document.getElementById('prayerOverlay').addEventListener('click', function(e) {
 </script>
 
 <script>
+// ═══ חישוב פרשת השבוע במכשיר — לפי מנהג ארץ ישראל, בלי רשת ═══
+// בעבר הבאנר נשען על hebcal בלבד: כשהבקשה נכשלה, או כשהשבת חלה בחג (hebcal לא מחזיר
+// אז פרשה), נשאר בבאנר שם קבוע ושגוי. כאן הפרשה מחושבת מהלוח העברי (Intl).
+// מחזור הקריאה מתחיל אחרי שמחת תורה (כ"ב תשרי); שבתות שחלות בחג מדולגות, ואילו פרשיות
+// מחוברות נקבע לפי סוג השנה (יום ראש השנה + אורך השנה). הטבלה אומתה מול @hebcal/core
+// לכל השנים ה'ת"ר–ה'תת"ק. ביטים: ויקהל-פקודי, תזריע-מצורע, אחרי-קדושים, בהר-בחוקותי,
+// חוקת-בלק, מטות-מסעי, נצבים-וילך.
+var _PARASHOT = [
+  ['Bereshit','בראשית'],['Noach','נח'],['Lech-Lecha','לך לך'],['Vayera','וירא'],['Chayei Sara','חיי שרה'],
+  ['Toldot','תולדות'],['Vayetzei','ויצא'],['Vayishlach','וישלח'],['Vayeshev','וישב'],['Miketz','מקץ'],
+  ['Vayigash','ויגש'],['Vayechi','ויחי'],['Shemot','שמות'],['Vaera','וארא'],['Bo','בא'],
+  ['Beshalach','בשלח'],['Yitro','יתרו'],['Mishpatim','משפטים'],['Terumah','תרומה'],['Tetzaveh','תצוה'],
+  ['Ki Tisa','כי תשא'],['Vayakhel','ויקהל'],['Pekudei','פקודי'],['Vayikra','ויקרא'],['Tzav','צו'],
+  ['Shmini','שמיני'],['Tazria','תזריע'],['Metzora','מצורע'],['Achrei Mot','אחרי מות'],['Kedoshim','קדושים'],
+  ['Emor','אמור'],['Behar','בהר'],['Bechukotai','בחוקותי'],['Bamidbar','במדבר'],['Nasso','נשא'],
+  ["Beha'alotcha",'בהעלותך'],['Shelach','שלח'],['Korach','קרח'],['Chukat','חוקת'],['Balak','בלק'],
+  ['Pinchas','פינחס'],['Matot','מטות'],['Masei','מסעי'],['Devarim','דברים'],['Vaetchanan','ואתחנן'],
+  ['Eikev','עקב'],["Re'eh",'ראה'],['Shoftim','שופטים'],['Ki Teitzei','כי תצא'],['Ki Tavo','כי תבוא'],
+  ['Nitzavim','נצבים'],['Vayeilech','וילך'],['Haazinu','האזינו']
+];
+var _PARASHA_PAIRS = [21, 26, 28, 31, 38, 41, 50];
+var _PARASHA_YEAR_MASK = { '1-353':111, '1-355':111, '1-383':96, '1-385':0, '2-354':111, '2-384':0,
+  '4-354':39, '4-355':46, '4-383':0, '4-385':64, '6-353':47, '6-355':111, '6-383':96, '6-385':96 };
+var _hebFmt = null;
+function _pHeb(d) {
+  if (!_hebFmt) _hebFmt = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long' });
+  var r = { day: 0, month: '' };
+  _hebFmt.formatToParts(d).forEach(function(p) {
+    if (p.type === 'day') r.day = parseInt(p.value, 10);
+    if (p.type === 'month') r.month = p.value;
+  });
+  return r;
+}
+function _pDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, 12); }
+// שבת שחלה בחג (ארץ ישראל) — מחזיר את שם החג, אחרת ריק
+function _shabbatHoliday(d) {
+  var h = _pHeb(d), x = h.day;
+  if (h.month === 'Tishri') {
+    if (x === 1 || x === 2) return 'ראש השנה';
+    if (x === 10) return 'יום כיפור';
+    if (x === 15) return 'סוכות';
+    if (x >= 16 && x <= 21) return 'חול המועד סוכות';
+    if (x === 22) return 'שמיני עצרת – שמחת תורה';
+  }
+  if (h.month === 'Nisan') {
+    if (x === 15) return 'פסח';
+    if (x >= 16 && x <= 20) return 'חול המועד פסח';
+    if (x === 21) return 'שביעי של פסח';
+  }
+  if (h.month === 'Sivan' && x === 6) return 'שבועות';
+  return '';
+}
+// הפרשה שנקראת בשבת sat (שאינה חג)
+function _parashaForShabbat(sat) {
+  var st = sat, h;
+  while (true) { h = _pHeb(st); if (h.month === 'Tishri' && h.day === 22) break; st = _pDays(st, -1); }
+  var rh = _pDays(st, -21), next = _pDays(rh, 353);
+  while (true) { h = _pHeb(next); if (h.month === 'Tishri' && h.day === 1) break; next = _pDays(next, 1); }
+  var len = Math.round((next - rh) / 86400000);
+  var mask = _PARASHA_YEAR_MASK[rh.getDay() + '-' + len];
+  if (mask === undefined) return null;
+  var list = [];
+  for (var i = 0; i < _PARASHOT.length; i++) {
+    var pi = _PARASHA_PAIRS.indexOf(i);
+    if (pi !== -1 && (mask & (1 << pi))) { list.push([i, i + 1]); i++; }
+    else list.push([i]);
+  }
+  var k = 0;
+  for (var s = _pDays(st, (6 - st.getDay() + 7) % 7 || 7); s < sat; s = _pDays(s, 7)) {
+    if (!_shabbatHoliday(s)) k++;
+  }
+  var item = list[k];
+  if (!item) return null;
+  return {
+    en: item.map(function(j) { return _PARASHOT[j][0]; }).join('-'),
+    he: item.map(function(j) { return _PARASHOT[j][1]; }).join('-')
+  };
+}
+// פרשת השבוע לתאריך נתון. במוצאי שבת (אחרי השקיעה) עוברים כבר לשבת הבאה.
+// מחזיר { en, he, holiday } — holiday הוא שם החג כשהשבת הקרובה חלה בחג, ואז en/he הם הפרשה שאחריו.
+function computeParasha(now) {
+  now = now || new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
+  var toSat = (6 - today.getDay() + 7) % 7;
+  if (toSat === 0) {
+    var sunset = typeof _sunsetJerusalem === 'function' ? _sunsetJerusalem(now) : null;
+    if (sunset ? now >= sunset : now.getHours() >= 19) toSat = 7;
+  }
+  var sat = _pDays(today, toSat), holiday = _shabbatHoliday(sat), after = sat;
+  while (_shabbatHoliday(after)) after = _pDays(after, 7);
+  var p = _parashaForShabbat(after);
+  if (!p) return null;
+  p.holiday = holiday;
+  return p;
+}
+
 (function() {
-  async function updateParashaDynamically() {
+  function updateParashaDynamically() {
     try {
-      const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on&_nocache=' + new Date().getTime());
-      const data = await res.json();
-      const pItem = data.items.find(item => item.category === 'parashat');
-      if (pItem && pItem.hebrew) {
-        const pName = pItem.hebrew;
-        const outStr = `✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: ${pName} ✨ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
-        const el1 = document.getElementById('parashaTextElement1');
-        const el2 = document.getElementById('parashaTextElement2');
-        if(el1) el1.innerHTML = outStr;
-        if(el2) el2.innerHTML = outStr;
+      var p = computeParasha();
+      if (!p) return;
+      var msg = p.holiday
+        ? '✨ שבת זו: ' + p.holiday + ' ✨ &nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע הבאה: פרשת ' + p.he + ' ✨'
+        : '✨ פרשת השבוע: פרשת ' + p.he + ' ✨';
+      var outStr = msg + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + msg + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+      var el1 = document.getElementById('parashaTextElement1');
+      var el2 = document.getElementById('parashaTextElement2');
+      if (el1) el1.innerHTML = outStr;
+      if (el2) el2.innerHTML = outStr;
 
-        // שמור לשימוש openParasha — שם עברי ואנגלי
-        window._hebcalParashaHebrew = pName;
-        window._hebcalParashaEnglish = pItem.title
-          ? pItem.title.replace('Parashat ','').replace('Shabbat ','').trim()
-          : '';
-
-      }
+      // שמור לשימוש openParasha — שם עברי ואנגלי
+      window._hebcalParashaHebrew = p.he;
+      window._hebcalParashaEnglish = p.en;
     } catch(e) {
-      console.error("שגיאה בטעינת פרשת השבוע:", e);
+      console.error("שגיאה בחישוב פרשת השבוע:", e);
     }
   }
-  
+
   window._updateParasha = updateParashaDynamically; // חשיפה לרענון הרך
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateParashaDynamically);
@@ -9193,7 +9272,11 @@ function resumePage() {
     var nextD = new Date(item.g.getFullYear(), item.g.getMonth(), item.g.getDate()+1);
     var nextH = getHeb(nextD);
     if(h.day===1||(h.day===30&&nextH&&nextH.day===1)) rows.push('🌙 ראש חודש '+h.month);
-    if(dow===6&&window._hebcalParashaHebrew) rows.push('📖 פרשת '+window._hebcalParashaHebrew);
+    if(dow===6){
+      var satNoon=new Date(item.g.getFullYear(),item.g.getMonth(),item.g.getDate(),12);
+      var satHol=_shabbatHoliday(satNoon), satP=satHol?null:_parashaForShabbat(satNoon);
+      if(satP) rows.push('📖 פרשת '+satP.he);
+    }
     if(hil) rows.push('🕯️ הילולת '+hil.name);
     var dk=item.g.getFullYear()+'-'+String(item.g.getMonth()+1).padStart(2,'0')+'-'+String(item.g.getDate()).padStart(2,'0');
     if(_zc[dk]){
