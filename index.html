@@ -9534,6 +9534,8 @@ function _shabbatApiUrl(lat, lng) {
             .then(function(r) { return r.json(); })
             .then(function(d) {
               var city = (d.address && (d.address.city || d.address.town || d.address.village)) || '';
+              // נשמר עבור שושן פורים — מזהה אם המשתמש בירושלים
+              try { localStorage.setItem('orHatfila_userCity', city); } catch(e) {}
               loadShabbatTimes(lat, lng, city);
             })
             .catch(function() { loadShabbatTimes(lat, lng, ''); });
@@ -11385,6 +11387,10 @@ function _hebDateParts(date) {
   return { day: day, month: month };
 }
 
+function _isJerusalemUser() {
+  try { return /ירושלים|jerusalem/i.test(localStorage.getItem('orHatfila_userCity') || ''); } catch(e) { return false; }
+}
+
 function _holidaysFor(date) {
   var h = _hebDateParts(date), d = h.day, m = h.month;
   var r = {};
@@ -11395,7 +11401,8 @@ function _holidaysFor(date) {
   if (m === 'Nisan' && d >= 15 && d <= 21) r.pesach = true;
   if (m === 'Sivan' && d === 6) r.shavuot = true;
   if ((m === 'Tishri' && (d === 15 || d === 22)) || (m === 'Nisan' && (d === 15 || d === 21)) || r.shavuot) r.yomTov = true;
-  if ((m === 'Adar' || m === 'Adar II') && d === 14) r.purim = true;
+  // פורים בי"ד; בירושלים — שושן פורים בט"ו (העיר נשמרת כשהמיקום מתקבל לזמני השבת)
+  if ((m === 'Adar' || m === 'Adar II') && d === (_isJerusalemUser() ? 15 : 14)) r.purim = true;
   // חנוכה — כ"ה בכסלו ושבעת הימים שאחריו (אורך כסלו משתנה, ולכן בודקים אחורה)
   for (var k = 0; k < 8; k++) {
     var back = _hebDateParts(new Date(date.getTime() - k * 86400000));
