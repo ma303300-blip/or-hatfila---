@@ -11404,6 +11404,18 @@ function _holidaysFor(date) {
   return r;
 }
 
+// קיץ/חורף לפי מנהג ארץ ישראל:
+// משיב הרוח — משמיני עצרת (כ"ב תשרי) עד ערב פסח; ותן טל ומטר — מז' בחשוון עד ערב פסח.
+var _HEB_WINTER_MONTHS = ['Kislev', 'Tevet', 'Shevat', 'Adar I', 'Adar', 'Adar II'];
+function _seasonFor(date) {
+  var h = _hebDateParts(date), d = h.day, m = h.month;
+  var mid = _HEB_WINTER_MONTHS.indexOf(m) !== -1 || (m === 'Nisan' && d <= 14);
+  return {
+    geshem: mid || m === 'Heshvan' || (m === 'Tishri' && d >= 22),
+    matar: mid || (m === 'Heshvan' && d >= 7)
+  };
+}
+
 function autoOpenHolidayButtons() {
   var body = document.getElementById('prayerBody');
   if (!body) return;
@@ -11437,6 +11449,17 @@ function autoOpenHolidayButtons() {
       var nissim = btns('selectAmida2(', "'" + p + '_nissim_');
       if (h.chanuka) open(nissim, 'חנוכה');
       else if (h.purim) open(nissim, 'פורים');
+
+      // קיץ/חורף — ברכת השנים, ובגבורות רק השורה של התקופה
+      var season = _seasonFor(p === 'arvit' && now.getHours() >= 12 ? tomorrow : now);
+      open(btns('selectAmida2(', "'" + p + '_shana_'), season.matar ? 'בחורף' : 'בקיץ');
+      var tal = document.getElementById(p + '_tal');
+      if (tal) {
+        var line = tal.innerHTML.split('<br>').filter(function(l) {
+          return l.indexOf(season.geshem ? 'בְּחֹרֶף' : 'בְּקַיִץ') !== -1;
+        })[0];
+        if (line) tal.innerHTML = line.trim() + '<br>';
+      }
     });
 
     // ברכת המזון — עדות המזרח ואשכנז
