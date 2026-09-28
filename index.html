@@ -9056,19 +9056,24 @@ function computeParasha(now) {
     if (sunset ? now >= sunset : now.getHours() >= 19) toSat = 7;
   }
   var sat = _pDays(today, toSat), holiday = _shabbatHoliday(sat), after = sat;
+  // שמחת תורה בשבת (בארץ ישראל — כ"ב תשרי): הפרשה של השבוע היא וזאת הברכה
+  if (_isSimchatTorah(sat)) return { en: 'Vezot Haberakhah', he: 'וזאת הברכה', holiday: holiday, onHoliday: true };
   while (_shabbatHoliday(after)) after = _pDays(after, 7);
   var p = _parashaForShabbat(after);
   if (!p) return null;
   p.holiday = holiday;
   return p;
 }
+function _isSimchatTorah(d) { var h = _pHeb(d); return h.month === 'Tishri' && h.day === 22; }
 
 (function() {
   function updateParashaDynamically() {
     try {
       var p = computeParasha();
       if (!p) return;
-      var msg = p.holiday
+      var msg = p.onHoliday
+        ? '✨ שבת זו: ' + p.holiday + ' ✨ &nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע: פרשת ' + p.he + ' ✨'
+        : p.holiday
         ? '✨ שבת זו: ' + p.holiday + ' ✨ &nbsp;&nbsp;&nbsp;&nbsp; ✨ פרשת השבוע הבאה: פרשת ' + p.he + ' ✨'
         : '✨ פרשת השבוע: פרשת ' + p.he + ' ✨';
       var outStr = msg + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + msg + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -9274,7 +9279,8 @@ function resumePage() {
     if(h.day===1||(h.day===30&&nextH&&nextH.day===1)) rows.push('🌙 ראש חודש '+h.month);
     if(dow===6){
       var satNoon=new Date(item.g.getFullYear(),item.g.getMonth(),item.g.getDate(),12);
-      var satHol=_shabbatHoliday(satNoon), satP=satHol?null:_parashaForShabbat(satNoon);
+      var satHol=_shabbatHoliday(satNoon);
+      var satP=_isSimchatTorah(satNoon)?{he:'וזאת הברכה'}:(satHol?null:_parashaForShabbat(satNoon));
       if(satP) rows.push('📖 פרשת '+satP.he);
     }
     if(hil) rows.push('🕯️ הילולת '+hil.name);
