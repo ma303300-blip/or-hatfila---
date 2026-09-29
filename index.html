@@ -770,21 +770,11 @@
     top: 0;
   }
 
-  /* כפתור עצירת הכיתובית הנעה — WCAG 2.2.2 (Pause, Stop, Hide) */
-  .marquee-toggle {
-    position: fixed;
-    top: env(safe-area-inset-top, 0px);
-    left: 0;
-    height: 0.5cm;
-    z-index: 1001;
-    background: rgba(10,14,46,0.85);
-    color: #FFD966;
-    border: none;
-    border-left: 1px solid rgba(255,255,255,0.25);
-    font-size: 10px;
-    line-height: 1;
-    padding: 0 7px;
-    cursor: pointer;
+  /* עצירת הכיתובית הנעה בלחיצה עליה — WCAG 2.2.2 (Pause, Stop, Hide) */
+  .parasha-marquee-container[role="button"] { cursor: pointer; }
+  .parasha-marquee-container:focus-visible {
+    outline: 2px solid #0A0E2E;
+    outline-offset: -2px;
   }
   body.marquee-paused .parasha-marquee-wrapper {
     animation-play-state: paused !important;
@@ -9459,21 +9449,26 @@ function wipeAllData() {
       document.body.insertBefore(skip, document.body.firstChild);
     }
 
-    // ── כפתור עצירה/הפעלה לכיתובית הנעה (WCAG 2.2.2) ──
+    // ── עצירה/הפעלה של הכיתובית הנעה בלחיצה עליה (WCAG 2.2.2) ──
+    // הכיתובית עצמה משמשת כפקד: לחיצה עוצרת, לחיצה נוספת מפעילה שוב.
+    // aria-describedby משאיר את שם הפרשה נקרא בקורא מסך למרות ה-aria-label.
     var marquee = document.querySelector('.parasha-marquee-container');
-    if (marquee && !document.querySelector('.marquee-toggle')) {
-      var btn = document.createElement('button');
-      btn.className = 'marquee-toggle';
-      btn.setAttribute('aria-label', 'עצירת הכיתובית הנעה של פרשת השבוע');
-      btn.textContent = '⏸';
-      btn.addEventListener('click', function () {
-        var paused = document.body.classList.toggle('marquee-paused');
-        btn.textContent = paused ? '▶' : '⏸';
-        btn.setAttribute('aria-label', paused
+    if (marquee && !marquee.hasAttribute('role')) {
+      var setMarqueeLabel = function (paused) {
+        marquee.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        marquee.setAttribute('aria-label', paused
           ? 'הפעלת הכיתובית הנעה של פרשת השבוע'
           : 'עצירת הכיתובית הנעה של פרשת השבוע');
-      });
-      document.body.appendChild(btn);
+      };
+      var toggleMarquee = function () {
+        setMarqueeLabel(document.body.classList.toggle('marquee-paused'));
+      };
+      marquee.setAttribute('role', 'button');
+      marquee.setAttribute('tabindex', '0');
+      marquee.setAttribute('aria-describedby', 'parashaTextElement1');
+      setMarqueeLabel(document.body.classList.contains('marquee-paused'));
+      // Enter/רווח מטופלים במאזין הכללי ל-role="button" שלמטה
+      marquee.addEventListener('click', toggleMarquee);
     }
 
     // ── הנגשת אלמנטים לחיצים שאינם button/a ──
